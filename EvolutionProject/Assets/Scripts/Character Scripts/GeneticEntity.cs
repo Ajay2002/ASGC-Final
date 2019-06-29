@@ -87,6 +87,54 @@ public class GeneticEntity : MonoBehaviour
     public void Nothing() {
 
     }
+    
+    //Loop through each tag's network
+    
+    // public GeneticEntity Breed (GeneticEntity e) {
+    //     NNetwork Child1 = new NNetwork();
+    //     NNetwork Child2 = new NNetwork();
+    //     Child1.Initialise(carController.LAYERS, carController.NEURONS);
+    //     Child2.Initialise(carController.LAYERS, carController.NEURONS);
+
+    //     Child1.fitness = 0;
+    //     Child2.fitness = 0;
+
+    //     for (int w = 0; w < Child1.weights.Count; w++)
+    //     {
+    //         if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.5f)
+    //         {//(Matrix<float> A, Matrix<float> B) = CrossOver(population[AIndex].weights[w], population[BIndex].weights[w]);
+    //             Child1.weights[w]=(population[AIndex].weights[w]);
+    //             Child2.weights[w]=(population[BIndex].weights[w]);
+    //         }
+    //         else {
+    //             Child1.weights[w]=(population[BIndex].weights[w]);
+    //             Child2.weights[w]=(population[AIndex].weights[w]);
+    //         }
+    //     }
+
+    //     for (int b = 0; b < Child1.biases.Count; b++)
+    //     {
+    //         if (Random.Range(0.0f, 1.0f) < 0.5f)
+    //         {
+    //             Child1.biases[b]=(population[AIndex].biases[b]);
+    //             Child2.biases[b]=(population[BIndex].biases[b]);
+    //         }
+    //         else
+    //         {
+    //             Child1.biases[b] = (population[BIndex].biases[b]);
+    //             Child2.biases[b] = (population[AIndex].biases[b]);
+    //         }
+    //     }
+
+
+    //     newPopulation[newPopulationIndex] = Child1;
+    //     newPopulationIndex++;
+
+    //     newPopulation[newPopulationIndex] = Child2;
+    //     newPopulationIndex++;
+
+    //     return null;
+    // }
 
     public void Roam() {
         Vector3 p = manager.GetRandomPointAwayFrom(transform.position, traits.sightRange);
