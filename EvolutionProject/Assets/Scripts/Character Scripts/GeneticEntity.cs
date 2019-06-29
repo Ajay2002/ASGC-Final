@@ -113,6 +113,9 @@ public class GeneticEntity : MonoBehaviour
 
 		controller.MoveTo(fightActionTarget, traits.speed, "fightCompleted", 0);
 
+		currentlyPerformingAction = true;
+		timeSinceAction           = 0;
+
 		//Make the fight target fight back
 		//TODO: Determine if this is necessary
 		fightActionTargetEntity.OverrideAction();
@@ -167,6 +170,8 @@ public class GeneticEntity : MonoBehaviour
 
 			//wait a couple seconds, then increase energy and health, reset sleepiness
 			Invoke(nameof(EndSleep), 5);
+			currentlyPerformingAction = true;
+			timeSinceAction           = 0;
 			return;
 		}
 
@@ -267,7 +272,7 @@ public class GeneticEntity : MonoBehaviour
 
 			//eat the food and increase energy + health, reduce hunger			
 			state.energy += foodScript.energyValue;
-			state.health += foodScript.healthValue;
+			state.health += foodScript.healthValue; //TODO: Potentially for balance food should only increase energy and sleep only increase health
 			state.hunger -= foodScript.hungerValue;
 
 			foodScript.Eat();
@@ -275,9 +280,9 @@ public class GeneticEntity : MonoBehaviour
 		else if (actionType == "sleepCompleted")
 		{
 			//TODO: Determine values these should be.
-			state.energy += 10;
-			state.health = 100;
-			state.sleepiness = 0;
+			state.energy     += 10;
+			state.health     =  100; //TODO: Potentially for balance sleep only increase health and food should only increase energy 
+			state.sleepiness =  0;
 		}
 		else if (actionType == "flightCompleted")
 		{
