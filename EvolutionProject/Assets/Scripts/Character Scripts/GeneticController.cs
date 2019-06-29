@@ -6,93 +6,100 @@ using System;
 
 public class GeneticController : MonoBehaviour
 {
-    NavMeshAgent agent;
-    GeneticEntity entity;
-    
-    #region  Default Methods
-    private void Awake() {
-        agent = GetComponent<NavMeshAgent>();
-        entity = GetComponent<GeneticEntity>();
-    }
+	NavMeshAgent  agent;
+	GeneticEntity entity;
 
-    private void Update() {
-        //Debug.DrawLine(transform.position,agent.destination,Color.red);
-        
-        if (agent.remainingDistance <= 0.1f) {
-            entity.CompletedAction(invocationStatement);
-        }
-        else {
-            entity.state.energy -= entity.EnergyMovementCalculation(agent.speed)*Time.deltaTime*0.2f;
-        }
+	#region  Default Methods
 
-    }
-    #endregion
-    
-    //TODO: Soon this will use A* however for now we will use the Navigation.AI
-    public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc) {
-        if (agent.isOnNavMesh && agent.isActiveAndEnabled) {
+	private void Awake ()
+	{
+		agent  = GetComponent<NavMeshAgent>();
+		entity = GetComponent<GeneticEntity>();
+	}
 
-            agent.speed = speed;
-            agent.SetDestination(target.position+(transform.position-target.position)*distPerc);
-            invocationStatement = invocationTarget;
-        }
-    }
+	private void Update ()
+	{
+		//Debug.DrawLine(transform.position,agent.destination,Color.red);
 
-    public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc) {
-        if (agent.isOnNavMesh && agent.isActiveAndEnabled) {
+		if (agent.remainingDistance <= 0.1f)
+		{
+			entity.CompletedAction(invocationStatement);
+		}
+		else
+		{
+			entity.state.energy -= entity.EnergyMovementCalculation(agent.speed) * Time.deltaTime * 0.2f;
+		}
+	}
 
-            agent.speed = speed;
-            agent.SetDestination(target+(transform.position-target)*distPerc);
+	#endregion
 
-            invocationStatement = invocationTarget;
+	//TODO: Soon this will use A* however for now we will use the Navigation.AI
+	public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
+	{
+		if (agent.isOnNavMesh && agent.isActiveAndEnabled)
+		{
+			agent.speed = speed;
+			agent.SetDestination(target.position + (transform.position - target.position) * distPerc);
+			invocationStatement = invocationTarget;
+		}
+	}
 
-        }
-    }
-    
-    bool initialSet = false;
-    //TODO: Move this whole thing out of an Enumerator and push it into the ECS or Job System <-- This can't even sustain 90 Elements
-    public void FOVChecker (float rate, float sensoryDistance) {
-        
+	public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
+	{
+		if (agent.isOnNavMesh && agent.isActiveAndEnabled)
+		{
+			agent.speed = speed;
+			agent.SetDestination(target + (transform.position - target) * distPerc);
 
-        Collider[] distanceCheck = Physics.OverlapSphere(transform.position,sensoryDistance);
+			invocationStatement = invocationTarget;
+		}
+	}
 
-        List<GeneticEntity> enemies = new List<GeneticEntity>();
-        List<GeneticEntity> player = new List<GeneticEntity>();
-        List<Transform> food = new List<Transform>();
+	bool initialSet = false;
 
-        for (int i = 0; i < distanceCheck.Length; i++) {
-            if (distanceCheck[i].transform == transform || distanceCheck[i].transform.root == transform)
-            continue;
+	//TODO: Move this whole thing out of an Enumerator and push it into the ECS or Job System <-- This can't even sustain 90 Elements
+	public void FOVChecker (float rate, float sensoryDistance)
+	{
+		Collider[] distanceCheck = Physics.OverlapSphere(transform.position, sensoryDistance);
 
-            //TODO: Remember to add and make sure it is in the FOV
-            string tag = distanceCheck[i].gameObject.tag;
+		List<GeneticEntity> enemies = new List<GeneticEntity>();
+		List<GeneticEntity> player  = new List<GeneticEntity>();
+		List<Transform>     food    = new List<Transform>();
 
-            if (tag.Equals("Enemy")) {
-                enemies.Add(distanceCheck[i].GetComponent<GeneticEntity>());
-            }
-            else if (tag.Equals("Player")) {
-                player.Add(distanceCheck[i].GetComponent<GeneticEntity>());
-            }
-            else if (tag.Equals("Food")) {
-                food.Add(distanceCheck[i].transform);
-            }
+		for (int i = 0; i < distanceCheck.Length; i++)
+		{
+			if (distanceCheck[i].transform == transform || distanceCheck[i].transform.root == transform)
+				continue;
 
-        }
+			//TODO: Remember to add and make sure it is in the FOV
+			string tag = distanceCheck[i].gameObject.tag;
 
-        entity.SensoryUpdate(enemies,food,player);
+			if (tag.Equals("Enemy"))
+			{
+				enemies.Add(distanceCheck[i].GetComponent<GeneticEntity>());
+			}
+			else if (tag.Equals("Player"))
+			{
+				player.Add(distanceCheck[i].GetComponent<GeneticEntity>());
+			}
+			else if (tag.Equals("Food"))
+			{
+				food.Add(distanceCheck[i].transform);
+			}
+		}
 
-    }
-    
-    #region  Extranous Vars
+		entity.SensoryUpdate(enemies, food, player);
+	}
 
-    //NOTE: These are all the elements in processing movement
+	#region  Extranous Vars
 
-    bool restarted = false;
-    string invocationStatement;
-    float timeOut = 0f;
-    float rateCopy;
-    float sensoryDistanceCopy;
+	//NOTE: These are all the elements in processing movement
 
-    #endregion
+	bool   restarted = false;
+	string invocationStatement;
+	float  timeOut = 0f;
+	float  rateCopy;
+	float  sensoryDistanceCopy;
 
+	#endregion
 }
