@@ -46,6 +46,9 @@ public class GeneticEntity : MonoBehaviour
 	private GeneticEntity fightActionTargetEntity;
 	private Transform     eatActionTarget;
 
+	//Planned Actions
+	private bool plannedSleep;
+
 	#endregion
 
 	#region  Default Methods
@@ -90,15 +93,16 @@ public class GeneticEntity : MonoBehaviour
 	//Pick a random enemy/player
 	public void Fight ()
 	{
-		switch (type) {
+		switch (type)
+		{
 			case GeneticType.Prey when fightActionTargetEntity == null:
 				fightActionTargetEntity = enemies[Random.Range(0, enemies.Count)];
 				break;
-			
+
 			case GeneticType.Predator when fightActionTargetEntity == null:
 				fightActionTargetEntity = friends[Random.Range(0, friends.Count)];
 				break;
-			
+
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
@@ -155,7 +159,26 @@ public class GeneticEntity : MonoBehaviour
 		timeSinceAction           = 0;
 	}
 
-	public void Sleep () { }
+	public void Sleep ()
+	{
+		if (enemies.Count == 0)
+		{
+			//can sleep now
+
+			//wait a couple seconds, then increase energy and health, reset sleepiness
+			Invoke(nameof(EndSleep), 5);
+			return;
+		}
+
+		//otherwise, have to find somewhere safe to sleep
+		Flight(enemies[0].transform.position);
+		plannedSleep = true;
+	}
+
+	private void EndSleep ()
+	{
+		CompletedAction("sleepCompleted");
+	}
 
 	public void Nothing () { }
 
@@ -231,7 +254,8 @@ public class GeneticEntity : MonoBehaviour
 		{
 			//TODO: Determine proper damage function
 			fightActionTargetEntity.state.health -=
-				(traits.strength + traits.size) / Mathf.Max(fightActionTargetEntity.traits.speed - traits.speed + 1, 0.5f) *
+				(traits.strength + traits.size) /
+				Mathf.Max(fightActionTargetEntity.traits.speed - traits.speed + 1, 0.5f) *
 				Time.deltaTime;
 
 			//TODO: Determine proper energy loss function
@@ -247,6 +271,13 @@ public class GeneticEntity : MonoBehaviour
 			state.hunger -= foodScript.hungerValue;
 
 			foodScript.Eat();
+		}
+		else if (actionType == "sleepCompleted")
+		{
+			//TODO: Determine values these should be.
+			state.energy += 10;
+			state.health = 100;
+			state.sleepiness = 0;
 		}
 		else if (actionType == "flightCompleted")
 		{
