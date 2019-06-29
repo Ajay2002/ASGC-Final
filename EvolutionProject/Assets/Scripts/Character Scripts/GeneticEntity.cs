@@ -7,7 +7,8 @@ using System.Reflection;
 public class GeneticEntity : MonoBehaviour
 {
    #region  Variables
-
+    public enum GeneticType {Predator, Prey};
+    public GeneticType type;
     //References
     [Header("External References")]
     public MapManager manager;
@@ -25,9 +26,9 @@ public class GeneticEntity : MonoBehaviour
     public float timeSinceAction;
 
     //Sensory Variables
-    public List<GeneticEntity> enemies = new List<GeneticEntity>();
-    public List<GeneticEntity> friends = new List<GeneticEntity>();
-    public List<Transform> food = new List<Transform>();
+    public List<GeneticEntity> enemies = new List<GeneticEntity>(); //Enemy Tag
+    public List<GeneticEntity> friends = new List<GeneticEntity>(); //Player Tag
+    public List<Transform> food = new List<Transform>(); //Food Tag
     #endregion
 
     #region  Default Methods
@@ -63,8 +64,9 @@ public class GeneticEntity : MonoBehaviour
 
     #region  Actions
     
-    public void Fight(GE e) {
-
+    //Pick a random enemy/player
+    public void Fight() {
+        
     }
 
     private void OverrideAction() {
@@ -76,7 +78,7 @@ public class GeneticEntity : MonoBehaviour
     }
 
     //Energy Boost, Hunger Reduction + Health
-    public void Eat(Transform food) {
+    public void Eat() {
 
     }
 
