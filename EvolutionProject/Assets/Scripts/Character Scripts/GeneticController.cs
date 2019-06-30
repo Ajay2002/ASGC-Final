@@ -17,14 +17,14 @@ public class GeneticController : MonoBehaviour
 
     private void Update() {
         //Debug.DrawLine(transform.position,agent.destination,Color.red);
-        
-        if (agent.remainingDistance <= 0.1f) {
-            entity.CompletedAction(invocationStatement);
+        if (agent.isOnNavMesh) {
+            if (agent.remainingDistance <= 0.1f) {
+                entity.CompletedAction(invocationStatement);
+            }
+            else {
+                entity.state.energy -= entity.EnergyMovementCalculation(agent.speed)*Time.deltaTime*0.2f;
+            }
         }
-        else {
-            entity.state.energy -= entity.EnergyMovementCalculation(agent.speed)*Time.deltaTime*0.2f;
-        }
-
     }
     #endregion
     
@@ -53,6 +53,9 @@ public class GeneticController : MonoBehaviour
     //TODO: Move this whole thing out of an Enumerator and push it into the ECS or Job System <-- This can't even sustain 90 Elements
     public void FOVChecker (float rate, float sensoryDistance) {
         
+        entity.enemies.Clear();
+        entity.friends.Clear();
+        entity.food.Clear();
 
         Collider[] distanceCheck = Physics.OverlapSphere(transform.position,sensoryDistance);
 
@@ -68,13 +71,13 @@ public class GeneticController : MonoBehaviour
             string tag = distanceCheck[i].gameObject.tag;
 
             if (tag.Equals("Enemy")) {
-                enemies.Add(distanceCheck[i].GetComponent<GeneticEntity>());
+                enemies.Add(distanceCheck[i].transform.root.GetComponent<GeneticEntity>());
             }
             else if (tag.Equals("Player")) {
-                player.Add(distanceCheck[i].GetComponent<GeneticEntity>());
+                player.Add(distanceCheck[i].transform.root.GetComponent<GeneticEntity>());
             }
             else if (tag.Equals("Food")) {
-                food.Add(distanceCheck[i].transform);
+                food.Add(distanceCheck[i].transform.root);
             }
 
         }
