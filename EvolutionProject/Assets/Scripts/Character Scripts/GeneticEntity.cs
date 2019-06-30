@@ -42,7 +42,12 @@ public class GeneticEntity : MonoBehaviour
 	public List<Transform>     food    = new List<Transform>();     //Food Tag
 
 	//Current Action Targets
-	private Transform eatActionTarget;
+	private Transform     fightActionTarget;
+	private GeneticEntity fightActionTargetEntity;
+	private Transform     eatActionTarget;
+
+	//Planned Actions
+	private bool plannedSleep;
 
 	#endregion
 
@@ -86,7 +91,39 @@ public class GeneticEntity : MonoBehaviour
 	#region  Actions
 
 	//Pick a random enemy/player
-	public void Fight () { }
+	public void Fight ()
+	{
+		switch (type)
+		{
+			case GeneticType.Prey when fightActionTargetEntity == null:
+				fightActionTargetEntity = enemies[Random.Range(0, enemies.Count)];
+				break;
+
+			case GeneticType.Predator when fightActionTargetEntity == null:
+				fightActionTargetEntity = friends[Random.Range(0, friends.Count)];
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
+
+		if (fightActionTargetEntity == null) return;
+
+		fightActionTarget = fightActionTargetEntity.transform;
+
+		controller.MoveTo(fightActionTarget, traits.speed, "fightCompleted", 0);
+
+		currentlyPerformingAction = true;
+		timeSinceAction           = 0;
+
+		//Make the fight target fight back
+		//TODO: Determine if this is necessary
+		fightActionTargetEntity.OverrideAction();
+		fightActionTargetEntity.fightActionTargetEntity = this;
+		fightActionTargetEntity.fightActionTarget       = transform;
+
+		fightActionTargetEntity.Fight();
+	}
 
 	private void OverrideAction ()
 	{
@@ -96,36 +133,57 @@ public class GeneticEntity : MonoBehaviour
 	private void Death ()
 	{
 		print("death");
-		
+
 		//TODO: Spawn Food if prey
 	}
 
 	//Energy Boost, Hunger Reduction + Health
 	public void Eat ()
-	{		
+	{
 		Food foodScript;
-		
+
 		foreach (Transform t in food)
 		{
 			if ((foodScript = t.GetComponent<Food>()) == null || foodScript.canPreyEat == false) continue;
-			
+
 			eatActionTarget = t;
 			break;
 		}
-		
+
 		if (eatActionTarget == null)
 		{
 			if (type == GeneticType.Predator) Fight();
 			return;
 		}
-		
+
 		controller.MoveTo(eatActionTarget.position, traits.speed, "eatCompleted", 0);
-		
+
 		currentlyPerformingAction = true;
 		timeSinceAction           = 0;
 	}
 
-	public void Sleep () { }
+	public void Sleep ()
+	{
+		if (enemies.Count == 0)
+		{
+			//can sleep now
+
+			//wait a couple seconds, then increase energy and health, reset sleepiness
+			Invoke(nameof(EndSleep), 5);
+			currentlyPerformingAction = true;
+			timeSinceAction           = 0;
+			return;
+		}
+
+		//otherwise, have to find somewhere safe to sleep
+		Flight(enemies[0].transform.position);
+		plannedSleep = true;
+	}
+
+	private void EndSleep ()
+	{
+		CompletedAction("sleepCompleted");
+	}
 
 	public void Nothing () { }
 
@@ -197,7 +255,36 @@ public class GeneticEntity : MonoBehaviour
 
 	public void CompletedAction (string actionType)
 	{
-		if (actionType == "flightCompleted")
+		if (actionType == "fightCompleted" && fightActionTarget != null)
+		{
+			//TODO: Determine proper damage function
+			fightActionTargetEntity.state.health -=
+				(traits.strength + traits.size) /
+				Mathf.Max(fightActionTargetEntity.traits.speed - traits.speed + 1, 0.5f) *
+				Time.deltaTime;
+
+			//TODO: Determine proper energy loss function
+			state.energy -= (traits.strength + traits.size + traits.speed) / 5f * Time.deltaTime;
+		}
+		else if (actionType == "eatCompleted" && eatActionTarget != null)
+		{
+			Food foodScript = eatActionTarget.GetComponent<Food>();
+
+			//eat the food and increase energy + health, reduce hunger			
+			state.energy += foodScript.energyValue;
+			state.health += foodScript.healthValue; //TODO: Potentially for balance food should only increase energy and sleep only increase health
+			state.hunger -= foodScript.hungerValue;
+
+			foodScript.Eat();
+		}
+		else if (actionType == "sleepCompleted")
+		{
+			//TODO: Determine values these should be.
+			state.energy     += 10;
+			state.health     =  100; //TODO: Potentially for balance sleep only increase health and food should only increase energy 
+			state.sleepiness =  0;
+		}
+		else if (actionType == "flightCompleted")
 		{
 			currentlyPerformingAction = false;
 		}
@@ -208,20 +295,9 @@ public class GeneticEntity : MonoBehaviour
 			//or should it be called after everything if there is nothing in sight range
 			//(i.e. outside of any if statements)
 			Roam();
-			
+
 			//should currentlyPerformingAction be set to false after calling roam again?
 			currentlyPerformingAction = false;
-		}
-		else if (actionType == "eatCompleted" && eatActionTarget != null)
-		{
-			Food foodScript = eatActionTarget.GetComponent<Food>();
-			
-			//eat the food and increase energy + health, reduce hunger			
-			state.energy += foodScript.energyValue;
-			state.health += foodScript.healthValue;
-			state.hunger -= foodScript.hungerValue;
-				
-			foodScript.Eat();
 		}
 	}
 
