@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
-using Debug = System.Diagnostics.Debug;
 
 public class PlayerController : MonoBehaviour
 {
@@ -152,7 +149,6 @@ public class PlayerController : MonoBehaviour
 
 	void BeginDrag ()
 	{
-		UnityEngine.Debug.Log("beginning drag");
 		checkingForDrag = false;
 		dragging        = true;
 
@@ -166,8 +162,6 @@ public class PlayerController : MonoBehaviour
 
 	private void UpdateDrag ()
 	{
-		UnityEngine.Debug.Log("dragging");
-
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
@@ -176,11 +170,13 @@ public class PlayerController : MonoBehaviour
 
 		Vector3 currentMouseWorldPosition = hit.point;
 
-		UnityEngine.Debug.DrawLine(Camera.main.transform.position, currentMouseWorldPosition);
+		Debug.DrawLine(Camera.main.transform.position, currentMouseWorldPosition);
 
 
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
+			if (selectedEntityTransforms[i] == null) continue;
+			
 			selectedEntityTransforms[i].position = Vector3.Lerp(selectedEntityTransforms[i].position,
 																currentMouseWorldPosition + Vector3.up +
 																DragDisplacementFunction(i),
@@ -188,13 +184,10 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-
 	private void EndDrag ()
 	{
 		dragging = false;
 		
-		UnityEngine.Debug.Log("ending drag");
-
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
@@ -206,6 +199,8 @@ public class PlayerController : MonoBehaviour
 
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
+			if (selectedEntityTransforms[i] == null) continue;
+			
 			FinishingDrag fd = new FinishingDrag
 			{
 				transform = selectedEntityTransforms[i],
@@ -215,8 +210,6 @@ public class PlayerController : MonoBehaviour
 			
 			finishingDrags.Add(fd);
 		}
-		
-		UnityEngine.Debug.Log(finishingDrags[0]);
 	}
 
 	private void FinishDrags ()
