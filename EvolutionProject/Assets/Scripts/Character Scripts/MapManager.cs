@@ -7,14 +7,24 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-
+    public GameObject entity;
+    public GameObject foodObject;
+    public float mutationChance;
     public Vector3 area;
+
+    public GeneticTraits idealTraits;
 
     private void OnDrawGizmos() {
         
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(transform.position, area);
         
+    }
+
+    private IEnumerator FoodGen() {
+        Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
+        yield return new WaitForSeconds(0.2f);
+        StartCoroutine("FoodGen");
     }
 
     public Vector3 GetRandomPoint () {
@@ -36,6 +46,13 @@ public class MapManager : MonoBehaviour
 
         return transform.position;
 
+    }
+
+    private void Awake() {StartCoroutine("FoodGen");}
+
+    public Transform SpawnEntity (Vector3 position) {
+        GameObject go = (GameObject)GameObject.Instantiate(entity,position,Quaternion.identity);
+        return go.transform;
     }
 
     public Vector3 GetRandomPointAwayFrom (Vector3 p, float r) {

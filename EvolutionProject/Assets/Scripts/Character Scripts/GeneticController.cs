@@ -6,21 +6,22 @@ using System;
 
 public class GeneticController : MonoBehaviour
 {
+
 	NavMeshAgent  agent;
-	GeneticEntity entity;
+	GeneticEntity_T entity;
 
 	#region  Default Methods
 
 	private void Awake ()
 	{
 		agent  = GetComponent<NavMeshAgent>();
-		entity = GetComponent<GeneticEntity>();
+		entity = GetComponent<GeneticEntity_T>();
 	}
 
 	private void Update ()
 	{
 		//Debug.DrawLine(transform.position,agent.destination,Color.red);
-
+		if (agent.isOnNavMesh)
 		if (agent.remainingDistance <= 0.1f)
 		{
 			entity.CompletedAction(invocationStatement);
@@ -62,8 +63,8 @@ public class GeneticController : MonoBehaviour
 	{
 		Collider[] distanceCheck = Physics.OverlapSphere(transform.position, sensoryDistance);
 
-		List<GeneticEntity> enemies = new List<GeneticEntity>();
-		List<GeneticEntity> player  = new List<GeneticEntity>();
+		List<GeneticEntity_T> enemies = new List<GeneticEntity_T>();
+		List<GeneticEntity_T> player  = new List<GeneticEntity_T>();
 		List<Transform>     food    = new List<Transform>();
 
 		for (int i = 0; i < distanceCheck.Length; i++)
@@ -76,11 +77,11 @@ public class GeneticController : MonoBehaviour
 
 			if (tag.Equals("Enemy"))
 			{
-				enemies.Add(distanceCheck[i].GetComponent<GeneticEntity>());
+				enemies.Add(distanceCheck[i].transform.root.GetComponent<GeneticEntity_T>());
 			}
 			else if (tag.Equals("Player"))
 			{
-				player.Add(distanceCheck[i].GetComponent<GeneticEntity>());
+				player.Add(distanceCheck[i].transform.root.GetComponent<GeneticEntity_T>());
 			}
 			else if (tag.Equals("Food"))
 			{

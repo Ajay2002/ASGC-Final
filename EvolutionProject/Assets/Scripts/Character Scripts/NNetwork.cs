@@ -64,7 +64,7 @@ public class NNetwork
 
         Matrix<float> OutputWeight = Matrix<float>.Build.Dense(hiddenNeuronCount, outputCount);
         weights.Add(OutputWeight);
-        biases.Add(UnityEngine.Random.Range(-10f, 10f));
+        biases.Add(UnityEngine.Random.Range(-1f, 1f));
 
         RandomiseWeights();
 
