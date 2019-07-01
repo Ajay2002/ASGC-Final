@@ -52,10 +52,18 @@
             <e p="MapManager.cs" t="Include" />
             <e p="NNetwork.cs" t="Include" />
             <e p="Note about Editor Folder.txt" t="Include" />
+            <e p="Production Ready Code" t="Include">
+              <e p="CreatureEntity.cs" t="Include" />
+              <e p="GeneticEntity_T.cs" t="Include" />
+            </e>
             <e p="Trash.cs" t="Include" />
+          </e>
+          <e p="UI Scripts" t="Include">
+            <e p="MouseInputUIBlocker.cs" t="Include" />
           </e>
           <e p="World Scripts" t="Include">
             <e p="Food.cs" t="Include" />
+            <e p="PlayerController.cs" t="Include" />
           </e>
         </e>
         <e p="Standard Assets" t="Include">
