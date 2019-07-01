@@ -6,7 +6,9 @@ using UnityEngine;
 //IMPORTANT: YOU WILL NEED A TIME SCALE MANAGER
 
 public class MapManager : MonoBehaviour
-{
+{   
+    public string graph;
+    public GraphHelp help;
     public GameObject entity;
     public GameObject foodObject;
     public float mutationChance;
@@ -23,7 +25,7 @@ public class MapManager : MonoBehaviour
 
     private IEnumerator FoodGen() {
         Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine("FoodGen");
     }
 
@@ -48,7 +50,48 @@ public class MapManager : MonoBehaviour
 
     }
 
-    private void Awake() {StartCoroutine("FoodGen");}
+    private void Awake() {StartCoroutine("FoodGen");
+
+        help.AddGraph("SelectedTrait",Color.blue);
+        help.AddGraph("Population",Color.red);
+    }
+
+    float t = 0;
+    private void Update() {
+        t += Time.deltaTime;
+
+        float average = 0f;
+        GeneticEntity_T[] T = GameObject.FindObjectsOfType<GeneticEntity_T>();
+        for (int i = 0; i < T.Length; i++) {
+            if (graph == "Speed")
+                average += T[i].traits.speed*100;
+            if (graph == "SightRange")
+                average += T[i].traits.sightRange*100;
+            if (graph == "Size")
+                average += T[i].traits.size*100;
+            if (graph == "Strength")
+                average += T[i].traits.strength*100;
+            if (graph == "DangerSense") 
+                average += T[i].traits.dangerSense*100;
+            if (graph == "Attractiveness")
+                average += T[i].traits.attractiveness*100;
+            if (graph == "HI")
+                average += T[i].traits.HI*100;
+            if (graph == "AI")
+                average += T[i].traits.AI*100;
+            if (graph == "FI")
+                average += T[i].traits.FI*100;
+            if (graph == "HUI")
+                average += T[i].traits.HUI*100;
+            if (graph == "SI")
+                average += T[i].traits.SI*100;
+            if (graph == "RI")
+                average += T[i].traits.RI*100;
+        }
+        average = average/T.Length;
+        help.Plot(t,average,0);
+        help.Plot(t,T.Length,1);
+    }
 
     public Transform SpawnEntity (Vector3 position) {
         GameObject go = (GameObject)GameObject.Instantiate(entity,position,Quaternion.identity);

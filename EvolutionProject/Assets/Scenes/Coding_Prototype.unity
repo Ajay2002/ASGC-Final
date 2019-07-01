@@ -1721,10 +1721,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbeaa931204f9c54c83acef401556707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  graph: HUI
+  help: {fileID: 1073496427}
   entity: {fileID: 7582951549450326883, guid: 03fc8448b839f6a41b49927dfacac2fc, type: 3}
   foodObject: {fileID: 4945754576530618588, guid: 050de80f32246134fb74dd07a9e1c163,
     type: 3}
-  mutationChance: 0.1
+  mutationChance: 0.03
   area: {x: 32.43, y: 0, z: 26.73}
   idealTraits:
     manager: {fileID: 0}

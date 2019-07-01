@@ -171,10 +171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d829d5d7f2518419151c27ec243db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initial: 0
   type: 0
   manager: {fileID: 0}
   controller: {fileID: 7582951549450326892}
   traits:
+    manager: {fileID: 0}
     surroundingCheckCooldown: 0.2
     decisionCoolDown: 1
     speed: 6
@@ -193,13 +195,13 @@ MonoBehaviour:
     SI: 0.1
     RI: 0.6
   state:
-    energy: 100
-    health: 100
-    age: 0
-    fear: 0
-    hunger: 0
-    sleepiness: 0
-    reproductiveness: 0
+    energyView: 0
+    healthView: 0
+    ageView: 0
+    fearView: 0
+    hungerView: 0
+    sleepView: 0
+    reproductivenessView: 0
   brain:
     fov: 0
     range: 0
@@ -211,3 +213,4 @@ MonoBehaviour:
   enemies: []
   friends: []
   food: []
+  bredWith: []

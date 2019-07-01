@@ -67,6 +67,8 @@ public class CreatureEntity : GeneticEntity_T
         }
         else {
 
+       //     Debug.DrawLine(transform.position,transform.position+Vector3.up*10,Color.red,10f);
+//            print ("Sleeping");
             state.energy += 60;
             state.sleepiness -= 100;
             state.health += 20;
@@ -138,6 +140,10 @@ public class CreatureEntity : GeneticEntity_T
             }
 
         }
+        else {
+            Vector3 randomPoint = manager.GetRandomPointAwayFrom(transform.position,traits.sightRange);
+            controller.MoveTo(randomPoint,traits.speed,"running", 0f);
+        }
 
     }
 
@@ -186,7 +192,7 @@ public class CreatureEntity : GeneticEntity_T
 
                 }
 
-                if (friends[i].traits.attractiveness < traits.attractiveness)
+                if (friends[i].traits.attractiveness*friends[i].state.age*friends[i].state.health*friends[i].traits.strength < traits.attractiveness*state.health*state.age*traits.strength)
                 continue;
 
                 friends[i].bredWith.Add(this);
@@ -236,9 +242,9 @@ public class CreatureEntity : GeneticEntity_T
             
             if (currentFood !=null && food.Contains(currentFood)) {
                 GameObject.Destroy(currentFood.gameObject);
-                state.energy += 30;
-                state.health += 20;
-                state.hunger -= 40;
+                state.energy += 10;
+                state.health += 5;
+                state.hunger -= 10;
                 pausedState = false;
             }
             else {
