@@ -7,12 +7,15 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {   
+    public bool enemyGraph = false;
     public string graph;
     public GraphHelp help;
     public GameObject entity;
     public GameObject foodObject;
     public float mutationChance;
     public Vector3 area;
+
+    public GameObject enemyEntity;
 
     public GeneticTraits idealTraits;
 
@@ -25,7 +28,7 @@ public class MapManager : MonoBehaviour
 
     private IEnumerator FoodGen() {
         Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.03f);
         StartCoroutine("FoodGen");
     }
 
@@ -58,11 +61,20 @@ public class MapManager : MonoBehaviour
 
     float t = 0;
     private void Update() {
+        
+        if (Input.GetKeyDown(KeyCode.Space))
+            Application.LoadLevel(0);
         t += Time.deltaTime;
 
         float average = 0f;
         GeneticEntity_T[] T = GameObject.FindObjectsOfType<GeneticEntity_T>();
+        int L  = 0;
         for (int i = 0; i < T.Length; i++) {
+            if (enemyGraph && T[i].type == GeneticEntity_T.GeneticType.Creature)
+                continue;
+            if (!enemyGraph && T[i].type == GeneticEntity_T.GeneticType.Predator)
+                continue;
+
             if (graph == "Speed")
                 average += T[i].traits.speed*100;
             if (graph == "SightRange")
@@ -87,14 +99,21 @@ public class MapManager : MonoBehaviour
                 average += T[i].traits.SI*100;
             if (graph == "RI")
                 average += T[i].traits.RI*100;
+
+            L++;
         }
-        average = average/T.Length;
+        average = average/L;
         help.Plot(t,average,0);
         help.Plot(t,T.Length,1);
     }
 
     public Transform SpawnEntity (Vector3 position) {
         GameObject go = (GameObject)GameObject.Instantiate(entity,position,Quaternion.identity);
+        return go.transform;
+    }
+
+    public Transform SpawnEntityEnemy (Vector3 position) {
+        GameObject go = (GameObject)GameObject.Instantiate(enemyEntity,position,Quaternion.identity);
         return go.transform;
     }
 

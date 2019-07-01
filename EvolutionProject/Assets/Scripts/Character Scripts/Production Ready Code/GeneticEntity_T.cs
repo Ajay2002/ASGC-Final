@@ -26,7 +26,7 @@ public abstract class GeneticEntity_T : MonoBehaviour
     float timerSense = 0f;
     bool timerEnabled = false;
     bool completionCheck = false;
-    bool currentlyPausedState = false;
+    public bool currentlyPausedState = false;
     public bool pausedState = false;
     private void Update() {
         if (timerEnabled == true) {

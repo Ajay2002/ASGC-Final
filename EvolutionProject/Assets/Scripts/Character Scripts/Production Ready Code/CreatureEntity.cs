@@ -129,8 +129,9 @@ public class CreatureEntity : GeneticEntity_T
             }
 
             if (enemies.Count < friends.Count || enemies.Count <= 1) {
-
-                Fight(enemies[fightIndex]);
+                
+                Flight();
+                //Fight(enemies[fightIndex]);
 
             }
             else {
