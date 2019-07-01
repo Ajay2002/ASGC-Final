@@ -12,6 +12,8 @@ public class MapManager : MonoBehaviour
     public float mutationChance;
     public Vector3 area;
 
+    public GeneticTraits idealTraits;
+
     private void OnDrawGizmos() {
         
         Gizmos.color = Color.green;
@@ -21,7 +23,7 @@ public class MapManager : MonoBehaviour
 
     private IEnumerator FoodGen() {
         Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         StartCoroutine("FoodGen");
     }
 

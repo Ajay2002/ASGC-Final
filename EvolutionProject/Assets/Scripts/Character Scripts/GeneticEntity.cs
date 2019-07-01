@@ -8,15 +8,6 @@ using Random = UnityEngine.Random;
 public class GeneticEntity : MonoBehaviour
 {
 
-	#region  Variables
-
-	public enum GeneticType
-	{
-		Predator,
-		Prey
-	};
-
-	public GeneticType type;
 
    #region  Variables
     
@@ -68,6 +59,9 @@ public class GeneticEntity : MonoBehaviour
     float timerSense = 0f;
     bool timerEnabled = false;
     bool completionCheck = false;
+
+    
+
     private void Update() {
         if (timerEnabled == true) {
             if (timerSense > 0) {
@@ -78,6 +72,8 @@ public class GeneticEntity : MonoBehaviour
                 timerSense = traits.surroundingCheckCooldown;
             }
         }
+
+        
 
         /*if (currentlyPerformingAction == true) {
             if (completionCheck == false) {
@@ -107,6 +103,8 @@ public class GeneticEntity : MonoBehaviour
         }
 
     }
+
+    
 
     #endregion
 
@@ -182,12 +180,12 @@ public class GeneticEntity : MonoBehaviour
 
         GeneticEntity newEntity = manager.SpawnEntity(transform.position+transform.forward*0.6f).GetComponent<GeneticEntity>();
         
-        e.state.energy -= 40;
-        e.state.sleepiness += 20;
+        e.state.energy -= 10;
+        e.state.sleepiness += 10;
         e.state.reproductiveness -= 10;
 
-        state.energy -= 40;
-        state.sleepiness += 20;
+        state.energy -= 10;
+        state.sleepiness += 10;
         state.reproductiveness -= 10;
 
         //FIXME: This assumes that e.brain.tags.Count = brain.tags.Count
@@ -404,7 +402,7 @@ public class GeneticEntity : MonoBehaviour
         }
         
 
-        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*0.2f*traits.size),0f,100f);
+        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*0.7f*traits.size),0f,100f);
 
         StateActionConversion();
     }
@@ -413,7 +411,7 @@ public class GeneticEntity : MonoBehaviour
 
         if (state.hunger >= 90) {
             //Force eat (until it finds food reduce health and energy)
-            state.health -= 2 * Time.deltaTime;
+            state.health -= 5 * Time.deltaTime;
             state.energy -= 2 * Time.deltaTime;
         }
         
@@ -617,6 +615,7 @@ public class GeneticEntity : MonoBehaviour
                         bredWith.Add(friends[i]);
 
                         Breed(friends[i]);
+                        break;
                     }
 
                 }
@@ -676,59 +675,5 @@ public class GeneticEntity : MonoBehaviour
 
     #endregion
 
-
-[System.Serializable]
-public class GeneticTraits
-{
-	public float surroundingCheckCooldown;
-	public float decisionCoolDown;
-	public float speed;
-	public float size;
-	public float attractiveness;
-	public float sightRange;
-	public float dangerSense;
-	public float strength;
-	public float heatResistance;
-	public float intellect;
-	public float brute;
-
-	public float HI;
-	public float AI;
-	public float FI;
-	public float HUI;
-	public float SI;
-	public float RI;
 }
 
-[System.Serializable]
-public struct CurrentState
-{
-	public float energy;
-	public float health;
-	public float age;
-	public float fear;
-	public float hunger;
-	public float sleepiness;
-	public float reproductiveness;
-}
-
-
-[System.Serializable]
-public class SenseNetwork
-{
-	public List<string> possibleActions = new List<string>();
-	public List<float>  inputValues     = new List<float>();
-	public List<float>  outputValues    = new List<float>();
-	public NNetwork     network;
-}
-
-[System.Serializable]
-public class Brain
-{
-	[Header("Vision Sense")]
-	public float fov;
-
-	public float              range;
-	public List<string>       tags                 = new List<string>();
-	public List<SenseNetwork> correspondingNetwork = new List<SenseNetwork>();
-}

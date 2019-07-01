@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEditor;
 
 [CanEditMultipleObjects]
-[CustomEditor(typeof(GeneticEntity))]
+[CustomEditor(typeof(CreatureEntity))]
 public class EntityInspectorEditor : Editor 
 {
-    GeneticEntity e;
+    CreatureEntity e;
     
     void OnEnable()
     {
-        e = (GeneticEntity)target;
+        e = (CreatureEntity)target;
     }
 
     public override void OnInspectorGUI()
