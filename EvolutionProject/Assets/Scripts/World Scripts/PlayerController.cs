@@ -10,16 +10,19 @@ public class PlayerController : MonoBehaviour
 
 	public Vector3 entityHeight;
 
-	private List<Transform>       selectedEntityTransforms = new List<Transform>();
-	private List<GeneticEntity_T> selectedEntities         = new List<GeneticEntity_T>();
+	private readonly List<Transform>       selectedEntityTransforms = new List<Transform>();
+	private readonly List<GeneticEntity_T> selectedEntities         = new List<GeneticEntity_T>();
 
-	private bool checkingForDrag;
+	private float checkTime;
+
 	private bool dragging;
+
+	private bool selecting;
 
 	private Vector3 boxSelectStartPosition;
 	private Vector3 boxSelectEndPosition;
 
-	private List<FinishingDrag> finishingDrags = new List<FinishingDrag>();
+	private readonly List<FinishingDrag> finishingDrags = new List<FinishingDrag>();
 
 	private struct FinishingDrag
 	{
@@ -28,66 +31,23 @@ public class PlayerController : MonoBehaviour
 		public Vector3         position;
 	}
 
-	void Update ()
+	private void Update ()
 	{
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
-		/*
-		 if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetMouseButtonDown(0))
-		{
-			BeginBoxSelect();
-			return;
-		}
-		*/
+		if (Input.GetMouseButtonDown(0)) BeginBoxSelect();
+		if (selecting    && Input.GetMouseButton(0)) UpdateBoxSelect();
+		if (selecting    && Input.GetMouseButtonUp(0)) EndBoxSelect();
 
-		if (Input.GetMouseButtonDown(0))
-		{
-			SelectCurrent();
-			return;
-		}
-
-		if (Input.GetMouseButtonDown(1))
-		{
-			checkingForDrag = true;
-			return;
-		}
-
-		if (checkingForDrag && Input.GetMouseButton(1))
-		{
-			BeginDrag();
-			return;
-		}
-
-		if (dragging && Input.GetMouseButton(1))
-		{
-			UpdateDrag();
-			return;
-		}
-
-		if (dragging && Input.GetMouseButtonUp(1))
-		{
-			EndDrag();
-			return;
-		}
+		if (Input.GetMouseButtonDown(1)) BeginDrag();
+		if (dragging   && Input.GetMouseButton(1)) UpdateDrag();
+		if (dragging   && Input.GetMouseButtonUp(1)) EndDrag();
 
 		FinishDrags();
 	}
 
-	void SelectCurrent ()
+	private void SelectCurrent (Ray ray)
 	{
-		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false)
-		{
-			selectedEntityTransforms.Clear();
-			selectedEntities.Clear();
-		}
-
-		if (Camera.main == null)
-		{
-			throw new Exception();
-		}
-
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
 		RaycastHit hit;
 
 		if (!Physics.Raycast(ray, out hit) || !hit.transform.CompareTag("Player")) return;
@@ -104,14 +64,8 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void BeginBoxSelect ()
+	private void BeginBoxSelect ()
 	{
-		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false)
-		{
-			selectedEntityTransforms.Clear();
-			selectedEntities.Clear();
-		}
-
 		if (Camera.main == null)
 		{
 			throw new Exception();
@@ -119,37 +73,79 @@ public class PlayerController : MonoBehaviour
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+		LayerMask mask = LayerMask.GetMask("Ground");
+
 		RaycastHit hit;
 
-		if (!Physics.Raycast(ray, out hit)) return;
+		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
+		selecting = true;
 		boxSelectStartPosition = hit.point;
 
 		//TODO: Update Visuals of box select
 	}
 
-	void UpdateBoxSelect ()
-	{
-		//TODO:
-	}
-
-	void EndBoxSelect ()
+	private void UpdateBoxSelect ()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+		LayerMask mask = LayerMask.GetMask("Ground");
+
 		RaycastHit hit;
 
-		if (Physics.Raycast(ray, out hit))
-		{
-			boxSelectEndPosition = hit.point + Vector3.up * 5;
+		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
-			//TODO: Update Visuals of box select
+		boxSelectEndPosition = hit.point;
+
+		//TODO:
+	}
+
+	private void EndBoxSelect ()
+	{
+		selecting = false;
+
+		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false)
+		{
+			selectedEntityTransforms.Clear();
+			selectedEntities.Clear();
+		}
+
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		
+		SelectCurrent(ray);
+
+		LayerMask mask = LayerMask.GetMask("Ground");
+
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) boxSelectEndPosition = hit.point;
+
+		//TODO: Update Visuals of box select
+
+		GameObject[] entityObjects = GameObject.FindGameObjectsWithTag("Player");
+
+		foreach (GameObject eo in entityObjects)
+		{
+			if (eo.name == "Model") continue;
+
+			Vector3 pos = eo.transform.position;
+
+			float minX = Mathf.Min(boxSelectStartPosition.x, boxSelectEndPosition.x);
+			float minZ = Mathf.Min(boxSelectStartPosition.z, boxSelectEndPosition.z);
+			float maxX = Mathf.Max(boxSelectStartPosition.x, boxSelectEndPosition.x);
+			float maxZ = Mathf.Max(boxSelectStartPosition.z, boxSelectEndPosition.z);
+
+			if (minX < pos.x && pos.x < maxX &&
+				minZ < pos.z && pos.z < maxZ)
+			{
+				selectedEntityTransforms.Add(eo.transform);
+				selectedEntities.Add(eo.GetComponent<GeneticEntity_T>());
+			}
 		}
 	}
 
-	void BeginDrag ()
+	private void BeginDrag ()
 	{
-		checkingForDrag = false;
 		dragging        = true;
 
 		foreach (var entity in selectedEntities)
@@ -176,7 +172,7 @@ public class PlayerController : MonoBehaviour
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
 			if (selectedEntityTransforms[i] == null) continue;
-			
+
 			selectedEntityTransforms[i].position = Vector3.Lerp(selectedEntityTransforms[i].position,
 																currentMouseWorldPosition + Vector3.up +
 																DragDisplacementFunction(i),
@@ -187,7 +183,7 @@ public class PlayerController : MonoBehaviour
 	private void EndDrag ()
 	{
 		dragging = false;
-		
+
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
@@ -200,14 +196,14 @@ public class PlayerController : MonoBehaviour
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
 			if (selectedEntityTransforms[i] == null) continue;
-			
+
 			FinishingDrag fd = new FinishingDrag
 			{
 				transform = selectedEntityTransforms[i],
 				entity    = selectedEntities[i],
 				position  = currentMouseWorldPosition + DragDisplacementFunction(i)
 			};
-			
+
 			finishingDrags.Add(fd);
 		}
 	}
@@ -238,6 +234,29 @@ public class PlayerController : MonoBehaviour
 
 	private Vector3 DragDisplacementFunction (int i)
 	{
-		return Vector3.zero + entityHeight / 2;
+		const float radianAngle = 137.5f / 360 * Mathf.PI * 2;
+		const float c           = 0.5f;
+
+		Vector3 displacement = new Vector3(c * Mathf.Sqrt(i) * Mathf.Cos(i * radianAngle), 0,
+										   c * Mathf.Sqrt(i) * Mathf.Sin(i * radianAngle));
+
+		return displacement + entityHeight / 2;
+	}
+
+	private void OnDrawGizmos ()
+	{
+		if (!selecting) return;
+
+		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
+									 0,
+									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
+									);
+
+		Vector3 size = new Vector3((boxSelectEndPosition.x - boxSelectStartPosition.x),
+								   0.01f,
+								   (boxSelectEndPosition.z - boxSelectStartPosition.z)
+								  );
+
+		Gizmos.DrawWireCube(centre, size);
 	}
 }
