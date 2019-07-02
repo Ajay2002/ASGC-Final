@@ -54,11 +54,15 @@ public class PlayerController : MonoBehaviour
 
 		if (selectedEntityTransforms.Contains(hit.transform.parent))
 		{
+			hit.transform.GetComponent<EntityGlowOnSelect>().SetSelected(false); //Remove Highlighting from Entities
+
 			selectedEntityTransforms.Remove(hit.transform.parent);
 			selectedEntities.Remove(hit.transform.parent.GetComponent<GeneticEntity_T>());
 		}
 		else
 		{
+			hit.transform.parent.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
+			
 			selectedEntityTransforms.Add(hit.transform.parent);
 			selectedEntities.Add(hit.transform.parent.GetComponent<GeneticEntity_T>());
 		}
@@ -106,6 +110,11 @@ public class PlayerController : MonoBehaviour
 
 		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false)
 		{
+			foreach (GeneticEntity_T entity in selectedEntities)
+			{
+				entity.GetComponent<EntityGlowOnSelect>().SetSelected(false); // Remove Highlighting from Entities
+			}
+			
 			selectedEntityTransforms.Clear();
 			selectedEntities.Clear();
 		}
@@ -138,6 +147,8 @@ public class PlayerController : MonoBehaviour
 			if (minX < pos.x && pos.x < maxX &&
 				minZ < pos.z && pos.z < maxZ)
 			{
+				eo.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
+				
 				selectedEntityTransforms.Add(eo.transform);
 				selectedEntities.Add(eo.GetComponent<GeneticEntity_T>());
 			}
