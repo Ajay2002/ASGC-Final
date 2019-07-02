@@ -29,9 +29,14 @@ public class ActionManager : MonoBehaviour
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.W)) {
+            agent.isStopped = false;
             EatFood();
             //   EatFood();
         }
+
+        // if (currentlyInAction) {
+        //     agent.isStopped = false;
+        // }
 
         if (currentlyInAction && currentAction != "") {    
             if (currentAction == "searchingForFood" ) {
@@ -59,9 +64,11 @@ public class ActionManager : MonoBehaviour
 
         }
 
-        if (currentlyInAction)
+        if (currentlyInAction && !movementProcessed)
         MovementHandling();
     }
+
+    bool movementProcessed = true; 
 
     public void EatFood () {
         currentlyInAction = true;
@@ -113,11 +120,13 @@ public class ActionManager : MonoBehaviour
     }
 
     private void Chase (EntityManager e) {
-        agent.isStopped = true;
+     
+        print ("Found creature and about to give chase!");
         CancelAction();
+
         currentlyInAction = true;
         currentAction = "creaturePursuit";
-        print ("Found creature and about to give chase!");
+
     }
 
     //Collisions result in instantaneous stuff
@@ -132,7 +141,6 @@ public class ActionManager : MonoBehaviour
 
             if (currentlyInAction && (currentAction == "searchingForFood" || currentAction == "movingToFood" || currentAction == "foodPursuit")) {
                 OnSuccess("findingFood");
-                agent.isStopped = true;
             }
         }
         else if (col.transform.tag == "Player") {
@@ -164,8 +172,9 @@ public class ActionManager : MonoBehaviour
 
     public void CancelAction() {
         currentAction = "";
+        movementProcessed = true;
         currentlyInAction = false;
-       // agent.isStopped = true;
+        agent.isStopped = true;
     }
 
     private void OnSuccess(string a) {
@@ -198,32 +207,39 @@ public class ActionManager : MonoBehaviour
 
     public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
 	{
-        agent.isStopped = false;
+        //agent.isStopped = false;
 		if (agent.isOnNavMesh && agent.isActiveAndEnabled)
 		{
 			agent.speed = speed;
 			agent.SetDestination(target.position + (transform.position - target.position) * distPerc);
 			invocationStatement = invocationTarget;
+            movementProcessed = false;
+            movementTarget = target.position;
 		}
 	}
 
     public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
 	{
-        agent.isStopped = false;
+        //agent.isStopped = false;
 		if (agent.isOnNavMesh && agent.isActiveAndEnabled)
 		{
 			agent.speed = speed;
 			agent.SetDestination(target + (transform.position - target) * distPerc);
 			invocationStatement = invocationTarget;
+            movementProcessed = false;
+            movementTarget = target;
 		}
-	}
+	}   
+
+    Vector3 movementTarget;
 
     private void MovementHandling() {
 
-        if (agent.isOnNavMesh)
-		if (agent.remainingDistance <= 0.05f)
+        if (agent.isOnNavMesh && agent.isStopped == false)
+		if (Vector3.Distance(transform.position,movementTarget) <= 0.05f)
 		{
 			CompletedAction(invocationStatement);
+            movementProcessed = true;
 		}
 		else
 		{
