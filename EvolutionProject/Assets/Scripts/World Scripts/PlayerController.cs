@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MathNet.Numerics.Distributions;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
@@ -177,8 +178,17 @@ public class PlayerController : MonoBehaviour
 			if (selectedEntityTransforms.Contains(finishingDrags[i].transform)) finishingDrags.RemoveAt(i);
 		}
 
-		foreach (GeneticEntity_T entity in selectedEntities)
+		for (int i = selectedEntities.Count - 1; i >= 0; i--)
 		{
+			GeneticEntity_T entity = selectedEntities[i];
+
+			if (entity == null)
+			{
+				selectedEntities.RemoveAt(i);
+				selectedEntityTransforms.RemoveAt(i);
+				continue;
+			}
+			
 			entity.GetComponent<NavMeshAgent>().enabled      = false;
 			entity.GetComponent<GeneticController>().enabled = false;
 			entity.enabled                                   = false;
@@ -210,7 +220,7 @@ public class PlayerController : MonoBehaviour
 			selectedEntityTransforms[i].position = Vector3.Lerp(selectedEntityTransforms[i].position,
 																currentMouseWorldPosition + Vector3.up +
 																DragDisplacementFunction(i),
-																Time.deltaTime * dragFollowSpeed);
+																Time.deltaTime * dragFollowSpeed / Time.timeScale);
 		}
 	}
 
@@ -265,7 +275,7 @@ public class PlayerController : MonoBehaviour
 			}
 
 			drag.transform.position = Vector3.Lerp(drag.transform.position, drag.position,
-												   Time.deltaTime * dragFollowSpeed);
+												   Time.deltaTime * dragFollowSpeed / Time.timeScale);
 		}
 	}
 

@@ -63,7 +63,9 @@ public class MapManager : MonoBehaviour
 
     }
 
-    private void Awake() {StartCoroutine("FoodGen");
+    private void Awake()
+    {
+        StartCoroutine("FoodGen");
 
         help.AddGraph("SelectedTrait",Color.blue);
         help.AddGraph("Population",Color.red);
