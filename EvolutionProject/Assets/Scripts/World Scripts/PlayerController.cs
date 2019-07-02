@@ -236,7 +236,7 @@ public class PlayerController : MonoBehaviour
 			{
 				transform = selectedEntityTransforms[i],
 				entity    = selectedEntities[i],
-				position  = currentMouseWorldPosition + DragDisplacementFunction(i)
+				position  = MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition + DragDisplacementFunction(i))
 			};
 
 			finishingDrags.Add(fd);
