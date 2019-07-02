@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -35,16 +36,22 @@ public class PlayerController : MonoBehaviour
 	{
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
-		if (Input.GetMouseButtonDown(0)) BeginBoxSelect();
-		if (selecting    && Input.GetMouseButton(0)) UpdateBoxSelect();
-		if (selecting    && Input.GetMouseButtonUp(0)) EndBoxSelect();
-
 		if (Input.GetMouseButtonDown(1)) BeginDrag();
 		if (dragging   && Input.GetMouseButton(1)) UpdateDrag();
 		if (dragging   && Input.GetMouseButtonUp(1)) EndDrag();
 
 		FinishDrags();
+
+		if (!dragging)
+		{
+			if (Input.GetMouseButtonDown(0)) BeginBoxSelect();
+			if (selecting && Input.GetMouseButton(0)) UpdateBoxSelect();
+			if (selecting && Input.GetMouseButtonUp(0)) EndBoxSelect();
+		}
 	}
+
+
+	#region Selection
 
 	private void SelectCurrent (Ray ray)
 	{
@@ -83,7 +90,7 @@ public class PlayerController : MonoBehaviour
 
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
-		selecting = true;
+		selecting              = true;
 		boxSelectStartPosition = hit.point;
 
 		//TODO: Update Visuals of box select
@@ -155,6 +162,11 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+
+	#region Dragging
+	
 	private void BeginDrag ()
 	{
 		dragging        = true;
@@ -170,6 +182,7 @@ public class PlayerController : MonoBehaviour
 			entity.GetComponent<NavMeshAgent>().enabled      = false;
 			entity.GetComponent<GeneticController>().enabled = false;
 			entity.enabled                                   = false;
+			entity.transform.GetChild(0).gameObject.layer = 2;
 		}
 	}
 
@@ -178,8 +191,11 @@ public class PlayerController : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
+		
+		LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
+		//mask = LayerMask.GetMask("Ground");
 
-		if (!Physics.Raycast(ray, out hit)) return;
+		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		Vector3 currentMouseWorldPosition = hit.point;
 
@@ -204,8 +220,10 @@ public class PlayerController : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
+		
+		LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
 
-		if (!Physics.Raycast(ray, out hit)) return;
+		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		Vector3 currentMouseWorldPosition = hit.point;
 
@@ -238,6 +256,7 @@ public class PlayerController : MonoBehaviour
 				drag.entity.enabled                                   = true;
 				drag.entity.GetComponent<NavMeshAgent>().enabled      = true;
 				drag.entity.GetComponent<GeneticController>().enabled = true;
+				drag.transform.GetChild(0).gameObject.layer = 0;
 
 				finishingDrags.RemoveAt(i);
 
@@ -260,6 +279,8 @@ public class PlayerController : MonoBehaviour
 		return displacement + entityHeight / 2;
 	}
 
+	#endregion
+	
 	private void OnDrawGizmos ()
 	{
 		if (!selecting) return;

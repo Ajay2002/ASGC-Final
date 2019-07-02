@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GlowCamera : MonoBehaviour
 {
-    public Renderer debugRenderer1;
-    public Renderer debugRenderer2;
-    
     public Material blurMaterial;
     
     private RenderTexture prePass;
@@ -23,8 +20,6 @@ public class GlowCamera : MonoBehaviour
         camera.targetTexture = prePass;
         camera.SetReplacementShader(glowShader, "Glowable");
         Shader.SetGlobalTexture("_GlowPrePassTex", prePass);
-
-        debugRenderer1.material.mainTexture = prePass;
     }
 
     private void OnRenderImage (RenderTexture src, RenderTexture dest)
@@ -44,8 +39,6 @@ public class GlowCamera : MonoBehaviour
             Graphics.Blit(temp, blurred, blurMaterial);
             RenderTexture.ReleaseTemporary(temp);
         }
-
-        debugRenderer2.material.mainTexture = blurred;
         
         Shader.SetGlobalTexture(GLOW_BLURRED_TEX, blurred);
     }
