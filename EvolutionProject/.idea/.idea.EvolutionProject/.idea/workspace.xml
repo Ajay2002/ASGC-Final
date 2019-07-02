@@ -10,11 +10,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="790">
-              <caret line="116" column="129" selection-start-line="116" selection-start-column="129" selection-end-line="116" selection-end-column="129" />
+            <state relative-caret-position="398">
+              <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
               <folding>
                 <marker date="1562080828464" expanded="false" signature="6:194" ph="..." />
                 <marker date="1562080828464" expanded="true" signature="241:9838" ph="{...}" />
@@ -26,7 +26,7 @@
                 <marker date="1562080828464" expanded="false" signature="1677:2367" ph="{...}" />
                 <marker date="1562080828464" expanded="true" signature="1848:2105" ph="{...}" />
                 <marker date="1562080828464" expanded="true" signature="2112:2364" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="2400:3461" ph="{...}" />
+                <marker date="1562080828464" expanded="false" signature="2400:3461" ph="{...}" />
                 <marker date="1562080828464" expanded="true" signature="2430:2464" ph="{...}" />
                 <marker date="1562080828464" expanded="false" signature="3495:4348" ph="{...}" />
                 <marker date="1562080828464" expanded="false" signature="4379:5956" ph="{...}" />
@@ -83,6 +83,21 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="578">
+              <caret line="34" column="69" selection-start-line="34" selection-start-column="69" selection-end-line="34" selection-end-column="69" />
+              <folding>
+                <marker date="1562084694484" expanded="true" signature="6:92" ph="..." />
+                <marker date="1562084694484" expanded="true" signature="139:1671" ph="{...}" />
+                <marker date="1562084694484" expanded="true" signature="344:502" ph="{...}" />
+                <marker date="1562084694484" expanded="true" signature="527:1669" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="Git.Settings">
@@ -93,6 +108,7 @@
     <setting file="file://$PROJECT_DIR$/../../GlowingObjectOutlines-master/Assets/Resources/Blur.shader" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Character Scripts/GeneticEntity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI Scripts/MouseInputUIBlocker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/StandardGlowShader.shader" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/GlowCamera.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/GlowReplacementShader.shader" root0="FORCE_HIGHLIGHTING" />
@@ -126,6 +142,7 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/GlowCamera.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Character Scripts/MapManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs" />
       </list>
     </option>
   </component>
@@ -201,7 +218,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40211000" />
+    <option name="totallyTimeSpent" value="43404000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -610,8 +627,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="790">
-          <caret line="116" column="129" selection-start-line="116" selection-start-column="129" selection-end-line="116" selection-end-column="129" />
+        <state relative-caret-position="398">
+          <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
           <folding>
             <marker date="1562080828464" expanded="false" signature="6:194" ph="..." />
             <marker date="1562080828464" expanded="true" signature="241:9838" ph="{...}" />
@@ -623,7 +640,7 @@
             <marker date="1562080828464" expanded="false" signature="1677:2367" ph="{...}" />
             <marker date="1562080828464" expanded="true" signature="1848:2105" ph="{...}" />
             <marker date="1562080828464" expanded="true" signature="2112:2364" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="2400:3461" ph="{...}" />
+            <marker date="1562080828464" expanded="false" signature="2400:3461" ph="{...}" />
             <marker date="1562080828464" expanded="true" signature="2430:2464" ph="{...}" />
             <marker date="1562080828464" expanded="false" signature="3495:4348" ph="{...}" />
             <marker date="1562080828464" expanded="false" signature="4379:5956" ph="{...}" />
@@ -646,6 +663,19 @@
             <marker date="1562080828464" expanded="true" signature="8452:8866" ph="{...}" />
             <marker date="1562080828464" expanded="false" signature="9074:9365" ph="{...}" />
             <marker date="1562080828464" expanded="false" signature="9409:9836" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="34" column="69" selection-start-line="34" selection-start-column="69" selection-end-line="34" selection-end-column="69" />
+          <folding>
+            <marker date="1562084694484" expanded="true" signature="6:92" ph="..." />
+            <marker date="1562084694484" expanded="true" signature="139:1671" ph="{...}" />
+            <marker date="1562084694484" expanded="true" signature="344:502" ph="{...}" />
+            <marker date="1562084694484" expanded="true" signature="527:1669" ph="{...}" />
           </folding>
         </state>
       </provider>
