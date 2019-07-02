@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
 		if (Input.GetMouseButtonDown(1)) BeginDrag();
-		if (dragging   && Input.GetMouseButton(1)) UpdateDrag();
-		if (dragging   && Input.GetMouseButtonUp(1)) EndDrag();
+		if (dragging && Input.GetMouseButton(1)) UpdateDrag();
+		if (dragging && Input.GetMouseButtonUp(1)) EndDrag();
 
 		FinishDrags();
 
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
 		else
 		{
 			hit.transform.parent.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
-			
+
 			selectedEntityTransforms.Add(hit.transform.parent);
 			selectedEntities.Add(hit.transform.parent.GetComponent<GeneticEntity_T>());
 		}
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		selecting              = true;
-		boxSelectStartPosition = hit.point;
+		boxSelectStartPosition = MapManager.Instance.NearestPointOnMap(hit.point);
 
 		//TODO: Update Visuals of box select
 	}
@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
-		boxSelectEndPosition = hit.point;
+		boxSelectEndPosition = MapManager.Instance.NearestPointOnMap(hit.point);
 
 		//TODO:
 	}
@@ -119,22 +119,22 @@ public class PlayerController : MonoBehaviour
 		{
 			foreach (GeneticEntity_T entity in selectedEntities)
 			{
-				entity.GetComponent<EntityGlowOnSelect>().SetSelected(false); // Remove Highlighting from Entities
+				if (entity != null) entity.GetComponent<EntityGlowOnSelect>().SetSelected(false); // Remove Highlighting from Entities
 			}
-			
+
 			selectedEntityTransforms.Clear();
 			selectedEntities.Clear();
 		}
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		
+
 		SelectCurrent(ray);
 
 		LayerMask mask = LayerMask.GetMask("Ground");
 
 		RaycastHit hit;
 
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) boxSelectEndPosition = hit.point;
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) boxSelectEndPosition = MapManager.Instance.NearestPointOnMap(hit.point);
 
 		//TODO: Update Visuals of box select
 
@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
 				minZ < pos.z && pos.z < maxZ)
 			{
 				eo.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
-				
+
 				selectedEntityTransforms.Add(eo.transform);
 				selectedEntities.Add(eo.GetComponent<GeneticEntity_T>());
 			}
@@ -166,10 +166,10 @@ public class PlayerController : MonoBehaviour
 
 
 	#region Dragging
-	
+
 	private void BeginDrag ()
 	{
-		dragging        = true;
+		dragging = true;
 
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
 			entity.GetComponent<NavMeshAgent>().enabled      = false;
 			entity.GetComponent<GeneticController>().enabled = false;
 			entity.enabled                                   = false;
-			entity.transform.GetChild(0).gameObject.layer = 2;
+			entity.transform.GetChild(0).gameObject.layer    = 2;
 		}
 	}
 
@@ -191,8 +191,9 @@ public class PlayerController : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
-		
+
 		LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
+
 		//mask = LayerMask.GetMask("Ground");
 
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
@@ -220,7 +221,7 @@ public class PlayerController : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
-		
+
 		LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
 
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
@@ -256,7 +257,7 @@ public class PlayerController : MonoBehaviour
 				drag.entity.enabled                                   = true;
 				drag.entity.GetComponent<NavMeshAgent>().enabled      = true;
 				drag.entity.GetComponent<GeneticController>().enabled = true;
-				drag.transform.GetChild(0).gameObject.layer = 0;
+				drag.transform.GetChild(0).gameObject.layer           = 0;
 
 				finishingDrags.RemoveAt(i);
 
@@ -280,7 +281,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	#endregion
-	
+
 	private void OnDrawGizmos ()
 	{
 		if (!selecting) return;
