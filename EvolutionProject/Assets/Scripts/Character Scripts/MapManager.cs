@@ -9,7 +9,9 @@ using Random = UnityEngine.Random;
 //IMPORTANT: YOU WILL NEED A TIME SCALE MANAGER
 
 public class MapManager : MonoBehaviour
-{   
+{
+    public static MapManager Instance;
+    
     public bool enemyGraph = false;
     public string graph;
     public GraphHelp help;

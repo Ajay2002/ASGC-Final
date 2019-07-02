@@ -55,6 +55,7 @@
             <e p="Production Ready Code" t="Include">
               <e p="CreatureEntity.cs" t="Include" />
               <e p="GeneticEntity_T.cs" t="Include" />
+              <e p="PredatorEntity.cs" t="Include" />
             </e>
             <e p="Trash.cs" t="Include" />
           </e>
