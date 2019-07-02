@@ -148,7 +148,13 @@ public class PlayerController : MonoBehaviour
 	{
 		dragging        = true;
 
-		foreach (var entity in selectedEntities)
+		for (int i = finishingDrags.Count - 1; i >= 0; i--)
+		{
+			Debug.Log(i);
+			if (selectedEntityTransforms.Contains(finishingDrags[i].transform)) finishingDrags.RemoveAt(i);
+		}
+
+		foreach (GeneticEntity_T entity in selectedEntities)
 		{
 			entity.GetComponent<NavMeshAgent>().enabled      = false;
 			entity.GetComponent<GeneticController>().enabled = false;
