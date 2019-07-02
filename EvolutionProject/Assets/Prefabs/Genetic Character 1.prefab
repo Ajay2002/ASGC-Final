@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 622544769d2ca984d9bf5c347d575ab8, type: 2}
+  - {fileID: 2100000, guid: 2752ed389ebc6c64fa29ec16ec1fa43c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 7582951549450326895}
   - component: {fileID: 7582951549450326892}
   - component: {fileID: 2890031249692766917}
+  - component: {fileID: 4583334104165816111}
   m_Layer: 0
   m_Name: Genetic Character 1
   m_TagString: Player
@@ -171,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0e23faef4ba58148a347a143aceeaa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentlyWantingTo: 
   pausedState: 0
   actionUpdateString: 
   type: 1
@@ -210,3 +212,17 @@ MonoBehaviour:
   friends: []
   food: []
   bredWith: []
+--- !u!114 &4583334104165816111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7582951549450326883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286414d56353e4b4fada40e4894ae8fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColour: {r: 0.9150943, g: 0.81432325, b: 0.13381095, a: 0}
+  colourLerpSpeed: 5

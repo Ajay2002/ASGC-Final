@@ -58,6 +58,23 @@
             </e>
             <e p="Trash.cs" t="Include" />
           </e>
+          <e p="Render Sripts and Shaders" t="Include">
+            <e p="BlurImageEffectShader.shader" t="Include" />
+            <e p="EntityGlowOnSelect.cs" t="Include" />
+            <e p="GlowCamera.cs" t="Include" />
+            <e p="GlowImageEffect.cs" t="Include" />
+            <e p="GlowImageEffectShader.shader" t="Include" />
+            <e p="GlowReplacementShader.shader" t="Include" />
+            <e p="StandardGlowShader.shader" t="Include" />
+            <e p="Testing" t="Include">
+              <e p="CustomImageEffect.cs" t="Include" />
+              <e p="ImageEffectShader.shader" t="Include" />
+              <e p="OverdrawShader.shader" t="Include" />
+              <e p="ReplacementShaderEffect.cs" t="Include" />
+              <e p="ShowDepthShader.shader" t="Include" />
+              <e p="TestShader.shader" t="Include" />
+            </e>
+          </e>
           <e p="UI Scripts" t="Include">
             <e p="MouseInputUIBlocker.cs" t="Include" />
           </e>
