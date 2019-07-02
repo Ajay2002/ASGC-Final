@@ -7,6 +7,7 @@ public abstract class GeneticEntity_T : MonoBehaviour
     public string currentlyWantingTo = "";
     #region  Core Methods
     private void Start() {
+        ageRate = Random.Range(0.2f,1.5f);
         if (initial) 
         Randomise();
         
@@ -22,7 +23,8 @@ public abstract class GeneticEntity_T : MonoBehaviour
         controller.FOVChecker(traits.surroundingCheckCooldown,traits.sightRange);
         timerEnabled = true;
     }
-
+    [HideInInspector]
+    public float ageRate = 0f;
     float timerSense = 0f;
     bool timerEnabled = false;
     bool completionCheck = false;
@@ -76,7 +78,7 @@ public abstract class GeneticEntity_T : MonoBehaviour
         
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
-        state.age += 1.2f * Time.deltaTime;
+        state.age += ageRate * Time.deltaTime;
 
         if (state.age >= 100) {
             Death();
@@ -85,9 +87,9 @@ public abstract class GeneticEntity_T : MonoBehaviour
         if (enemies != null)
         state.fear = Mathf.Clamp(enemies.Count*10 - (traits.strength*10)/2 + traits.dangerSense*10,0f,100f);
         
-        if (state.energy <= 50) {
-            state.sleepiness = Mathf.Clamp(state.sleepiness+0.3f*Time.deltaTime,0f,100f);
-        }
+        // if (state.energy <= 50) {
+        //     state.sleepiness = Mathf.Clamp(state.sleepiness+0.3f*Time.deltaTime,0f,100f);
+        // }
 
         if (state.age <= 50 && state.age >= 20) {
             state.reproductiveness += 0.9f * Time.deltaTime;
@@ -114,10 +116,14 @@ public abstract class GeneticEntity_T : MonoBehaviour
             state.health -= 2*Time.deltaTime;
         }
 
-        if (state.sleepiness >= 100) {
-            state.energy -= 1.5f*Time.deltaTime;
-            state.health -= 2f*Time.deltaTime;
+        if (state.energy <= 0) {
+            state.health -= 2*Time.deltaTime;
         }
+
+        // if (state.sleepiness >= 100) {
+        //     state.energy -= 1.5f*Time.deltaTime;
+        //     state.health -= 2f*Time.deltaTime;
+        // }
 
         if (!currentlyPausedState && !pausedState)
         StateActionConversion();
@@ -180,7 +186,7 @@ public abstract class GeneticEntity_T : MonoBehaviour
             currentlyWantingTo = "Eat";
         }
         else if (highest == 3) {
-            LowSleep();
+//            LowSleep();
             currentlyWantingTo = "Sleep";
         }
         else if (highest == 4) {
@@ -193,7 +199,6 @@ public abstract class GeneticEntity_T : MonoBehaviour
         }
     }
 
-    public abstract void LowSleep();
     public abstract void LowHealth();
     public abstract void FoodRequired();
     public abstract void HighFear();
@@ -234,10 +239,7 @@ public abstract class GeneticEntity_T : MonoBehaviour
     public virtual void Fight(GeneticEntity_T fighter){}
     public virtual void Flight(){}
     public virtual void Breed(GeneticEntity_T e) {
-        //TODO: Breeding Conditions && Attractiveness and such
-
-        //Spawning
-//        Debug.LogError("Haven't created a prefab with the correct GeneticEntity_T Component");
+     
         GeneticEntity_T newEntity = manager.SpawnEntity(manager.GetRandomPointAwayFrom(transform.position,traits.sightRange)).GetComponent<GeneticEntity_T>();
         
        
@@ -304,7 +306,6 @@ public abstract class GeneticEntity_T : MonoBehaviour
 
     }
 
-
     public virtual void Death(){}
     public virtual void Sleep(){}
     public virtual void Roam(){}
@@ -316,12 +317,9 @@ public abstract class GeneticEntity_T : MonoBehaviour
     #region  Energy Calculation Methods
 
     public virtual float EnergyMovementCalculation (float movementSpeed) {
-        return movementSpeed*traits.size*0.5f+state.age*0.1f;
+        return movementSpeed*traits.size*0.2f+state.age*0.02f;
     }
 
-    public virtual float EnergyMovementCalculation (float movementSpeed, float d) { 
-        return d*(movementSpeed*traits.size-Mathf.Pow(state.age,2));
-    }
 
     #endregion
 
@@ -366,98 +364,16 @@ public abstract class GeneticEntity_T : MonoBehaviour
         this.enemies = enemies;
         this.food = food;
         this.friends = friends;
+
+        state.energy -= 2.5f * (traits.sightRange/10)*traits.dangerSense;
        // print ("Detected : " + enemies.Count + " enemies, " + friends.Count + " friends, " + food.Count + " items!");
         
     }
 
     public enum GeneticType {Predator, Creature};
-}
-
-[System.Serializable]
-public class GeneticTraits
-{
-    public MapManager manager;
-
-	public float surroundingCheckCooldown;
-	public float decisionCoolDown;
-	public float speed;
-	public float size;
-	public float attractiveness;
-	public float sightRange;
-	public float dangerSense;
-	public float strength;
-	public float heatResistance;
-	public float intellect;
-	public float brute;
-
-	public float HI;
-	public float AI;
-	public float FI;
-	public float HUI;
-	public float SI;
-	public float RI;
-}
-
-[System.Serializable]
-public struct CurrentState
-{   
-    public float energyView;
-    public float healthView;
-    public float ageView;
-    public float fearView;
-    public float hungerView;
-    public float sleepView;
-    public float reproductivenessView;
     
-	public float energy {
-        set {
-            energyView = Mathf.Clamp(value,0,100);
-        }
-        get {return energyView;}
-    }
-	public float health { 
-        set {
-
-            healthView = Mathf.Clamp(value,0,100);
-        }
-        get {return healthView;}
-    }
-	public float age { 
-        set {
-
-            ageView = Mathf.Clamp(value,0,100);
-        }
-        get {return ageView;}
-    }
-	public float fear  {
-        set {
-
-            fearView = Mathf.Clamp(value,0,100);
-        }
-        get {return fearView;}
-    }
-	public float hunger { 
-        set {
-
-            hungerView = Mathf.Clamp(value,0,100);
-        }
-        get {return hungerView;}
-    }
-	public float sleepiness { 
-        set {
-
-            sleepView = Mathf.Clamp(value,0,100);
-        }
-        get {return sleepView;}
-    }
-	public float reproductiveness { 
-        set {
-
-            reproductivenessView = Mathf.Clamp(value,0,100);
-        }
-        get {return reproductivenessView;}
-    }
 }
+
 
 [System.Serializable]
 public class SenseNetwork

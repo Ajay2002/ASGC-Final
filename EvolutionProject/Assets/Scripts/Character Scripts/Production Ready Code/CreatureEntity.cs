@@ -97,11 +97,6 @@ public class CreatureEntity : GeneticEntity_T
 
     }
 
-    public override void LowSleep() {
-        pausedState = true;
-        Sleep();
-    }
-
     public override void LowEnergy() {
         pausedState = true;
         
@@ -276,9 +271,7 @@ public class CreatureEntity : GeneticEntity_T
         return movementSpeed*traits.size*0.5f+state.age*0.1f;
     }
 
-    public override float EnergyMovementCalculation (float movementSpeed, float d) { 
-        return d*(movementSpeed*traits.size-Mathf.Pow(state.age,2));
-    }
+   
 
     #endregion
 }

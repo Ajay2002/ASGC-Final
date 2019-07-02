@@ -159,11 +159,6 @@ public class PredatorEntity : GeneticEntity_T
 
     }
 
-    public override void LowSleep() {
-        pausedState = true;
-        Sleep();
-    }
-
     public override void LowEnergy() {
         pausedState = true;
         
@@ -289,7 +284,7 @@ public class PredatorEntity : GeneticEntity_T
         
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
-        state.age += 1.2f * Time.deltaTime;
+        state.age += ageRate * Time.deltaTime;
 
         if (state.age >= 100) {
             Death();
@@ -390,9 +385,6 @@ public class PredatorEntity : GeneticEntity_T
         return movementSpeed*traits.size*0.5f+state.age*0.1f;
     }
 
-    public override float EnergyMovementCalculation (float movementSpeed, float d) { 
-        return d*(movementSpeed*traits.size-Mathf.Pow(state.age,2));
-    }
 
     #endregion
 }

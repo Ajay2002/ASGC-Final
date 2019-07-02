@@ -38,7 +38,7 @@ public class MapManager : MonoBehaviour
 
     private IEnumerator FoodGen() {
         Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
-        yield return new WaitForSeconds(0.03f);
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine("FoodGen");
     }
 
@@ -57,6 +57,9 @@ public class MapManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit)) {
             return hit.point;
+        }
+        else {
+            //GetRandomPoint();
         }
 
         return transform.position;
@@ -116,7 +119,7 @@ public class MapManager : MonoBehaviour
         }
         average = average/L;
         help.Plot(t,average,0);
-        help.Plot(t,T.Length,1);
+        help.Plot(t,L,1);
     }
 
     public Transform SpawnEntity (Vector3 position) {
@@ -147,22 +150,24 @@ public class MapManager : MonoBehaviour
             Vector3 suggestedPoint = new Vector3(xPoint,0,zPoint);
             Vector3 unSuggestedPoint = new Vector3(p.x,0,p.z);
 
+            bool distGr = false;
             if (Vector3.Distance(suggestedPoint,unSuggestedPoint) >= r) {
-                conditionsMet = true;
-                break;
+                    conditionsMet = true;
+                    break;
             }
-            
-
         }
 
-        Ray ray = new Ray(new Vector3(xPoint,yPoint, zPoint), Vector3.down);
-        RaycastHit hit = new RaycastHit();
+        
+            Ray ray = new Ray(new Vector3(xPoint,yPoint, zPoint), Vector3.down);
+            RaycastHit hit = new RaycastHit();
 
-        if (Physics.Raycast(ray, out hit)) {
-            Vector3 hP = hit.point;
-            hP.y += 0.5f;
-            return hP;
-        }
+            if (Physics.Raycast(ray, out hit)) {
+                Vector3 hP = hit.point;
+                hP.y += 0.5f;
+                conditionsMet = true;
+                return hP;
+            }
+        
 
         return transform.position;
     }
