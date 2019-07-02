@@ -10,6 +10,8 @@ public class GeneticController : MonoBehaviour
 	NavMeshAgent  agent;
 	GeneticEntity_T entity;
 
+	public float movementCost = 0.2f;
+
 	#region  Default Methods
 
 	private void Awake ()
@@ -28,7 +30,7 @@ public class GeneticController : MonoBehaviour
 		}
 		else
 		{
-			entity.state.energy -= entity.EnergyMovementCalculation(agent.speed) * Time.deltaTime * 0.2f;
+			entity.state.energy -= entity.EnergyMovementCalculation(agent.speed) * Time.deltaTime * movementCost;
 		}
 	}
 
@@ -60,7 +62,7 @@ public class GeneticController : MonoBehaviour
 
 	//TODO: Move this whole thing out of an Enumerator and push it into the ECS or Job System <-- This can't even sustain 90 Elements
 	public void FOVChecker (float rate, float sensoryDistance)
-	{
+	{	
 		Collider[] distanceCheck = Physics.OverlapSphere(transform.position, sensoryDistance);
 
 		List<GeneticEntity_T> enemies = new List<GeneticEntity_T>();
