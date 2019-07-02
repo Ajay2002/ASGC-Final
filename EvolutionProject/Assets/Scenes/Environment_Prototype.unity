@@ -858,7 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImageEffectMaterial: {fileID: 2100000, guid: 5b8e9e3326f5c36408a1b8050976a62a,
     type: 2}
-  intensity: 16
+  intensity: 20
 --- !u!1001 &570072406
 PrefabInstance:
   m_ObjectHideFlags: 0
