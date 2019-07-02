@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -784,11 +784,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 7.98
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -811,13 +811,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.27180153, y: 0.36574787, z: -0.112583876, w: 0.8829934}
+  m_LocalPosition: {x: -8.17, y: 8.21, z: -14.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.219, y: 45.000004, z: 0}
 --- !u!1001 &570072406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1766,11 +1766,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbeaa931204f9c54c83acef401556707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyGraph: 0
+  graph: 
+  help: {fileID: 1073496427}
   entity: {fileID: 7582951549450326883, guid: 03fc8448b839f6a41b49927dfacac2fc, type: 3}
   foodObject: {fileID: 4945754576530618588, guid: 050de80f32246134fb74dd07a9e1c163,
     type: 3}
   mutationChance: 0.1
   area: {x: 32.43, y: 0, z: 26.73}
+  enemyEntity: {fileID: 0}
   idealTraits:
     manager: {fileID: 0}
     surroundingCheckCooldown: 0
