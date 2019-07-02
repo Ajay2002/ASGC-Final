@@ -8,6 +8,9 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
+	public  Transform      selectionBoxSpriteTransform;
+	private SpriteRenderer selectionBoxSprite;
+
 	public float dragFollowSpeed = 1f;
 
 	public Vector3 entityHeight;
@@ -31,6 +34,12 @@ public class PlayerController : MonoBehaviour
 		public Transform       transform;
 		public GeneticEntity_T entity;
 		public Vector3         position;
+	}
+
+	private void Start ()
+	{
+		selectionBoxSprite = selectionBoxSpriteTransform.GetComponent<SpriteRenderer>();
+		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
 	private void Update ()
@@ -93,8 +102,23 @@ public class PlayerController : MonoBehaviour
 
 		selecting              = true;
 		boxSelectStartPosition = MapManager.Instance.NearestPointOnMap(hit.point);
+		boxSelectEndPosition   = boxSelectStartPosition;
 
-		//TODO: Update Visuals of box select
+
+		//Update the graphics for the selection box
+		selectionBoxSpriteTransform.gameObject.SetActive(true);
+
+		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
+									 0.1f,
+									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
+									);
+
+		Vector3 size = new Vector2((boxSelectEndPosition.x - boxSelectStartPosition.x) / selectionBoxSpriteTransform.lossyScale.x,
+								   (boxSelectEndPosition.z - boxSelectStartPosition.z) / selectionBoxSpriteTransform.lossyScale.y
+								  );
+
+		selectionBoxSpriteTransform.position = centre;
+		selectionBoxSprite.size              = size;
 	}
 
 	private void UpdateBoxSelect ()
@@ -109,7 +133,18 @@ public class PlayerController : MonoBehaviour
 
 		boxSelectEndPosition = MapManager.Instance.NearestPointOnMap(hit.point);
 
-		//TODO:
+		//Update the graphics for the selection box
+		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
+									 0.1f,
+									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
+									);
+
+		Vector3 size = new Vector2((boxSelectEndPosition.x - boxSelectStartPosition.x) / selectionBoxSpriteTransform.lossyScale.x,
+								   (boxSelectEndPosition.z - boxSelectStartPosition.z) / selectionBoxSpriteTransform.lossyScale.y
+								  );
+
+		selectionBoxSpriteTransform.position = centre;
+		selectionBoxSprite.size              = size;
 	}
 
 	private void EndBoxSelect ()
@@ -137,8 +172,6 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) boxSelectEndPosition = MapManager.Instance.NearestPointOnMap(hit.point);
 
-		//TODO: Update Visuals of box select
-
 		GameObject[] entityObjects = GameObject.FindGameObjectsWithTag("Player");
 
 		foreach (GameObject eo in entityObjects)
@@ -161,6 +194,9 @@ public class PlayerController : MonoBehaviour
 				selectedEntities.Add(eo.GetComponent<GeneticEntity_T>());
 			}
 		}
+		
+		//Turn off visuals for the selection
+		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
 	#endregion
@@ -188,7 +224,7 @@ public class PlayerController : MonoBehaviour
 				selectedEntityTransforms.RemoveAt(i);
 				continue;
 			}
-			
+
 			entity.GetComponent<NavMeshAgent>().enabled      = false;
 			entity.GetComponent<GeneticController>().enabled = false;
 			entity.enabled                                   = false;
