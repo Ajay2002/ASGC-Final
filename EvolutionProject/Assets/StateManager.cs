@@ -29,6 +29,11 @@ public class StateManager : MonoBehaviour
         state.sleepiness = 0;
     }
 
+
+    public void AquiringSleep() {
+        
+    }
+
     public virtual float EnergyMovementCalculation (float movementSpeed) {
         return movementSpeed*entity.traits.size+state.age*0.05f;
     }

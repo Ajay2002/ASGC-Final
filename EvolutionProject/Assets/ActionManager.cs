@@ -37,7 +37,7 @@ public class ActionManager : MonoBehaviour
     }
 
     private void Start() {
-        Eat(true);
+        Sleep(true);
     }
 
     ActionTemplate currentAction;
@@ -71,6 +71,16 @@ public class ActionManager : MonoBehaviour
 
     }
 
+    public void Sleep (bool begin) {
+
+        if (begin) {
+
+            
+
+        }
+
+    }
+
     public void ActionCompletion() {
         //agent.ResetPath();
         movementProcessed = true;
@@ -80,7 +90,7 @@ public class ActionManager : MonoBehaviour
 
         entity.SuccessfulAction("");
 
-        Eat(true);
+        
 
     }
 
