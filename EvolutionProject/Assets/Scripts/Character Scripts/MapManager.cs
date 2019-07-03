@@ -19,11 +19,13 @@ public class MapManager : MonoBehaviour
 
     public List<Tuple<float, FoodScriptableObject>> worldSpawnedFood;
 
+    public int maxAmountOfFood;
+    public int amountOfFood;
+
     public bool enemyGraph = false;
     public string graph;
     public GraphHelp help;
     public GameObject entity;
-    public GameObject foodObject;
     public float mutationChance;
     public Vector3 area;
 
@@ -40,12 +42,15 @@ public class MapManager : MonoBehaviour
     
     private IEnumerator FoodGen(int i)
     {
-        Food f = Instantiate(worldSpawnedFood[i].Item2.prefab, GetRandomPoint(), Quaternion.identity).GetComponent<Food>();
-        f.energyValue = worldSpawnedFood[i].Item2.value;
-        f.healthValue = worldSpawnedFood[i].Item2.value;
-        f.hungerValue = worldSpawnedFood[i].Item2.value;
-        f.canPreyEat  = worldSpawnedFood[i].Item2.canPreyEat;
-        
+        if (amountOfFood < maxAmountOfFood)
+        {
+            Food f = Instantiate(worldSpawnedFood[i].Item2.prefab, NearestPointOnMap(GetRandomPoint()), Quaternion.identity).GetComponent<Food>();
+            f.value      = worldSpawnedFood[i].Item2.value;
+            f.canPreyEat = worldSpawnedFood[i].Item2.canPreyEat;
+
+            amountOfFood++;
+        }
+
         yield return new WaitForSeconds(worldSpawnedFood[i].Item1);
         StartCoroutine(nameof(FoodGen), i);
     }
