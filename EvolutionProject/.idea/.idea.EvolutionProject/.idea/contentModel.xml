@@ -9,6 +9,8 @@
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="ActionManager.cs" t="Include" />
+        <e p="DecisionManager.cs" t="Include" />
         <e p="Editor" t="Include">
           <e p="EntityInspectorEditor.cs" t="Include" />
           <e p="NetworkEditor.cs" t="Include" />
@@ -41,6 +43,7 @@
             </e>
           </e>
         </e>
+        <e p="EntityManager.cs" t="Include" />
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
         </e>
@@ -52,6 +55,9 @@
             <e p="MapManager.cs" t="Include" />
             <e p="NNetwork.cs" t="Include" />
             <e p="Note about Editor Folder.txt" t="Include" />
+            <e p="Production Ready 2" t="Include">
+              <e p="GeneticCharacter.cs" t="Include" />
+            </e>
             <e p="Production Ready Code" t="Include">
               <e p="CreatureEntity.cs" t="Include" />
               <e p="GeneticEntity_T.cs" t="Include" />
@@ -231,6 +237,7 @@
             </e>
           </e>
         </e>
+        <e p="StateManager.cs" t="Include" />
       </e>
       <e p="EvolutionProject.sln" t="IncludeFlat" />
       <e p="Library" t="ExcludeRecursive" />
