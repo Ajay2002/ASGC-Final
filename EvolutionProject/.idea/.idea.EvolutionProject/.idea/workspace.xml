@@ -88,10 +88,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/ActionManager.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
+            <state relative-caret-position="799">
               <caret line="312" column="68" selection-start-line="312" selection-start-column="68" selection-end-line="312" selection-end-column="68" />
               <folding>
                 <marker date="1562150122621" expanded="false" signature="6:100" ph="..." />
@@ -198,18 +198,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/EntityGlowOnSelect.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
+            <state relative-caret-position="612">
+              <caret line="38" column="32" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
               <folding>
-                <marker date="1562148740890" expanded="false" signature="6:78" ph="..." />
-                <marker date="1562148740890" expanded="true" signature="127:1303" ph="{...}" />
-                <marker date="1562148740890" expanded="true" signature="361:470" ph="{...}" />
-                <marker date="1562148740890" expanded="true" signature="495:1082" ph="{...}" />
-                <marker date="1562148740890" expanded="true" signature="1018:1079" ph="{...}" />
-                <marker date="1562148740890" expanded="true" signature="1124:1301" ph="{...}" />
+                <marker date="1562154598005" expanded="false" signature="6:78" ph="..." />
+                <marker date="1562154598005" expanded="true" signature="127:1304" ph="{...}" />
+                <marker date="1562154598005" expanded="true" signature="361:470" ph="{...}" />
+                <marker date="1562154598005" expanded="true" signature="495:1082" ph="{...}" />
+                <marker date="1562154598005" expanded="true" signature="1018:1079" ph="{...}" />
+                <marker date="1562154598005" expanded="true" signature="1124:1302" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -428,12 +428,12 @@
         <option value="$PROJECT_DIR$/Assets/ScriptableObjects/FoodSpawnerScriptableObject.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Character Scripts/Production Ready Code/CreatureEntity.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/CurrencyController.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/EntityGlowOnSelect.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/FoodSpawner.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Character Scripts/MapManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/Food.cs" />
         <option value="$PROJECT_DIR$/Assets/ActionManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/EntityGlowOnSelect.cs" />
       </list>
     </option>
   </component>
@@ -510,7 +510,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56389000" />
+    <option name="totallyTimeSpent" value="57414000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1055,21 +1055,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/EntityGlowOnSelect.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
-          <folding>
-            <marker date="1562148740890" expanded="false" signature="6:78" ph="..." />
-            <marker date="1562148740890" expanded="true" signature="127:1303" ph="{...}" />
-            <marker date="1562148740890" expanded="true" signature="361:470" ph="{...}" />
-            <marker date="1562148740890" expanded="true" signature="495:1082" ph="{...}" />
-            <marker date="1562148740890" expanded="true" signature="1018:1079" ph="{...}" />
-            <marker date="1562148740890" expanded="true" signature="1124:1301" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="482">
@@ -1173,7 +1158,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/ActionManager.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
+        <state relative-caret-position="799">
           <caret line="312" column="68" selection-start-line="312" selection-start-column="68" selection-end-line="312" selection-end-column="68" />
           <folding>
             <marker date="1562150122621" expanded="false" signature="6:100" ph="..." />
@@ -1275,6 +1260,21 @@
             <marker date="1562150122621" expanded="true" signature="15271:15279" ph="{...}" />
             <marker date="1562150122621" expanded="true" signature="15315:15323" ph="{...}" />
             <marker date="1562150122621" expanded="true" signature="15385:15393" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/EntityGlowOnSelect.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="38" column="32" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+          <folding>
+            <marker date="1562154598005" expanded="false" signature="6:78" ph="..." />
+            <marker date="1562154598005" expanded="true" signature="127:1304" ph="{...}" />
+            <marker date="1562154598005" expanded="true" signature="361:470" ph="{...}" />
+            <marker date="1562154598005" expanded="true" signature="495:1082" ph="{...}" />
+            <marker date="1562154598005" expanded="true" signature="1018:1079" ph="{...}" />
+            <marker date="1562154598005" expanded="true" signature="1124:1302" ph="{...}" />
           </folding>
         </state>
       </provider>
