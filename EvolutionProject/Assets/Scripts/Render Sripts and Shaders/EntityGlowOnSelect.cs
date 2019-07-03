@@ -36,7 +36,7 @@ public class EntityGlowOnSelect : MonoBehaviour
 
 	public void SetSelected (bool selected)
 	{
-		targetColour = selected
+		targetColour = selected 
 						   ? new Color(targetColour.r, targetColour.g, targetColour.b, 1)
 						   : new Color(targetColour.r, targetColour.g, targetColour.b, 0);
 	}
