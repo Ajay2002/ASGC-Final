@@ -7,20 +7,25 @@ public class EntityGlowOnSelect : MonoBehaviour
 	public Color targetColour;
 	public float colourLerpSpeed;
 
-	private Material glowMaterial;
+	private Material[] glowMaterials;
 
 	private Color currentColor;
+	
+	private static readonly int GLOW_COLOUR = Shader.PropertyToID("_GlowColour");
 
 	private void OnEnable ()
 	{
-		if (glowMaterial == null) glowMaterial = transform.GetChild(0).GetComponent<Renderer>().material;
+		if (glowMaterials == null) glowMaterials = transform.GetChild(0).GetComponent<Renderer>().materials;
 	}
 
 	private void Update ()
 	{
 		currentColor = Color.Lerp(currentColor, targetColour, Time.deltaTime * colourLerpSpeed);
 
-		glowMaterial.SetColor("_GlowColour", currentColor);
+		foreach (Material glowMaterial in glowMaterials)
+		{
+			glowMaterial.SetColor(GLOW_COLOUR, currentColor);	
+		}
 	}
 
 	public void SetSelected (bool selected)
