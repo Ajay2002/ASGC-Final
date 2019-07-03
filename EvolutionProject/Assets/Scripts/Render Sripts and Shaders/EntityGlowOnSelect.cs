@@ -20,6 +20,7 @@ public class EntityGlowOnSelect : MonoBehaviour
 
 	private void Update ()
 	{
+		
 		currentColor = Color.Lerp(currentColor, targetColour, Time.deltaTime * colourLerpSpeed);
 
 		foreach (Material glowMaterial in glowMaterials)
