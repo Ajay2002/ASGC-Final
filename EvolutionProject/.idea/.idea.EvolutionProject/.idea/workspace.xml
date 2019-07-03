@@ -9,46 +9,48 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
+            <state relative-caret-position="489">
+              <caret line="334" column="14" lean-forward="true" selection-start-line="334" selection-start-column="14" selection-end-line="334" selection-end-column="14" />
               <folding>
-                <marker date="1562080828464" expanded="false" signature="6:194" ph="..." />
-                <marker date="1562080828464" expanded="true" signature="241:9838" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="868:978" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="1002:1150" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="1175:1617" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="1425:1614" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="1621:5969" ph="MyRegion" />
-                <marker date="1562080828464" expanded="false" signature="1677:2367" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="1848:2105" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="2112:2364" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="2400:3461" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="2430:2464" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="3495:4348" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="4379:5956" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="4497:4761" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="4557:4690" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="5170:5852" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="5635:5848" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="5973:9378" ph="MyRegion" />
-                <marker date="1562080828464" expanded="false" signature="6017:6700" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="6094:6218" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="6275:6697" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="6352:6452" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="6729:7515" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="7186:7512" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="7541:8238" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="7900:8235" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="8003:8202" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="8268:9023" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="8325:9020" ph="{...}" />
-                <marker date="1562080828464" expanded="true" signature="8452:8866" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="9074:9365" ph="{...}" />
-                <marker date="1562080828464" expanded="false" signature="9409:9836" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="6:194" ph="..." />
+                <marker date="1562128699728" expanded="true" signature="241:10322" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="912:1022" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="1046:1236" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="1261:1759" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="1567:1756" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="1763:6157" ph="Selection Methods" />
+                <marker date="1562128699728" expanded="false" signature="1827:2517" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="1998:2255" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="2262:2514" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="2550:3611" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="2580:2614" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="3645:4498" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="4529:5857" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="5071:5753" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="5536:5749" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="5887:6143" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="5945:6075" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="6162:9575" ph="Dragging Methods" />
+                <marker date="1562128699728" expanded="false" signature="6214:6897" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="6291:6415" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="6472:6894" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="6549:6649" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="6926:7712" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="7383:7709" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="7738:8435" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="8097:8432" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="8200:8399" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="8465:9220" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="8522:9217" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="8649:9063" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="9271:9562" ph="{...}" />
+                <marker date="1562128699728" expanded="false" signature="9581:9859" ph="External Tie In Methods" />
+                <marker date="1562128699728" expanded="true" signature="9698:9845" ph="{...}" />
+                <marker date="1562128699728" expanded="true" signature="9893:10320" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -57,42 +59,43 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Character Scripts/MapManager.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="69" column="12" selection-start-line="69" selection-start-column="8" selection-end-line="69" selection-end-column="12" />
+            <state relative-caret-position="1139">
+              <caret line="72" column="12" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="12" />
               <folding>
-                <marker date="1562075809683" expanded="true" signature="6:149" ph="..." />
-                <marker date="1562075809683" expanded="true" signature="240:5183" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="598:657" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="691:807" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="843:1003" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="1042:1540" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="1456:1497" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="1566:1712" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="1757:3415" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="2051:3315" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="3469:3602" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="3661:3799" ph="{...}" />
-                <marker date="1562075809683" expanded="false" signature="3864:4872" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="4014:4568" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="4468:4544" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="4734:4830" ph="{...}" />
-                <marker date="1562075809683" expanded="false" signature="4929:5181" ph="{...}" />
-                <marker date="1562075809683" expanded="true" signature="5049:5093" ph="{...}" />
+                <marker date="1562126549060" expanded="false" signature="6:149" ph="..." />
+                <marker date="1562126549060" expanded="true" signature="240:5343" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="598:657" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="691:807" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="843:1002" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="1041:1596" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="1455:1496" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="1496:1553" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="1622:1768" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="1813:3464" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="2107:3371" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="3518:3651" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="3710:3848" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="3913:5032" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="4063:4644" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="4550:4634" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="4831:4981" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="5089:5341" ph="{...}" />
+                <marker date="1562126549060" expanded="true" signature="5209:5253" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
+            <state relative-caret-position="527">
               <caret line="34" column="69" selection-start-line="34" selection-start-column="69" selection-end-line="34" selection-end-column="69" />
               <folding>
-                <marker date="1562084694484" expanded="true" signature="6:92" ph="..." />
-                <marker date="1562084694484" expanded="true" signature="139:1671" ph="{...}" />
-                <marker date="1562084694484" expanded="true" signature="344:502" ph="{...}" />
-                <marker date="1562084694484" expanded="true" signature="527:1669" ph="{...}" />
+                <marker date="1562126549139" expanded="false" signature="6:92" ph="..." />
+                <marker date="1562126549139" expanded="true" signature="139:1671" ph="{...}" />
+                <marker date="1562126549139" expanded="true" signature="344:502" ph="{...}" />
+                <marker date="1562126549139" expanded="true" signature="527:1669" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -141,8 +144,8 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/EntityGlowOnSelect.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Render Sripts and Shaders/GlowCamera.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Character Scripts/MapManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs" />
       </list>
     </option>
   </component>
@@ -154,20 +157,10 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="UnityExplorer" proportions="" version="1">
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="SolutionExplorer">
-        <option name="show-all-files" value="false" />
-      </pane>
-      <pane id="AssemblyExplorer" />
-      <pane id="FileSystemExplorer" />
-      <pane id="UnityExplorer">
-        <option name="show-hidden-items" value="false" />
-        <option name="show-project-names" value="true" />
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
@@ -214,11 +207,12 @@
       <option name="presentableId" value="Default" />
       <updated>1561802785970</updated>
       <workItem from="1561802795458" duration="31204000" />
+      <workItem from="1562128212818" duration="485000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43404000" />
+    <option name="totallyTimeSpent" value="43889000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -233,20 +227,11 @@
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info id="Image Layers" />
-      <window_info id="Capture Tool" />
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="NuGet" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Unity" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Unit Tests" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Performance Profiler" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -254,13 +239,22 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Errors In Solution" />
-      <window_info anchor="right" id="Database" />
-      <window_info anchor="right" id="Unit Tests Coverage" />
+      <window_info anchor="bottom" id="NuGet" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Performance Profiler" order="8" />
+      <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Unity" order="11" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
+      <window_info anchor="bottom" id="Unit Tests" order="13" />
+      <window_info anchor="bottom" id="Terminal" order="14" />
+      <window_info anchor="bottom" id="Event Log" order="15" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="right" id="Errors In Solution" order="4" />
+      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="right" id="Unit Tests Coverage" order="6" />
     </layout>
     <layout-to-restore>
       <window_info id="Image Layers" order="0" />
@@ -305,32 +299,6 @@
           <properties exception="System.Threading.ThreadAbortException" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="1" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs</url>
-          <line>45</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs" initialLine="27">
-            <startOffsets>
-              <option value="1177" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1178" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs</url>
-          <line>235</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs" initialLine="176">
-            <startOffsets>
-              <option value="6731" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6732" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -600,82 +568,85 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Character Scripts/MapManager.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="69" column="12" selection-start-line="69" selection-start-column="8" selection-end-line="69" selection-end-column="12" />
+        <state relative-caret-position="1139">
+          <caret line="72" column="12" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="12" />
           <folding>
-            <marker date="1562075809683" expanded="true" signature="6:149" ph="..." />
-            <marker date="1562075809683" expanded="true" signature="240:5183" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="598:657" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="691:807" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="843:1003" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="1042:1540" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="1456:1497" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="1566:1712" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="1757:3415" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="2051:3315" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="3469:3602" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="3661:3799" ph="{...}" />
-            <marker date="1562075809683" expanded="false" signature="3864:4872" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="4014:4568" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="4468:4544" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="4734:4830" ph="{...}" />
-            <marker date="1562075809683" expanded="false" signature="4929:5181" ph="{...}" />
-            <marker date="1562075809683" expanded="true" signature="5049:5093" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
-          <folding>
-            <marker date="1562080828464" expanded="false" signature="6:194" ph="..." />
-            <marker date="1562080828464" expanded="true" signature="241:9838" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="868:978" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="1002:1150" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="1175:1617" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="1425:1614" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="1621:5969" ph="MyRegion" />
-            <marker date="1562080828464" expanded="false" signature="1677:2367" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="1848:2105" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="2112:2364" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="2400:3461" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="2430:2464" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="3495:4348" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="4379:5956" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="4497:4761" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="4557:4690" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="5170:5852" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="5635:5848" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="5973:9378" ph="MyRegion" />
-            <marker date="1562080828464" expanded="false" signature="6017:6700" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="6094:6218" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="6275:6697" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="6352:6452" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="6729:7515" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="7186:7512" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="7541:8238" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="7900:8235" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="8003:8202" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="8268:9023" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="8325:9020" ph="{...}" />
-            <marker date="1562080828464" expanded="true" signature="8452:8866" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="9074:9365" ph="{...}" />
-            <marker date="1562080828464" expanded="false" signature="9409:9836" ph="{...}" />
+            <marker date="1562126549060" expanded="false" signature="6:149" ph="..." />
+            <marker date="1562126549060" expanded="true" signature="240:5343" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="598:657" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="691:807" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="843:1002" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="1041:1596" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="1455:1496" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="1496:1553" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="1622:1768" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="1813:3464" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="2107:3371" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="3518:3651" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="3710:3848" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="3913:5032" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="4063:4644" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="4550:4634" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="4831:4981" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="5089:5341" ph="{...}" />
+            <marker date="1562126549060" expanded="true" signature="5209:5253" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/CameraController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
+        <state relative-caret-position="527">
           <caret line="34" column="69" selection-start-line="34" selection-start-column="69" selection-end-line="34" selection-end-column="69" />
           <folding>
-            <marker date="1562084694484" expanded="true" signature="6:92" ph="..." />
-            <marker date="1562084694484" expanded="true" signature="139:1671" ph="{...}" />
-            <marker date="1562084694484" expanded="true" signature="344:502" ph="{...}" />
-            <marker date="1562084694484" expanded="true" signature="527:1669" ph="{...}" />
+            <marker date="1562126549139" expanded="false" signature="6:92" ph="..." />
+            <marker date="1562126549139" expanded="true" signature="139:1671" ph="{...}" />
+            <marker date="1562126549139" expanded="true" signature="344:502" ph="{...}" />
+            <marker date="1562126549139" expanded="true" signature="527:1669" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/World Scripts/PlayerController.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="334" column="14" lean-forward="true" selection-start-line="334" selection-start-column="14" selection-end-line="334" selection-end-column="14" />
+          <folding>
+            <marker date="1562128699728" expanded="false" signature="6:194" ph="..." />
+            <marker date="1562128699728" expanded="true" signature="241:10322" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="912:1022" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="1046:1236" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="1261:1759" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="1567:1756" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="1763:6157" ph="Selection Methods" />
+            <marker date="1562128699728" expanded="false" signature="1827:2517" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="1998:2255" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="2262:2514" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="2550:3611" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="2580:2614" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="3645:4498" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="4529:5857" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="5071:5753" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="5536:5749" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="5887:6143" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="5945:6075" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="6162:9575" ph="Dragging Methods" />
+            <marker date="1562128699728" expanded="false" signature="6214:6897" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="6291:6415" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="6472:6894" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="6549:6649" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="6926:7712" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="7383:7709" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="7738:8435" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="8097:8432" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="8200:8399" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="8465:9220" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="8522:9217" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="8649:9063" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="9271:9562" ph="{...}" />
+            <marker date="1562128699728" expanded="false" signature="9581:9859" ph="External Tie In Methods" />
+            <marker date="1562128699728" expanded="true" signature="9698:9845" ph="{...}" />
+            <marker date="1562128699728" expanded="true" signature="9893:10320" ph="{...}" />
           </folding>
         </state>
       </provider>

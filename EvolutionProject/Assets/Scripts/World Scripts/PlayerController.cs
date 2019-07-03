@@ -8,6 +8,8 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
+	public static PlayerController Instance;
+	
 	public  Transform      selectionBoxSpriteTransform;
 	private SpriteRenderer selectionBoxSprite;
 
@@ -38,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
 	private void Start ()
 	{
+		if (Instance == null) Instance = this;
+
 		selectionBoxSprite = selectionBoxSpriteTransform.GetComponent<SpriteRenderer>();
 		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
@@ -47,8 +51,8 @@ public class PlayerController : MonoBehaviour
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
 		if (Input.GetMouseButtonDown(1)) BeginDrag();
-		if (dragging && Input.GetMouseButton(1)) UpdateDrag();
-		if (dragging && Input.GetMouseButtonUp(1)) EndDrag();
+		if (dragging && (Input.GetMouseButton(0) || Input.GetMouseButton(1))) UpdateDrag();
+		if (dragging && (Input.GetMouseButton(0) || Input.GetMouseButton(1))) EndDrag();
 
 		FinishDrags();
 
@@ -61,7 +65,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 
-	#region Selection
+	#region Selection Methods
 
 	private void SelectCurrent (Ray ray)
 	{
@@ -151,16 +155,7 @@ public class PlayerController : MonoBehaviour
 	{
 		selecting = false;
 
-		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false)
-		{
-			foreach (GeneticEntity_T entity in selectedEntities)
-			{
-				if (entity != null) entity.GetComponent<EntityGlowOnSelect>().SetSelected(false); // Remove Highlighting from Entities
-			}
-
-			selectedEntityTransforms.Clear();
-			selectedEntities.Clear();
-		}
+		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false) ClearSelect();
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -199,10 +194,21 @@ public class PlayerController : MonoBehaviour
 		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
+	private void ClearSelect ()
+	{
+		foreach (GeneticEntity_T entity in selectedEntities)
+		{
+			if (entity != null) entity.GetComponent<EntityGlowOnSelect>().SetSelected(false); // Remove Highlighting from Entities
+		}
+
+		selectedEntityTransforms.Clear();
+		selectedEntities.Clear();
+	}
+	
 	#endregion
 
-
-	#region Dragging
+	
+	#region Dragging Methods
 
 	private void BeginDrag ()
 	{
@@ -327,7 +333,25 @@ public class PlayerController : MonoBehaviour
 	}
 
 	#endregion
+	
+	
+	#region External Tie In Methods
 
+	public void BeginDragWithEntity (Transform entityTransform, GeneticEntity_T entity)
+	{
+		dragging = true;
+		
+		ClearSelect();
+		
+		selectedEntities.Add(entity);
+		selectedEntityTransforms.Add(entityTransform);
+		
+		BeginDrag();
+	}
+	
+	#endregion
+	
+	
 	private void OnDrawGizmos ()
 	{
 		if (!selecting) return;
