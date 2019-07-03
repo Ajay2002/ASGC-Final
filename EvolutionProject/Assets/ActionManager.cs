@@ -87,6 +87,15 @@ public class ActionManager : MonoBehaviour
 
     }
 
+    public void Flight(bool begin) {
+        if (begin) {
+
+        }   
+        else {
+            ActionCompletion();
+        }
+    }
+
     public void Breed (bool begin) {
         currentState = ActionState.Breeding;
         if (begin == true) {
@@ -809,6 +818,43 @@ public class BreedingAction : ActionTemplate {
             if (mate != null)
             Breed(mate);
 
+        }
+    }
+
+}
+
+public class FlightAction : ActionTemplate {
+
+    bool reachedDestination = false;
+    Vector3 randomPointOnMap = new Vector3();
+
+    public override void Begin(EntityManager m) {
+        manager = m;
+        randomPointOnMap = m.manager.GetRandomPointAwayFrom(m.transform.position,m.traits.sightRange);
+        reachedDestination = false;
+        m.controller.MoveTo(randomPointOnMap,m.traits.speed,"goingToTarget",0f);
+        currentState = "movingToTarget";
+    }
+
+    public override void Completion() {
+        manager.controller.Flight(false);
+    }
+
+    Transform foodItem;
+
+    public override void Update() {
+
+        if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.5f) {
+            Completion();
+        }
+        
+    }
+
+    string currentState = "";
+
+    public override void MovementComplete (string statement) {
+        if (statement == "goingToTarget") {
+            Completion();
         }
     }
 
