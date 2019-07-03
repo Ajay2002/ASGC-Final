@@ -37,7 +37,7 @@ public class ActionManager : MonoBehaviour
     }
 
     private void Start() {
-       Eat(true);
+       
     }
 
     ActionTemplate currentAction;
@@ -100,6 +100,21 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    //Breed request from 'm'
+    public bool BreedRequest (EntityManager m) {
+
+        if (m.stateManagement.fitness >= entity.manager.GetAverageFitness(m.type)) {
+
+            if (m.traits.attractiveness >= entity.traits.attractiveness-0.4f) {
+                return true;
+            }
+
+        }
+
+        return false;
+
+    }
+
     public void ActionCompletion() {
         //agent.ResetPath();
         movementProcessed = true;
@@ -108,7 +123,7 @@ public class ActionManager : MonoBehaviour
         currentAction = null;
 
         entity.SuccessfulAction("");
-        Eat(true);
+        
 
     }
 
@@ -513,22 +528,193 @@ public class PredatorEatingAction : ActionTemplate {
 
 public class BreedingAction : ActionTemplate {
 
-    public string lookingForMate;
-
+    public string state;
+    EntityManager manager;
+    EntityManager mate;
+    Vector3 randomPoint;
+    //Request from higher fitness
+    //Evaluates based on attractiveness
     public override void Begin(EntityManager m) {
+
+        manager = m;
+        state = "lookingForMate";
+        randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
+        m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
 
     }
 
     public override void Completion() {
-
+        manager.controller.Breed(false);
     }
 
     public override void Update() {
 
+        if (mate == null) {
+            state = "lookingForMate";
+        }
+
+        if (Vector3.Distance(manager.position,randomPoint) <= 0.5f && state == "lookingForMate") {
+            Completion();
+        }
+
+        if (state == "lookingForMate") {
+            if (manager.type == GTYPE.Creature) {
+                if (manager.creatures.Count > 0) {
+                    bool foundBreeding = false;
+                    EntityManager found = new EntityManager();
+                    for (int i = 0; i < manager.creatures.Count; i++) {
+                        if (manager.creatures[i] == null)
+                            {continue;}
+
+                        if (manager.bredWith.Contains(manager.creatures[i]))
+                            {continue;}
+                        
+                        if (manager.creatures[i].stateManagement.state.age < 20 || manager.stateManagement.state.age < 20)
+                            {continue;}
+
+                        if (manager.parentA != null && manager.parentB != null) {
+                            if (manager.creatures[i] == manager.parentA)
+                                continue;
+
+                            if (manager.creatures[i] == manager.parentB)
+                                continue;
+
+                            if (manager.creatures[i].parentA != null && manager.creatures[i].parentB != null) {
+                                if (manager.creatures[i].parentA == manager.parentA || manager.creatures[i].parentA == manager.parentB)
+                                    continue;
+                                if (manager.creatures[i].parentB == manager.parentB || manager.creatures[i].parentB == manager.parentB)
+                                    continue;
+
+                                
+                                if (manager.creatures[i].parentA == this.manager)
+                                continue;
+
+                                if (manager.creatures[i].parentB == this.manager)
+                                continue;
+
+                            }
+
+                                
+
+                        }
+
+                        if (manager.stateManagement.fitness > manager.creatures[i].stateManagement.fitness)
+                        continue;
+
+                        foundBreeding = true;
+                        found = manager.creatures[i];
+                        break;
+                    }
+
+                    if (foundBreeding) {
+                        //Send a request
+                        if (found != null) {
+                            if (found.controller.BreedRequest(manager)) {
+                                state = "mating";
+                                mate = found;
+                                BeginMating();
+                            }
+                        }
+
+                    }
+                }
+            }
+            else if (manager.type == GTYPE.Predator) {
+                 if (manager.enemies.Count > 0) {
+                    bool foundBreeding = false;
+                    EntityManager found = new EntityManager();
+                    for (int i = 0; i < manager.enemies.Count; i++) {
+                        if (manager.enemies[i] == null)
+                            {continue;}
+
+                        if (manager.bredWith.Contains(manager.enemies[i]))
+                            {continue;}
+                        
+                        if (manager.enemies[i].stateManagement.state.age < 20 || manager.stateManagement.state.age < 20)
+                            {continue;}
+
+                        if (manager.parentA != null && manager.parentB != null) {
+                            if (manager.enemies[i] == manager.parentA)
+                                continue;
+
+                            if (manager.enemies[i] == manager.parentB)
+                                continue;
+
+                            if (manager.enemies[i].parentA != null && manager.enemies[i].parentB != null) {
+                                if (manager.enemies[i].parentA == manager.parentA || manager.enemies[i].parentA == manager.parentB)
+                                    continue;
+                                if (manager.enemies[i].parentB == manager.parentB || manager.enemies[i].parentB == manager.parentB)
+                                    continue;
+
+                                
+                                if (manager.enemies[i].parentA == this.manager)
+                                continue;
+
+                                if (manager.enemies[i].parentB == this.manager)
+                                continue;
+
+                            }
+
+                                
+
+                        }
+
+                        if (manager.stateManagement.fitness > manager.enemies[i].stateManagement.fitness)
+                        continue;
+
+                        foundBreeding = true;
+                        found = manager.enemies[i];
+                        break;
+                    }
+
+                    if (foundBreeding) {
+                        //Send a request
+                        if (found != null) {
+                            if (found.controller.BreedRequest(manager)) {
+                                state = "mating";
+                                mate = found;
+                                BeginMating();
+                            }
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        if (state == "mating") {
+            
+        }
+
+    }
+
+    private void BeginMating() {
+
+        //Change the state of the other to a breed wait
+        //Move to other entity
+        //Wait 1 second
+        //Breed
+        
+
+    }
+
+
+    private void Breed (EntityManager m) {
+
+        
+        m.bredWith.Add(manager);
+        manager.bredWith.Add(m);
+        m.stateManagement.ReproductionState();
+        manager.stateManagement.ReproductionState();
+
+
     }
 
     public override void MovementComplete(string statement) {
-
+        if (statement == "reachedRandomPoint") {
+            Completion();
+        }
     }
 
 }

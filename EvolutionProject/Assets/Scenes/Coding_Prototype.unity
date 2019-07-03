@@ -459,6 +459,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -752,6 +757,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -1001,6 +1011,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -1213,6 +1228,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -1463,6 +1483,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -1541,6 +1566,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -1743,6 +1773,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -1882,6 +1917,11 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 1073496425}
+    - target: {fileID: 6169644870131594948, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 95be161729bdfff469d250cbc9e10219, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 072fd773aafd73542b6d0267d5b2623c, type: 3}
 --- !u!1001 &966073260
@@ -1895,6 +1935,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -1999,6 +2044,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2072,6 +2122,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
@@ -2177,6 +2232,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbeaa931204f9c54c83acef401556707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodSpawnerScriptableObjects:
+  - {fileID: 11400000, guid: b27ff65e910d36544a53c4a890a3b126, type: 2}
+  worldSpawnedFoodSpawnPeriods:
+  - 0.2
+  worldSpawnedFoodScriptableObjects:
+  - {fileID: 11400000, guid: b99b3416388e24742ba9fdb60f96b305, type: 2}
   enemyGraph: 1
   graph: Speed
   help: {fileID: 1073496427}
@@ -2528,6 +2589,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -2689,6 +2755,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -2852,6 +2923,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -2942,6 +3018,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
@@ -3100,6 +3181,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3173,6 +3259,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
@@ -3343,6 +3434,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -3505,6 +3601,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3661,6 +3762,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -3824,6 +3930,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3897,6 +4008,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -4060,6 +4176,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -4138,6 +4259,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761647023016439377, guid: 072fd773aafd73542b6d0267d5b2623c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
         type: 3}
@@ -4537,6 +4663,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -4651,6 +4782,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -4976,6 +5112,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creature (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
       propertyPath: manager
@@ -5054,6 +5195,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}
@@ -5283,6 +5429,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Creature (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796067724021642261, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8769435504991402760, guid: d7ff0a0bc1633164d8c5e080714efbc1,
         type: 3}

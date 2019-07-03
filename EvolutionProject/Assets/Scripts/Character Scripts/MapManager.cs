@@ -74,6 +74,23 @@ public class MapManager : MonoBehaviour
 
     }
 
+    public float GetAverageFitness (GTYPE type) {
+        
+        EntityManager[] m = GameObject.FindObjectsOfType<EntityManager>();
+
+        int L = 0;
+        float avg = 0;
+        for (int i = 0; i < m.Length; i++) {
+            if (m[i].type == type) {
+                L++;
+                avg += m[i].stateManagement.fitness;
+            }
+        }
+
+        return avg/L;
+
+    }
+
     private void Awake()
     {
         if (Instance == null) Instance = this;

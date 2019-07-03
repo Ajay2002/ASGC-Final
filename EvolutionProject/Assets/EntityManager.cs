@@ -26,7 +26,7 @@ public class EntityManager : MonoBehaviour
     //Sensory management & entity setup
     [Header("Sensory Elements")]
     public GTYPE type;
-
+    public EntityManager parentA, parentB;
     public List<EntityManager> enemies = new List<EntityManager>(); //Enemy Tag
     public List<EntityManager> creatures = new List<EntityManager>(); //Player Tag
     public List<Transform> food = new List<Transform>(); //Food Tag

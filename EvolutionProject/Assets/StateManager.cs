@@ -47,6 +47,9 @@ public class StateManager : MonoBehaviour
         state.fear = 100-entity.traits.strength/2-e.traits.size/2;
     }
 
+    public void ReproductionState() {
+        
+    }
     
     public float EvaluateFitness() {
         return ((100-state.ageView)+state.energyView+(100-state.hungerView)+(100-state.sleepView)+(100-state.fearView)+state.health*2)/10;
