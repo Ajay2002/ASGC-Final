@@ -37,7 +37,7 @@ public class ActionManager : MonoBehaviour
     }
 
     private void Start() {
-       
+       Eat(true);
     }
 
     ActionTemplate currentAction;
@@ -87,6 +87,19 @@ public class ActionManager : MonoBehaviour
 
     }
 
+    public void Breed (bool begin) {
+        currentState = ActionState.Breeding;
+        if (begin == true) {
+
+            currentAction = new BreedingAction();
+            currentAction.Begin(entity);
+
+        }
+        else {
+            ActionCompletion();
+        }
+    }
+
     public void ActionCompletion() {
         //agent.ResetPath();
         movementProcessed = true;
@@ -95,7 +108,7 @@ public class ActionManager : MonoBehaviour
         currentAction = null;
 
         entity.SuccessfulAction("");
-
+        Eat(true);
 
     }
 
@@ -346,8 +359,6 @@ public class EntitySleepingAction : ActionTemplate {
                     m.controller.StopMovement();
                     currentState = "sleeping";
                     sleepTimer = 2f;
-                    //Debug.Log("A");
-
                 }
             }
             else {
@@ -356,8 +367,6 @@ public class EntitySleepingAction : ActionTemplate {
                     m.controller.StopMovement();
                     currentState = "sleeping";
                     sleepTimer = 2f;
-            
-                   // Debug.Log("B");
                 }
             }
 
@@ -371,7 +380,6 @@ public class EntitySleepingAction : ActionTemplate {
             if (sleepTimer <= 0f) {
                 m.stateManagement.AquiringSleep();
                 Completion();
-//                Debug.Log("Reaching Sleep");
             }
             
             m.controller.subState = "sleeping";
@@ -500,5 +508,27 @@ public class PredatorEatingAction : ActionTemplate {
         }
     }
 
+
+}
+
+public class BreedingAction : ActionTemplate {
+
+    public string lookingForMate;
+
+    public override void Begin(EntityManager m) {
+
+    }
+
+    public override void Completion() {
+
+    }
+
+    public override void Update() {
+
+    }
+
+    public override void MovementComplete(string statement) {
+
+    }
 
 }
