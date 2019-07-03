@@ -96,7 +96,6 @@ public class ActionManager : MonoBehaviour
 
         entity.SuccessfulAction("");
 
-       
 
     }
 
@@ -162,6 +161,7 @@ public class ActionManager : MonoBehaviour
         //}
     }
 
+    Vector3 look;
     private void MovementUpdate ()
 	{
 		if (!movementProcessed && currentAction != null)
@@ -175,6 +175,8 @@ public class ActionManager : MonoBehaviour
             Vector3 d = (target-transform.position).normalized*entity.traits.speed*Time.deltaTime;
             d.y = 0;
             transform.position += d;
+            look = Vector3.Lerp(transform.position+transform.forward,transform.position+d,0.8f);
+            transform.LookAt(look);
 			stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * Time.deltaTime * movementCost;
 		}
 	}
