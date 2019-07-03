@@ -9,16 +9,15 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
 	public static PlayerController Instance;
-	
+
 	public  Transform      selectionBoxSpriteTransform;
 	private SpriteRenderer selectionBoxSprite;
 
-	public float dragFollowSpeed = 1f;
+	public float dragFollowSpeed = 5f;
 
 	public Vector3 entityHeight;
 
-	private readonly List<Transform>       selectedEntityTransforms = new List<Transform>();
-	private readonly List<GeneticEntity_T> selectedEntities         = new List<GeneticEntity_T>();
+	private readonly List<Transform> selectedEntityTransforms = new List<Transform>();
 
 	private float checkTime;
 
@@ -33,9 +32,8 @@ public class PlayerController : MonoBehaviour
 
 	private struct FinishingDrag
 	{
-		public Transform       transform;
-		public GeneticEntity_T entity;
-		public Vector3         position;
+		public Transform transform;
+		public Vector3   position;
 	}
 
 	private void Start ()
@@ -51,8 +49,8 @@ public class PlayerController : MonoBehaviour
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
 		if (Input.GetMouseButtonDown(1)) BeginDrag();
-		if (dragging && (Input.GetMouseButton(0) || Input.GetMouseButton(1))) UpdateDrag();
-		if (dragging && (Input.GetMouseButton(0) || Input.GetMouseButton(1))) EndDrag();
+		if (dragging && (Input.GetMouseButton(0)   || Input.GetMouseButton(1))) UpdateDrag();
+		if (dragging && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))) EndDrag();
 
 		FinishDrags();
 
@@ -71,21 +69,19 @@ public class PlayerController : MonoBehaviour
 	{
 		RaycastHit hit;
 
-		if (!Physics.Raycast(ray, out hit) || !hit.transform.CompareTag("Player")) return;
+		if (!Physics.Raycast(ray, out hit) || !hit.transform.parent.CompareTag("Player")) return;
 
 		if (selectedEntityTransforms.Contains(hit.transform.parent))
 		{
 			hit.transform.GetComponent<EntityGlowOnSelect>().SetSelected(false); //Remove Highlighting from Entities
 
 			selectedEntityTransforms.Remove(hit.transform.parent);
-			selectedEntities.Remove(hit.transform.parent.GetComponent<GeneticEntity_T>());
 		}
 		else
 		{
 			hit.transform.parent.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
 
 			selectedEntityTransforms.Add(hit.transform.parent);
-			selectedEntities.Add(hit.transform.parent.GetComponent<GeneticEntity_T>());
 		}
 	}
 
@@ -186,28 +182,26 @@ public class PlayerController : MonoBehaviour
 				eo.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
 
 				selectedEntityTransforms.Add(eo.transform);
-				selectedEntities.Add(eo.GetComponent<GeneticEntity_T>());
 			}
 		}
-		
+
 		//Turn off visuals for the selection
 		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
 	private void ClearSelect ()
 	{
-		foreach (GeneticEntity_T entity in selectedEntities)
+		foreach (Transform entity in selectedEntityTransforms)
 		{
 			if (entity != null) entity.GetComponent<EntityGlowOnSelect>().SetSelected(false); // Remove Highlighting from Entities
 		}
 
 		selectedEntityTransforms.Clear();
-		selectedEntities.Clear();
 	}
-	
+
 	#endregion
 
-	
+
 	#region Dragging Methods
 
 	private void BeginDrag ()
@@ -216,25 +210,21 @@ public class PlayerController : MonoBehaviour
 
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
-			Debug.Log(i);
 			if (selectedEntityTransforms.Contains(finishingDrags[i].transform)) finishingDrags.RemoveAt(i);
 		}
 
-		for (int i = selectedEntities.Count - 1; i >= 0; i--)
+		for (int i = selectedEntityTransforms.Count - 1; i >= 0; i--)
 		{
-			GeneticEntity_T entity = selectedEntities[i];
+			Transform entity = selectedEntityTransforms[i];
 
 			if (entity == null)
 			{
-				selectedEntities.RemoveAt(i);
 				selectedEntityTransforms.RemoveAt(i);
 				continue;
 			}
 
-			entity.GetComponent<NavMeshAgent>().enabled      = false;
-			entity.GetComponent<GeneticController>().enabled = false;
-			entity.enabled                                   = false;
-			entity.transform.GetChild(0).gameObject.layer    = 2;
+			//TODO: Turn off other scripts controlling entity
+			entity.transform.GetChild(0).gameObject.layer = 2;
 		}
 	}
 
@@ -246,22 +236,21 @@ public class PlayerController : MonoBehaviour
 
 		LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
 
-		//mask = LayerMask.GetMask("Ground");
-
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		Vector3 currentMouseWorldPosition = hit.point;
 
-		Debug.DrawLine(Camera.main.transform.position, currentMouseWorldPosition);
-
-
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
-			if (selectedEntityTransforms[i] == null) continue;
+			if (selectedEntityTransforms[i] == null)
+			{
+				selectedEntityTransforms.RemoveAt(i);
+				continue;
+			}
 
 			selectedEntityTransforms[i].position = Vector3.Lerp(selectedEntityTransforms[i].position,
-																currentMouseWorldPosition + Vector3.up +
-																DragDisplacementFunction(i),
+																currentMouseWorldPosition   + Vector3.up +
+																DragDisplacementFunction(i) + entityHeight,
 																Time.deltaTime * dragFollowSpeed / Time.timeScale);
 		}
 	}
@@ -288,8 +277,7 @@ public class PlayerController : MonoBehaviour
 			FinishingDrag fd = new FinishingDrag
 			{
 				transform = selectedEntityTransforms[i],
-				entity    = selectedEntities[i],
-				position  = MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition + DragDisplacementFunction(i))
+				position  = MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition + DragDisplacementFunction(i)) + entityHeight
 			};
 
 			finishingDrags.Add(fd);
@@ -305,11 +293,11 @@ public class PlayerController : MonoBehaviour
 			if (Vector3.SqrMagnitude(drag.position - drag.transform.position) < 0.005f)
 			{
 				//Drag Finished
-				drag.transform.position                               = drag.position;
-				drag.entity.enabled                                   = true;
-				drag.entity.GetComponent<NavMeshAgent>().enabled      = true;
-				drag.entity.GetComponent<GeneticController>().enabled = true;
-				drag.transform.GetChild(0).gameObject.layer           = 0;
+				drag.transform.position = drag.position;
+
+				//TODO: Turn back on other scripts controlling entity
+
+				drag.transform.GetChild(0).gameObject.layer = 0;
 
 				finishingDrags.RemoveAt(i);
 
@@ -333,39 +321,38 @@ public class PlayerController : MonoBehaviour
 	}
 
 	#endregion
-	
-	
+
+
 	#region External Tie In Methods
 
-	public void BeginDragWithEntity (Transform entityTransform, GeneticEntity_T entity)
+	public void BeginDragWithEntity (Transform entityTransform)
 	{
 		dragging = true;
-		
+
 		ClearSelect();
-		
-		selectedEntities.Add(entity);
+
 		selectedEntityTransforms.Add(entityTransform);
-		
+
 		BeginDrag();
 	}
-	
+
 	#endregion
-	
-	
-	private void OnDrawGizmos ()
-	{
-		if (!selecting) return;
 
-		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
-									 0,
-									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
-									);
 
-		Vector3 size = new Vector3((boxSelectEndPosition.x - boxSelectStartPosition.x),
-								   0.01f,
-								   (boxSelectEndPosition.z - boxSelectStartPosition.z)
-								  );
-
-		Gizmos.DrawWireCube(centre, size);
-	}
+	// private void OnDrawGizmos ()
+	// {
+	// 	if (!selecting) return;
+	//
+	// 	Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
+	// 								 0,
+	// 								 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
+	// 								);
+	//
+	// 	Vector3 size = new Vector3((boxSelectEndPosition.x - boxSelectStartPosition.x),
+	// 							   0.01f,
+	// 							   (boxSelectEndPosition.z - boxSelectStartPosition.z)
+	// 							  );
+	//
+	// 	Gizmos.DrawWireCube(centre, size);
+	// }
 }
