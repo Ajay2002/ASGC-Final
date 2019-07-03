@@ -8,6 +8,12 @@ public class EntityManager : MonoBehaviour
     public bool initial;
     public GeneticTraits traits;
 
+    public Vector3 position {
+        get {
+            return transform.position;
+        }
+    }
+
     //Action Management
     public void SuccessfulAction(string action) {
 
@@ -42,7 +48,7 @@ public class EntityManager : MonoBehaviour
     public StateManager stateManagement;
 
     private void OnDrawGizmos() {
-        Gizmos.DrawWireSphere(transform.position,traits.sightRange/2);
+        Gizmos.DrawWireSphere(transform.position,traits.sightRange);
     }
 
     private void Start() {

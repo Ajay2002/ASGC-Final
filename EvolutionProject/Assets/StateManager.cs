@@ -29,4 +29,12 @@ public class StateManager : MonoBehaviour
         state.sleepiness = 0;
     }
 
+    public virtual float EnergyMovementCalculation (float movementSpeed) {
+        return movementSpeed*entity.traits.size+state.age*0.05f;
+    }
+
+    public void Pursuit (EntityManager e) {
+        state.fear = 100-entity.traits.strength/2-e.traits.size/2;
+    }
+
 }
