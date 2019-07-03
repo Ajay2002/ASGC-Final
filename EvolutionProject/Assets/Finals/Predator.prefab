@@ -71,6 +71,8 @@ MonoBehaviour:
     SI: 0
     RI: 0
   type: 1
+  parentA: {fileID: 0}
+  parentB: {fileID: 0}
   enemies: []
   creatures: []
   food: []
@@ -256,12 +258,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 40816b85811ef274a80f0d3695e4a54a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.47
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 40816b85811ef274a80f0d3695e4a54a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.03575
+      value: -0.04
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 40816b85811ef274a80f0d3695e4a54a,
         type: 3}

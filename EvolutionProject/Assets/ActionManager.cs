@@ -43,10 +43,10 @@ public class ActionManager : MonoBehaviour
     ActionTemplate currentAction;
 
     private void Update() {
-        
+        if (currentAction != null && currentState != ActionState.Nothing)
         MovementUpdate();
 
-        if (currentAction != null & currentState != ActionState.Nothing) {
+        if (currentAction != null && currentState != ActionState.Nothing) {
             currentAction.Update();
         }
 
@@ -115,6 +115,17 @@ public class ActionManager : MonoBehaviour
 
     }
 
+    
+    public void BreedConfirmed(EntityManager m) {
+        StopMovement();
+        transform.LookAt(m.transform.position);
+        subState = "";
+        currentState = ActionState.Breeding;
+        
+    }
+
+    
+
     public void ActionCompletion() {
         //agent.ResetPath();
         movementProcessed = true;
@@ -123,8 +134,7 @@ public class ActionManager : MonoBehaviour
         currentAction = null;
 
         entity.SuccessfulAction("");
-        
-
+ 
     }
 
     public void StopMovement() {
@@ -214,35 +224,42 @@ public class ActionManager : MonoBehaviour
     #region  Sensory Handling
     public void FOVChecker (float rate, float sensoryDistance)
 	{	
-		Collider[] distanceCheck = Physics.OverlapSphere(transform.position, sensoryDistance);
+        if (currentState != ActionState.Nothing && currentAction != null) {
+            Collider[] distanceCheck = Physics.OverlapSphere(transform.position, sensoryDistance);
 
-		List<EntityManager> enemies = new List<EntityManager>();
-		List<EntityManager> player  = new List<EntityManager>();
-		List<Transform>     food    = new List<Transform>();
+            List<EntityManager> enemies = new List<EntityManager>();
+            List<EntityManager> player  = new List<EntityManager>();
+            List<Transform>     food    = new List<Transform>();
 
-		for (int i = 0; i < distanceCheck.Length; i++)
-		{
-			if (distanceCheck[i].transform == transform || distanceCheck[i].transform.root == transform)
-				continue;
+            for (int i = 0; i < distanceCheck.Length; i++)
+            {
+                if (distanceCheck[i].transform == transform || distanceCheck[i].transform.root == transform)
+                    continue;
 
-			//TODO: Remember to add and make sure it is in the FOV
-			string tag = distanceCheck[i].gameObject.tag;
+                //TODO: Remember to add and make sure it is in the FOV
+                string tag = distanceCheck[i].gameObject.tag;
 
-			if (tag.Equals("Enemy"))
-			{
-				enemies.Add(distanceCheck[i].transform.root.GetComponent<EntityManager>());
-			}
-			else if (tag.Equals("Player"))
-			{
-				player.Add(distanceCheck[i].transform.root.GetComponent<EntityManager>());
-			}
-			else if (tag.Equals("Food"))
-			{
-				food.Add(distanceCheck[i].transform);
-			}
-		}
+                if (tag.Equals("Enemy"))
+                {
+                    enemies.Add(distanceCheck[i].transform.root.GetComponent<EntityManager>());
+                }
+                else if (tag.Equals("Player"))
+                {
+                    player.Add(distanceCheck[i].transform.root.GetComponent<EntityManager>());
+                }
+                else if (tag.Equals("Food"))
+                {
+                    food.Add(distanceCheck[i].transform);
+                }
+            }
 
-		entity.SensoryUpdate(enemies, food, player);
+            entity.SensoryUpdate(enemies, food, player);
+        }
+        else {
+            entity.SensoryUpdate(entity.enemies, entity.food, entity.creatures);
+        }
+
+		
 	}
 
     #endregion
@@ -537,6 +554,8 @@ public class BreedingAction : ActionTemplate {
     public override void Begin(EntityManager m) {
 
         manager = m;
+//        Debug.LogError("What the hell age set");
+                manager.stateManagement.state.age = 30;
         state = "lookingForMate";
         randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
         m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
@@ -547,10 +566,13 @@ public class BreedingAction : ActionTemplate {
         manager.controller.Breed(false);
     }
 
+    float timeSinceBreedReq = 0f;
+
     public override void Update() {
 
         if (mate == null) {
             state = "lookingForMate";
+            manager.controller.MoveTo(randomPoint,manager.traits.speed,"reachedRandomPoint",0f);
         }
 
         if (Vector3.Distance(manager.position,randomPoint) <= 0.5f && state == "lookingForMate") {
@@ -609,10 +631,14 @@ public class BreedingAction : ActionTemplate {
                     if (foundBreeding) {
                         //Send a request
                         if (found != null) {
+                            //Debug.Log("Request Send");
                             if (found.controller.BreedRequest(manager)) {
                                 state = "mating";
                                 mate = found;
                                 BeginMating();
+                            }
+                            else {
+                                ///Debug.Log("Request Failed");
                             }
                         }
 
@@ -684,7 +710,10 @@ public class BreedingAction : ActionTemplate {
         }
 
         if (state == "mating") {
-            
+            timeSinceBreedReq += Time.deltaTime;
+            if (timeSinceBreedReq >= 5) {
+                mate.controller.ActionCompletion();
+            }
         }
 
     }
@@ -695,25 +724,91 @@ public class BreedingAction : ActionTemplate {
         //Move to other entity
         //Wait 1 second
         //Breed
+        mate.controller.BreedConfirmed(manager);
+        manager.controller.MoveTo(mate.position,manager.traits.speed,"reachedMate",0.7f);
+        state = "mating";
         
 
     }
 
 
-    private void Breed (EntityManager m) {
+    private void Breed (EntityManager e) {
 
         
-        m.bredWith.Add(manager);
-        manager.bredWith.Add(m);
-        m.stateManagement.ReproductionState();
+        e.bredWith.Add(manager);
+        manager.bredWith.Add(e);
+        e.stateManagement.ReproductionState();
         manager.stateManagement.ReproductionState();
 
+        //manager.manager.GetRandomPointAwayFrom(manager.position,manager.traits.sightRange)
+        Vector3 pos = e.position + e.transform.forward*0.5f;
+        EntityManager newEntity = manager.manager.SpawnEntity(pos).GetComponent<EntityManager>();
+        
+    
+        #region  Trait Modification
+        newEntity.traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,2f) : ((manager.traits.surroundingCheckCooldown+e.traits.surroundingCheckCooldown)/2);
+    
+        newEntity.traits.decisionCoolDown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,5f) : ((manager.traits.decisionCoolDown+e.traits.decisionCoolDown)/2);
+        
+        newEntity.traits.speed = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? (UnityEngine.Random.Range(0.01f,1f)*5) : ((manager.traits.speed+e.traits.speed)/2);
+    
+        newEntity.traits.size = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f)*3 : ((manager.traits.size+e.traits.size)/2);
+        
+        newEntity.traits.attractiveness = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.attractiveness+e.traits.attractiveness)/2);
+    
+        newEntity.traits.sightRange = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f)*10 : ((manager.traits.sightRange+e.traits.sightRange)/2);
+    
+        newEntity.traits.dangerSense = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.dangerSense+e.traits.dangerSense)/2);
+    
+        newEntity.traits.strength = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.strength+e.traits.strength)/2);
+    
+        newEntity.traits.heatResistance = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.heatResistance+e.traits.heatResistance)/2);
+    
+        newEntity.traits.intellect  =UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.intellect+e.traits.intellect)/2);
+    
+        newEntity.traits.brute = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.brute+e.traits.brute)/2);
+        
+        newEntity.traits.HI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.HI+e.traits.HI)/2);
+    
+        newEntity.traits.AI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.AI+e.traits.AI)/2);
 
+        newEntity.traits.FI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.FI+e.traits.FI)/2);
+    
+        newEntity.traits.HUI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.HUI+e.traits.HUI)/2);
+
+        newEntity.traits.SI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.SI+e.traits.SI)/2);
+    
+        newEntity.traits.RI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.RI+e.traits.RI)/2);
+        #endregion
+
+        //State Resets
+        newEntity.stateManagement.state.age = 0;
+        newEntity.stateManagement.state.energy = 100;
+        newEntity.stateManagement.state.fear = 0;
+        newEntity.stateManagement.state.sleepiness = 0;
+        newEntity.stateManagement.state.hunger = 0;
+        newEntity.stateManagement.state.health = 100;
+        newEntity.stateManagement.state.reproductiveness = 0f;
+
+        newEntity.parentA = this.manager;
+        newEntity.parentB = e;
+
+         //State changing with regards to breeding
+        e.stateManagement.ReproductionState();
+        manager.stateManagement.ReproductionState();
+        Completion();
+        e.controller.ActionCompletion();
     }
 
     public override void MovementComplete(string statement) {
         if (statement == "reachedRandomPoint") {
             Completion();
+        }
+        else if (statement == "reachedMate") {
+
+            if (mate != null)
+            Breed(mate);
+
         }
     }
 

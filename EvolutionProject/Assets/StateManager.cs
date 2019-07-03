@@ -48,7 +48,10 @@ public class StateManager : MonoBehaviour
     }
 
     public void ReproductionState() {
-        
+        state.energy -= 70;
+        state.hunger += 30;
+        state.sleepiness += 20;
+        state.reproductiveness -= 100;
     }
     
     public float EvaluateFitness() {
