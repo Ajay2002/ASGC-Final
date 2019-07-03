@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -644,6 +644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 232006088}
   - component: {fileID: 232006089}
+  - component: {fileID: 232006090}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -681,6 +682,20 @@ MonoBehaviour:
   selectionBoxSpriteTransform: {fileID: 1404161324}
   dragFollowSpeed: 5
   entityHeight: {x: 0, y: 0.3, z: 0}
+--- !u!114 &232006090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232006087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd158aa5fda823f45a55c867b8ed414f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currencyAmountUpperBound: 1877
+  currentCurrencyAmount: 1477
 --- !u!1 &264687380
 GameObject:
   m_ObjectHideFlags: 0
