@@ -223,8 +223,11 @@ public class PlayerController : MonoBehaviour
 				continue;
 			}
 
-			//TODO: Turn off other scripts controlling entity
-			entity.transform.GetChild(0).gameObject.layer = 2;
+			entity.GetComponent<EntityManager>().enabled   = false;
+			entity.GetComponent<StateManager>().enabled    = false;
+			entity.GetComponent<DecisionManager>().enabled = false;
+			entity.GetComponent<ActionManager>().enabled   = false;
+			entity.gameObject.layer  = 2;
 		}
 	}
 
@@ -295,9 +298,12 @@ public class PlayerController : MonoBehaviour
 				//Drag Finished
 				drag.transform.position = drag.position;
 
-				//TODO: Turn back on other scripts controlling entity
+				drag.transform.GetComponent<EntityManager>().enabled   = true;
+				drag.transform.GetComponent<StateManager>().enabled    = true;
+				drag.transform.GetComponent<DecisionManager>().enabled = true;
+				drag.transform.GetComponent<ActionManager>().enabled   = true;
 
-				drag.transform.GetChild(0).gameObject.layer = 0;
+				drag.transform.gameObject.layer = 0;
 
 				finishingDrags.RemoveAt(i);
 
