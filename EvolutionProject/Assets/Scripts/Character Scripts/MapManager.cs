@@ -98,16 +98,9 @@ public class MapManager : MonoBehaviour
                                                                                                                         "same length as World Spawned Food Scriptable Objects.");
 
         for (int i = 0; i < worldSpawnedFoodSpawnPeriods.Count; i++)
-        {
             worldSpawnedFood.Add(new Tuple<float, FoodScriptableObject>(worldSpawnedFoodSpawnPeriods[i], worldSpawnedFoodScriptableObjects[i]));
-        }
 
-        for (int i = 0; i < worldSpawnedFood.Count; i++)
-        {
-            Debug.Log(i);
-            StartCoroutine(nameof(FoodGen), i);
-        }
-
+        for (int i = 0; i < worldSpawnedFood.Count; i++) StartCoroutine(nameof(FoodGen), i);
     }
 
     float t = 0;

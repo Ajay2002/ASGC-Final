@@ -47,6 +47,10 @@
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
         </e>
+        <e p="ScriptableObjects" t="Include">
+          <e p="FoodScriptableObject.cs" t="Include" />
+          <e p="FoodSpawnerScriptableObject.cs" t="Include" />
+        </e>
         <e p="Scripts" t="Include">
           <e p="Character Scripts" t="Include">
             <e p="GE.cs" t="Include" />
@@ -87,7 +91,9 @@
           </e>
           <e p="World Scripts" t="Include">
             <e p="CameraController.cs" t="Include" />
+            <e p="CurrencyController.cs" t="Include" />
             <e p="Food.cs" t="Include" />
+            <e p="FoodSpawner.cs" t="Include" />
             <e p="PlayerController.cs" t="Include" />
           </e>
         </e>

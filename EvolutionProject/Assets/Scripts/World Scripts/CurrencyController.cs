@@ -20,17 +20,17 @@ public class CurrencyController : MonoBehaviour
 
     private void OnValidate ()
     {
-        if (currencyAmountUpperBound < 0) currencyAmountUpperBound = 0;
+        if (currencyAmountUpperBound < 0) currencyAmountUpperBound = -1;
         
     }
 
     public bool AddCurrency (int amount) //
     {
-        bool unclamped = !(currentCurrencyAmount + Mathf.Abs(amount) > currencyAmountUpperBound);
+        bool unclamped = currencyAmountUpperBound == -1 || !(currentCurrencyAmount + Mathf.Abs(amount) > currencyAmountUpperBound);
 
         currentCurrencyAmount += Mathf.Abs(amount);
 
-        currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
+        if (currencyAmountUpperBound != -1) currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
 
         return unclamped;
     }
