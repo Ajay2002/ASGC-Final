@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 8769435504991402763}
   - component: {fileID: 5556628690567974894}
   - component: {fileID: 5556628690567974895}
-  - component: {fileID: 4903135723892195118}
   m_Layer: 0
   m_Name: Creature
   m_TagString: Player
@@ -169,8 +168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 0}
   state:
-    energyView: 0
-    healthView: 0
+    energyView: 100
+    healthView: 100
     ageView: 0
     fearView: 0
     hungerView: 0
@@ -201,10 +200,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementCost: 0.2
+  subState: 
+  goalAccomplished: 1
+  currentState: 5
   entity: {fileID: 8769435504991402760}
   stateManager: {fileID: 8769435504991402761}
-  currentlyInAction: 0
-  currentAction: 
 --- !u!54 &5556628690567974894
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -234,25 +234,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!195 &4903135723892195118
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3796067724021642261}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 1

@@ -7,129 +7,86 @@ public class ActionManager : MonoBehaviour
 {
     [Header("Action Elements")]
     public float movementCost = 0.2f;
+    
+    public string subState = "";
+    public bool goalAccomplished = true;
+
+    public enum ActionState {
+        Eating,
+        Sleeping,
+        Fighting,
+        Running,
+        Breeding,
+        Nothing
+    }
+
+    public ActionState currentState;
 
     [Header("Components")]
     public EntityManager entity;
     public StateManager stateManager;
-    public NavMeshAgent  agent;
+    //public NavMeshAgent  agent;
 
     [HideInInspector]
-    public bool currentlyInAction = false;
-    public string currentAction = "";
-    
+    private bool movementProcessed;
+
     private void Awake() {
         entity.manager = GameObject.FindObjectOfType<MapManager>();
+        //agent = GetComponent<NavMeshAgent>();
+        
     }
 
     private void Start() {
-        
-        agent  = GetComponent<NavMeshAgent>();
-        
+        Eat(true);
     }
+
+    ActionTemplate currentAction;
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.W)) {
-            agent.isStopped = false;
-            EatFood();
-            //   EatFood();
+        
+        MovementUpdate();
+
+        if (currentAction != null & currentState != ActionState.Nothing) {
+            currentAction.Update();
         }
 
-        // if (currentlyInAction) {
-        //     agent.isStopped = false;
-        // }
-
-        if (currentlyInAction && currentAction != "") {    
-            if (currentAction == "searchingForFood" ) {
-
-                if (entity.food.Count > 0) {
-                    if (entity.food[0] != null) {
-                        print ("Finding?");
-                        MoveTo(entity.food[0],entity.traits.speed,"movingToFood",0);
-                        currentAction = "foodPursuit";
-                       
-                    }
-                }
-            }
-
-            if (currentAction == "searchingForCreature" && entity.type == GTYPE.Predator) {
-                if (entity.creatures.Count > 0) {
-                    if (entity.creatures[0] != null)
-                    {
-                        Chase(entity.creatures[0]);
-                        
-                    }
-                }
-
-            }
-
-        }
-
-        if (currentlyInAction && !movementProcessed)
-        MovementHandling();
     }
 
-    bool movementProcessed = true; 
+    public void Eat(bool begin) {
 
-    public void EatFood () {
-        currentlyInAction = true;
-        currentAction = "";
-
-        if (entity.type == GTYPE.Creature) {
-
-            if (entity.food.Count > 0) {
-                
-                if (entity.food[0] != null)
-                    MoveTo(entity.food[0],entity.traits.speed,"movingToFood",0);
-                else {
-                    currentAction = "searchingForFood";
-                    return;
-                }
-
+        if (begin) {
+            currentState = ActionState.Eating;
+            if (entity.type == GTYPE.Creature) {
+                currentAction = new CreatureEatingAction();
+                currentAction.Begin(entity);
             }
             else {
-                currentAction = "searchingForFood";
-                Vector3 pointOnMap = entity.manager.GetRandomPointAwayFrom(transform.position,entity.traits.sightRange);
-                Debug.DrawLine(pointOnMap, pointOnMap+Vector3.up*10,Color.red,10);
-                MoveTo(pointOnMap,entity.traits.speed,"movingToFood",0f);
-                return;
+                currentAction = new PredatorEatingAction();
+                currentAction.Begin(entity);
             }
-
         }
-        else if (entity.type == GTYPE.Predator) 
-        {
-            if (entity.creatures.Count > 0) {
-              if (entity.creatures[0] != null)
-                    Chase (entity.creatures[0]);
-                else {
-                    currentAction = "searchingForCreature";
-                    return;
-                }
-
-            }
-            else {
-                currentAction = "searchingForCreature";
-                Vector3 pointOnMap = entity.manager.GetRandomPointAwayFrom(transform.position,entity.traits.sightRange);
-                Debug.DrawLine(pointOnMap, pointOnMap+Vector3.up*10,Color.red,10);
-                MoveTo(pointOnMap,entity.traits.speed,"movingToCreature",0f);
-                return;
-            }
-            //Pursuit Request if Existing
-            //If not look for food then send request
+        else {
+            ActionCompletion();
         }
 
     }
 
-    private void Chase (EntityManager e) {
-     
-        print ("Found creature and about to give chase!");
-        CancelAction();
+    public void ActionCompletion() {
+        //agent.ResetPath();
+        movementProcessed = true;
+        subState = "";
+        currentState = ActionState.Nothing;
+        currentAction = null;
 
-        currentlyInAction = true;
-        currentAction = "creaturePursuit";
+        entity.SuccessfulAction("");
+
+        Eat(true);
 
     }
 
-    //Collisions result in instantaneous stuff
+
+    #region  Eating Management
+    
     private void OnCollisionEnter (Collision col) {
         if (col.transform.tag == "Food") {
             if (entity.type == GTYPE.Creature) {
@@ -137,124 +94,73 @@ public class ActionManager : MonoBehaviour
                 if (entity.food.Contains(col.transform))
                     entity.food.Remove(col.transform);
                 GameObject.Destroy(col.transform.gameObject);
+
+                if (currentState == ActionState.Eating && currentAction != null)
+                    currentAction.Completion();
             }
 
-            if (currentlyInAction && (currentAction == "searchingForFood" || currentAction == "movingToFood" || currentAction == "foodPursuit")) {
-                OnSuccess("findingFood");
-            }
         }
+
         else if (col.transform.tag == "Player") {
-
-            if (entity.type == GTYPE.Predator) {
-
-                if (currentlyInAction && (currentAction == "searchingForCreature" || currentAction == "movingToCreature" || currentAction == "foodPursuit")) {
-                    OnSuccess("findingFood");
-                }
-
-            }
-
+            
         }
         else if (col.transform.tag == "Enemy") {
 
         }
     }
-
-    #region  Core Action Management
-
-    private void CompletedAction (string invocationStatement) {
-        if (invocationStatement == "movingToFood") {
-            OnFailure("findingFood");
-        }
-        else if (invocationStatement == "movingToCreature") {
-            OnFailure("findingFood");
-        }
-    }
-
-    public void CancelAction() {
-        currentAction = "";
-        movementProcessed = true;
-        currentlyInAction = false;
-        agent.isStopped = true;
-    }
-
-    private void OnSuccess(string a) {
-        entity.SuccessfulAction(a);
-        print ("Success of " + a);
-        CancelAction();
-    }
-
-    private void OnFailure(string a) {
-        entity.FailedAction(a);
-        print ("Failure of " + a);
-        CancelAction();
-    }
-
-    public void Request (string request, EntityManager requestSender) {
-
-        if (request == "pursuit") {
-            CancelAction();
-
-        }
-
-    }
     
-
     #endregion
+    
+    #region  Movement
 
-    #region  Movement Handling
-
-    string invocationStatement;
-
-    public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
+    string invocationStatement = "";
+    Vector3 target;
+    
+    //TODO: Soon this will use A* however for now we will use the Navigation.AI
+	public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
 	{
-        //agent.isStopped = false;
-		if (agent.isOnNavMesh && agent.isActiveAndEnabled)
-		{
-			agent.speed = speed;
-			agent.SetDestination(target.position + (transform.position - target.position) * distPerc);
-			invocationStatement = invocationTarget;
+        // if ( agent.isOnNavMesh) {
+        //     agent.ResetPath();
+            this.target = target.position;
+            // agent.speed = speed;
+            // agent.SetDestination(target.position + (transform.position - target.position) * distPerc);
             movementProcessed = false;
-            movementTarget = target.position;
-		}
-	}
+            invocationStatement = invocationTarget;
+        //}
+    }
 
-    public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
+	public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
+	{   
+        // if ( agent.isOnNavMesh) {
+        //     agent.ResetPath();
+            this.target = target;
+            // agent.speed = speed;
+            // agent.SetDestination(target + (transform.position - target) * distPerc);
+            movementProcessed = false;
+            invocationStatement = invocationTarget;
+        //}
+    }
+
+    private void MovementUpdate ()
 	{
-        //agent.isStopped = false;
-		if (agent.isOnNavMesh && agent.isActiveAndEnabled)
+		if (!movementProcessed && currentAction != null)
+		if (Vector3.Distance(transform.position,target) <= 0.2f )
 		{
-			agent.speed = speed;
-			agent.SetDestination(target + (transform.position - target) * distPerc);
-			invocationStatement = invocationTarget;
-            movementProcessed = false;
-            movementTarget = target;
-		}
-	}   
-
-    Vector3 movementTarget;
-
-    private void MovementHandling() {
-
-        if (agent.isOnNavMesh && agent.isStopped == false)
-		if (Vector3.Distance(transform.position,movementTarget) <= 0.05f)
-		{
-			CompletedAction(invocationStatement);
+            currentAction.MovementComplete(invocationStatement);
             movementProcessed = true;
 		}
 		else
 		{
-			stateManager.state.energy -= EnergyMovementCalculation(agent.speed) * Time.deltaTime * movementCost;
+            Vector3 d = (target-transform.position).normalized*entity.traits.speed*Time.deltaTime;
+            d.y = 0;
+            transform.position += d;
+			stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * Time.deltaTime * movementCost;
 		}
-    }
-
-    public virtual float EnergyMovementCalculation (float movementSpeed) {
-        return movementSpeed*entity.traits.size+stateManager.state.age*0.05f;
-    }
+	}
 
     #endregion
-
+    
     #region  Sensory Handling
-
     public void FOVChecker (float rate, float sensoryDistance)
 	{	
 		Collider[] distanceCheck = Physics.OverlapSphere(transform.position, sensoryDistance);
@@ -289,5 +195,206 @@ public class ActionManager : MonoBehaviour
 	}
 
     #endregion
+    
+}
+
+public abstract class ActionTemplate {
+
+    public EntityManager manager;
+
+    public abstract void Begin(EntityManager m);
+    public abstract void Completion();
+    public abstract void Update();
+    public abstract void MovementComplete (string statement);
+
+}
+
+
+//Go after the random point
+//If something better comes along - go towards it
+//If it becomes null or it can't make it to the new one it reverts back to original
+public class CreatureEatingAction : ActionTemplate {
+
+    bool reachedDestination = false;
+    Vector3 randomPointOnMap = new Vector3();
+
+    public override void Begin(EntityManager m) {
+        manager = m;
+        randomPointOnMap = m.manager.GetRandomPointAwayFrom(m.transform.position,m.traits.sightRange);
+        reachedDestination = false;
+        m.controller.MoveTo(randomPointOnMap,m.traits.speed,"goingToTarget",0f);
+        currentState = "movingToTarget";
+    }
+
+    public override void Completion() {
+        manager.controller.Eat(false);
+    }
+
+    Transform foodItem;
+
+    public override void Update() {
+
+        if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.5f) {
+            Completion();
+        }
+
+        if (currentState == "movingToTarget") {
+
+            if (manager.food.Count > 0) {
+                if (manager.food[0] != null) {
+
+                    currentState = "movingToSeperate";
+                    foodItem = manager.food[0];
+                    manager.controller.MoveTo(foodItem.position,manager.traits.speed,"goingToFood",0f);
+                    
+                }
+            }
+
+
+
+        }
+
+        if (currentState == "movingToSeperate") {
+            if (foodItem == null) {
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+                currentState = "movingToTarget";
+            }
+        }
+    }
+
+    string currentState = "";
+
+    public override void MovementComplete (string statement) {
+        if (statement == "goingToTarget") {
+            Completion();
+        }
+        else if (statement == "goingToFood") {
+            
+            if (foodItem != null) {
+
+                manager.stateManagement.EatState();
+                GameObject.Destroy(foodItem.gameObject);
+                Completion();
+
+            }
+            else {
+
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+                currentState = "movingToTarget";
+
+            }
+
+        }
+    }
+
+}
+
+
+// No pursuit just increase fear beyond measure
+
+public class PredatorEatingAction : ActionTemplate {
+
+    string currentState = "";
+    EntityManager chasing;
+    EntityManager manager;
+    Vector3 randomPointOnMap;
+
+    public override void Begin(EntityManager m) {
+        manager = m;
+        randomPointOnMap = m.manager.GetRandomPointAwayFrom(m.transform.position,m.traits.sightRange);
+        m.controller.MoveTo(randomPointOnMap,m.traits.speed,"goingToTarget",0f);
+        currentState = "movingToTarget";
+        m.controller.subState = "randomPointMovement";
+    }
+
+    EntityManager foodItem;
+    public override void Update() {
+        if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.5f) {
+            Completion();
+            manager.controller.subState = "reachedAtDistance";
+            return;
+        }
+
+        if (foodItem != null)
+        if (Vector3.Distance(manager.position,foodItem.position) < 0.6f) {
+            manager.stateManagement.EatState();
+            GameObject.Destroy(foodItem.gameObject);
+            Completion();
+            manager.controller.subState = "ateATDistance";
+            return;
+        }
+
+        if (currentState == "movingToTarget") {
+
+            if (manager.creatures.Count > 0) {
+                if (manager.creatures[0] != null) {
+                    
+                    currentState = "movingToSeperate";
+                    foodItem = manager.creatures[0];
+                    manager.controller.MoveTo(foodItem.position,manager.traits.speed,"goingToFood",0f);
+                    foodItem.stateManagement.Pursuit(manager);
+                }
+            }
+
+             manager.controller.subState = "randomMovementTarge";
+
+        }
+        else if (currentState == "movingToSeperate") {
+            if (foodItem == null) {
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+                currentState = "movingToTarget";
+                manager.controller.subState = "updateRandomPointMovement";
+            }
+            else {
+                
+                if (Vector3.Distance(manager.position,foodItem.position) < manager.traits.sightRange) {
+                    manager.controller.MoveTo(foodItem.transform.position,manager.traits.speed,"reachedFood",0.5f);
+                    foodItem.stateManagement.Pursuit(manager);
+                    manager.controller.subState = "inPursuit";
+                }
+                else {
+                    manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+                    currentState = "movingToTarget";
+                    manager.controller.subState = "backToRandomPointMovement";
+                }
+
+            }
+        }
+        else {
+            manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+            currentState = "movingToTarget";
+            manager.controller.subState = "backBackToRandomPointMovement";
+        }
+    }
+
+    public override void Completion() {
+        manager.controller.Eat(false);
+    }
+
+    public override void MovementComplete(string statement) {
+        if (statement == "goingToTarget") {
+            Completion();
+            manager.controller.subState = "finishedGoingToRandomPoint";
+        }
+        else if (statement == "goingToFood") {
+            
+            if (foodItem != null) {
+                manager.controller.subState = "ateAtFinish";
+                manager.stateManagement.EatState();
+                GameObject.Destroy(foodItem.gameObject);
+                Completion();
+
+            }
+            else {
+
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+                currentState = "movingToTarget";
+                manager.controller.subState = "goAgain";
+
+            }
+
+        }
+    }
+
 
 }

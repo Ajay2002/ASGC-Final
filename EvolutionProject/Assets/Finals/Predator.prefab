@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3761647023016439376}
-  - component: {fileID: 3761647023016439389}
   - component: {fileID: 8730529500624669332}
   - component: {fileID: 8730529500624669335}
   - component: {fileID: 8730529500624669334}
   - component: {fileID: 8730529500624669337}
   - component: {fileID: -8068033892949714370}
+  - component: {fileID: -3503326267824601479}
   m_Layer: 0
   m_Name: Predator
   m_TagString: Enemy
@@ -37,28 +37,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 117.59701, z: 0}
---- !u!195 &3761647023016439389
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3761647023016439377}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 1
 --- !u!114 &8730529500624669332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,10 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df2a6efe2a45434090058dfc25626d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m: {fileID: 8730529500624669332}
+  entity: {fileID: 0}
   state:
-    energyView: 0
-    healthView: 0
+    energyView: 100
+    healthView: 100
     ageView: 0
     fearView: 0
     hungerView: 0
@@ -145,10 +123,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementCost: 0.2
+  subState: 
+  goalAccomplished: 1
+  currentState: 5
   entity: {fileID: 8730529500624669332}
   stateManager: {fileID: 8730529500624669335}
-  currentlyInAction: 0
-  currentAction: 
 --- !u!54 &-8068033892949714370
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -163,8 +142,21 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!65 &-3503326267824601479
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3761647023016439377}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3761647023156950798
 GameObject:
   m_ObjectHideFlags: 0
