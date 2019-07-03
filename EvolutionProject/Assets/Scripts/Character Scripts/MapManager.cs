@@ -11,7 +11,14 @@ using Random = UnityEngine.Random;
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
-    
+
+    public List<FoodSpawnerScriptableObject> foodSpawnerScriptableObjects;
+
+    public List<float> worldSpawnedFoodSpawnPeriods;
+    public List<FoodScriptableObject> worldSpawnedFoodScriptableObjects;
+
+    public List<Tuple<float, FoodScriptableObject>> worldSpawnedFood;
+
     public bool enemyGraph = false;
     public string graph;
     public GraphHelp help;
@@ -24,22 +31,23 @@ public class MapManager : MonoBehaviour
 
     public GeneticTraits idealTraits;
 
-    private void Start ()
-    {
-        if (Instance == null) Instance = this;
-    }
-
     private void OnDrawGizmos() {
         
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(transform.position, area);
         
     }
-
-    private IEnumerator FoodGen() {
-        Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
-        yield return new WaitForSeconds(0.1f);
-        StartCoroutine("FoodGen");
+    
+    private IEnumerator FoodGen(int i)
+    {
+        Food f = Instantiate(worldSpawnedFood[i].Item2.prefab, GetRandomPoint(), Quaternion.identity).GetComponent<Food>();
+        f.energyValue = worldSpawnedFood[i].Item2.value;
+        f.healthValue = worldSpawnedFood[i].Item2.value;
+        f.hungerValue = worldSpawnedFood[i].Item2.value;
+        f.canPreyEat  = worldSpawnedFood[i].Item2.canPreyEat;
+        
+        yield return new WaitForSeconds(worldSpawnedFood[i].Item1);
+        StartCoroutine(nameof(FoodGen), i);
     }
 
     public Vector3 GetRandomPoint () {
@@ -68,10 +76,38 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine("FoodGen");
+        if (Instance == null) Instance = this;
+        
+        if (foodSpawnerScriptableObjects == null) foodSpawnerScriptableObjects = new List<FoodSpawnerScriptableObject>();
+        if (worldSpawnedFood == null) worldSpawnedFood = new List<Tuple<float, FoodScriptableObject>>();
+        if (worldSpawnedFoodSpawnPeriods == null) worldSpawnedFoodSpawnPeriods = new List<float>();
+        if (worldSpawnedFoodScriptableObjects == null) worldSpawnedFoodScriptableObjects = new List<FoodScriptableObject>();
+        
+        
+        for (int i = 0; i < 10; i++)
+        {
+            FoodSpawner fs = Instantiate(foodSpawnerScriptableObjects[0].prefab, GetRandomPoint(), Quaternion.identity).GetComponent<FoodSpawner>();
+            fs.Initialise(foodSpawnerScriptableObjects[0]);
+        }
 
-        help.AddGraph("SelectedTrait",Color.blue);
-        help.AddGraph("Population",Color.red);
+        help.AddGraph("SelectedTrait", Color.blue);
+        help.AddGraph("Population",    Color.red);
+        
+        
+        if (worldSpawnedFoodSpawnPeriods.Count != worldSpawnedFoodScriptableObjects.Count) throw new Exception("World Spawned Food Spawn Periods is not the " +
+                                                                                                                        "same length as World Spawned Food Scriptable Objects.");
+
+        for (int i = 0; i < worldSpawnedFoodSpawnPeriods.Count; i++)
+        {
+            worldSpawnedFood.Add(new Tuple<float, FoodScriptableObject>(worldSpawnedFoodSpawnPeriods[i], worldSpawnedFoodScriptableObjects[i]));
+        }
+
+        for (int i = 0; i < worldSpawnedFood.Count; i++)
+        {
+            Debug.Log(i);
+            StartCoroutine(nameof(FoodGen), i);
+        }
+
     }
 
     float t = 0;
