@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minPosLimits: {x: -25, y: 5, z: -30}
-  maxPosLimits: {x: 25, y: 25, z: 30}
+  maxPosLimits: {x: 25, y: 20, z: 30}
   moveSpeed: 20
   zoomSpeed: 1.5
 --- !u!114 &534669907

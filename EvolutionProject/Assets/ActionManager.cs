@@ -349,6 +349,10 @@ public class CreatureEatingAction : ActionTemplate {
             
             if (foodItem != null) {
 
+                //TODO: Change to use the Food component attached to the gameobject
+                //TODO: Use the food to determine how much energy to gain and hunger to lose
+                //TODO: as well as use it to destroy the gameobject.
+                
                 manager.stateManagement.EatState();
                 GameObject.Destroy(foodItem.gameObject);
                 Completion();
