@@ -1,12 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 
 //IMPORTANT: YOU WILL NEED A TIME SCALE MANAGER
 
 public class MapManager : MonoBehaviour
-{   
+{
+    public static MapManager Instance;
+    
     public bool enemyGraph = false;
     public string graph;
     public GraphHelp help;
@@ -18,6 +23,11 @@ public class MapManager : MonoBehaviour
     public GameObject enemyEntity;
 
     public GeneticTraits idealTraits;
+
+    private void Start ()
+    {
+        if (Instance == null) Instance = this;
+    }
 
     private void OnDrawGizmos() {
         
@@ -56,7 +66,9 @@ public class MapManager : MonoBehaviour
 
     }
 
-    private void Awake() {StartCoroutine("FoodGen");
+    private void Awake()
+    {
+        StartCoroutine("FoodGen");
 
         help.AddGraph("SelectedTrait",Color.blue);
         help.AddGraph("Population",Color.red);
@@ -160,5 +172,13 @@ public class MapManager : MonoBehaviour
         return transform.position;
     }
 
-    
+    public Vector3 NearestPointOnMap (Vector3 offPoint)
+    {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(offPoint, out hit, Mathf.Infinity, NavMesh.AllAreas)) {
+            return hit.position;
+        }
+        
+        throw new Exception("NearestPointOnMap failed, nav mesh error");
+    }
 }
