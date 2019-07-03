@@ -37,7 +37,7 @@ public class ActionManager : MonoBehaviour
     }
 
     private void Start() {
-        Sleep(true);
+       
     }
 
     ActionTemplate currentAction;
@@ -73,10 +73,16 @@ public class ActionManager : MonoBehaviour
 
     public void Sleep (bool begin) {
 
+        currentState = ActionState.Sleeping;
+
         if (begin) {
-
             
+            currentAction = new EntitySleepingAction();
+            currentAction.Begin(entity);
 
+        }
+        else {
+            ActionCompletion();
         }
 
     }
@@ -90,8 +96,13 @@ public class ActionManager : MonoBehaviour
 
         entity.SuccessfulAction("");
 
-        
+       
 
+    }
+
+    public void StopMovement() {
+        movementProcessed = true;
+        target = transform.position;
     }
 
 
@@ -299,7 +310,88 @@ public class CreatureEatingAction : ActionTemplate {
 
 }
 
+public class EntitySleepingAction : ActionTemplate {
+    
+    bool foundSafePlaceToSleep = false;
+    Vector3 randomPoint;
 
+    EntityManager m;
+    string currentState = "";
+
+    public override void Begin(EntityManager m) {
+        this.m = m;
+        foundSafePlaceToSleep = false;
+        randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
+        m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
+        currentState = "lookingForPlaceToSleep";
+    }
+
+    float sleepTimer = 0f;
+
+    public override void Update() {
+
+        if (Vector3.Distance(m.position,randomPoint) <= 0.5f && currentState == "lookingForPlaceToSleep") {
+            randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
+            m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
+            currentState = "lookingForPlaceToSleep";
+        }
+
+        if (currentState == "lookingForPlaceToSleep") {
+            
+            if (m.type == GTYPE.Creature) {
+                if (m.enemies.Count <= 0) {
+                    
+                    m.controller.StopMovement();
+                    currentState = "sleeping";
+                    sleepTimer = 2f;
+                    //Debug.Log("A");
+
+                }
+            }
+            else {
+                if (m.creatures.Count <= 0) {
+                    
+                    m.controller.StopMovement();
+                    currentState = "sleeping";
+                    sleepTimer = 2f;
+            
+                   // Debug.Log("B");
+                }
+            }
+
+            m.controller.subState = "lookingForPlaceToSleep";
+        }
+
+        if (currentState == "sleeping") {
+
+            sleepTimer -= Time.deltaTime;
+
+            if (sleepTimer <= 0f) {
+                m.stateManagement.AquiringSleep();
+                Completion();
+//                Debug.Log("Reaching Sleep");
+            }
+            
+            m.controller.subState = "sleeping";
+        }
+
+
+    }
+
+    public override void MovementComplete (string statement) {
+        if (statement == "reachedRandomPoint") {
+            //Didn't find a place to sleep.. go again
+            randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
+            m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
+            currentState = "lookingForPlaceToSleep";
+        }
+    }
+
+    public override void Completion() {
+        m.controller.Sleep(false);
+    }
+
+}
 // No pursuit just increase fear beyond measure
 
 public class PredatorEatingAction : ActionTemplate {
