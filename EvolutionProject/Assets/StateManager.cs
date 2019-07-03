@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
+    public float fitness;
     public EntityManager entity;
     public CurrentState state;
 
     private void Start() {
         entity = GetComponent<EntityManager>();
+    }
+
+    private void Update() {
+        fitness = EvaluateFitness();
     }
 
     public void SensoryUpdate() {
@@ -31,7 +36,7 @@ public class StateManager : MonoBehaviour
 
 
     public void AquiringSleep() {
-        
+        Debug.LogError("Nothing here");
     }
 
     public virtual float EnergyMovementCalculation (float movementSpeed) {
@@ -40,6 +45,11 @@ public class StateManager : MonoBehaviour
 
     public void Pursuit (EntityManager e) {
         state.fear = 100-entity.traits.strength/2-e.traits.size/2;
+    }
+
+    
+    public float EvaluateFitness() {
+        return ((100-state.ageView)+state.energyView+(100-state.hungerView)+(100-state.sleepView)+(100-state.fearView)+state.health*2)/10;
     }
 
 }
