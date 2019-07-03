@@ -8,12 +8,65 @@ public class StateManager : MonoBehaviour
     public EntityManager entity;
     public CurrentState state;
 
+    //public CurrentState tempState;
+
     private void Start() {
         entity = GetComponent<EntityManager>();
     }
 
     private void Update() {
-        fitness = EvaluateFitness();
+        StateUpdate();
+    }
+
+    private void StateUpdate() {
+        state.energy = Mathf.Clamp(state.energy,0f,100f);
+        
+        state.age += 0.2f * Time.deltaTime;
+
+        if (state.age >= 100) {
+            GameObject.Destroy(this.gameObject);
+        }
+        
+        if (entity.enemies != null)
+        state.fear = Mathf.Clamp(entity.enemies.Count*10 - entity.traits.strength/2 + entity.traits.dangerSense/3,0f,100f);
+        
+        if (state.energy <= 50) {
+            state.sleepiness = Mathf.Clamp(state.sleepiness+2*Time.deltaTime,0f,100f);
+        }
+
+        if (state.age <= 50 && state.age >= 20) {
+            state.reproductiveness += 3 * Time.deltaTime * entity.traits.attractiveness;
+        }
+        else if (state.age >= 50 && state.age <= 75) {
+            state.reproductiveness -= 3 * Time.deltaTime * entity.traits.attractiveness;
+        }
+        
+
+        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*0.7f*entity.traits.size),0f,100f);
+
+        if (state.hunger >= 95) {
+            state.health -= Time.deltaTime*3;
+            state.energy -= Time.deltaTime;
+        }
+
+        if (state.sleepiness >= 95) {
+            state.health -= Time.deltaTime*3;
+            state.energy -= Time.deltaTime;
+        }
+
+        if (state.energy <= 5) {
+            state.hunger += Time.deltaTime;
+            state.sleepiness += Time.deltaTime;
+        }
+
+        if (state.health <= 0) {
+            GameObject.Destroy(this.gameObject);
+        }
+
+        if (state.age >= 100) {
+            GameObject.Destroy(this.gameObject);
+        }
+
     }
 
     public void SensoryUpdate() {
@@ -22,12 +75,13 @@ public class StateManager : MonoBehaviour
 
     public void EatState() {
         state.hunger -= 40*((entity.traits.size/3));
-        state.energy += 20*((entity.traits.size/3));
+        state.energy += 5;
     }
 
     public void EatState (Food food) {
+        //No value attached to food
         state.hunger -= 40*((entity.traits.size/3))*food.value;
-        state.energy += 20*((entity.traits.size/3))*food.value;
+        state.energy += 5;
     }
 
     public void ResetState () {
@@ -41,7 +95,10 @@ public class StateManager : MonoBehaviour
 
 
     public void AquiringSleep() {
-        Debug.LogError("Nothing here");
+//        Debug.LogError("Nothing here");
+        state.energy += 20;
+        state.health += 20;
+        state.sleepiness -= 40;
     }
 
     public virtual float EnergyMovementCalculation (float movementSpeed) {
@@ -49,7 +106,8 @@ public class StateManager : MonoBehaviour
     }
 
     public void Pursuit (EntityManager e) {
-        state.fear = 100-entity.traits.strength/2-e.traits.size/2;
+        if (e != null && entity != null)
+        state.fear += entity.traits.strength*10+e.traits.size*2+e.traits.speed*10;
     }
 
     public void ReproductionState() {

@@ -7,6 +7,7 @@ public class EntityManager : MonoBehaviour
     [Header("State and Traits")]
     public bool initial;
     public GeneticTraits traits;
+    public DecisionManager decision;
 
     public Vector3 position {
         get {
@@ -16,11 +17,11 @@ public class EntityManager : MonoBehaviour
 
     //Action Management
     public void SuccessfulAction(string action) {
-
+        decision.currentlyPerformingAction = false;
     }
 
     public void FailedAction(string action) {
-
+        decision.currentlyPerformingAction = false;
     }
     
     //Sensory management & entity setup
@@ -74,6 +75,7 @@ public class EntityManager : MonoBehaviour
             else if (timerSense <= 0) {
                 controller.FOVChecker(traits.surroundingCheckCooldown,traits.sightRange);
                 timerSense = traits.surroundingCheckCooldown;
+                decision.StateActionConversion();
             }
         }
     }

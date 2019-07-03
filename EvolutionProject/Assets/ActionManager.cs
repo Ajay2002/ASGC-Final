@@ -88,8 +88,10 @@ public class ActionManager : MonoBehaviour
     }
 
     public void Flight(bool begin) {
+        currentState = ActionState.Running;
         if (begin) {
-
+            currentAction = new FlightAction();
+            currentAction.Begin(entity);
         }   
         else {
             ActionCompletion();
@@ -157,13 +159,18 @@ public class ActionManager : MonoBehaviour
     private void OnCollisionEnter (Collision col) {
         if (col.transform.tag == "Food") {
             if (entity.type == GTYPE.Creature) {
-                if (col.transform.GetComponent<Food>() != null)
-                stateManager.EatState(col.transform.GetComponent<Food>());
+                if (col.transform.GetComponent<Food>() != null) {
+                    
+                    col.transform.GetComponent<Food>().Eat();
+                    stateManager.EatState(col.transform.GetComponent<Food>());
+
+                }
                 else
-                stateManager.EatState();
+                    stateManager.EatState();
                 if (entity.food.Contains(col.transform))
                     entity.food.Remove(col.transform);
-                GameObject.Destroy(col.transform.gameObject);
+                
+                //GameObject.Destroy(col.transform.gameObject);
 
                 if (currentState == ActionState.Eating && currentAction != null)
                     currentAction.Completion();
@@ -227,7 +234,7 @@ public class ActionManager : MonoBehaviour
             transform.position += d;
             look = Vector3.Lerp(transform.position+transform.forward,transform.position+d,0.8f);
             transform.LookAt(look);
-			stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * Time.deltaTime * movementCost;
+			stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost;
 		}
 	}
 
@@ -357,8 +364,14 @@ public class CreatureEatingAction : ActionTemplate {
                 //TODO: as well as use it to destroy the gameobject.
                 if (foodItem.GetComponent<Food>() != null) {
                     manager.stateManagement.EatState(foodItem.GetComponent<Food>());
+                    foodItem.GetComponent<Food>().Eat();
                 }
-                GameObject.Destroy(foodItem.gameObject);
+                else {
+                    manager.stateManagement.EatState();
+                    GameObject.Destroy(foodItem.gameObject);
+                }
+                
+
                 Completion();
 
             }
@@ -407,7 +420,7 @@ public class EntitySleepingAction : ActionTemplate {
                     
                     m.controller.StopMovement();
                     currentState = "sleeping";
-                    sleepTimer = 2f;
+                    sleepTimer = 5f;
                 }
             }
             else {
@@ -415,7 +428,7 @@ public class EntitySleepingAction : ActionTemplate {
                     
                     m.controller.StopMovement();
                     currentState = "sleeping";
-                    sleepTimer = 2f;
+                    sleepTimer = 5f;
                 }
             }
 
@@ -730,6 +743,7 @@ public class BreedingAction : ActionTemplate {
             timeSinceBreedReq += Time.deltaTime;
             if (timeSinceBreedReq >= 5) {
                 mate.controller.ActionCompletion();
+                Completion();
             }
         }
 

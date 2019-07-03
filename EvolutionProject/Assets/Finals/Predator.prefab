@@ -70,6 +70,7 @@ MonoBehaviour:
     HUI: 0
     SI: 0
     RI: 0
+  decision: {fileID: 8730529500624669334}
   type: 1
   parentA: {fileID: 0}
   parentB: {fileID: 0}
@@ -114,6 +115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de7c1fda38009a34591e9d075dd35979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entity: {fileID: 8730529500624669332}
+  currentlyWantingTo: 
+  currentlyPerformingAction: 0
 --- !u!114 &8730529500624669337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b0bb28543981a4d885a85acca20b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementCost: 0.2
+  movementCost: 0.1
   subState: 
   goalAccomplished: 1
   currentState: 5

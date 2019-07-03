@@ -148,6 +148,7 @@ MonoBehaviour:
     HUI: 0
     SI: 0
     RI: 0
+  decision: {fileID: 8769435504991402762}
   type: 0
   parentA: {fileID: 0}
   parentB: {fileID: 0}
@@ -192,6 +193,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de7c1fda38009a34591e9d075dd35979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entity: {fileID: 8769435504991402760}
+  currentlyWantingTo: 
+  currentlyPerformingAction: 0
 --- !u!114 &8769435504991402763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b0bb28543981a4d885a85acca20b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementCost: 0.2
+  movementCost: 0.1
   subState: 
   goalAccomplished: 1
   currentState: 5
@@ -251,8 +255,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 1.4, z: 1.2}
-  m_Center: {x: 0, y: 0.7, z: 0.1}
+  m_Size: {x: 0.90000004, y: 1.5280809, z: 1.2}
+  m_Center: {x: -0.000000004803577, y: 0.23249173, z: 0.1}
 --- !u!1001 &7381024185406599495
 PrefabInstance:
   m_ObjectHideFlags: 0
