@@ -157,6 +157,9 @@ public class ActionManager : MonoBehaviour
     private void OnCollisionEnter (Collision col) {
         if (col.transform.tag == "Food") {
             if (entity.type == GTYPE.Creature) {
+                if (col.transform.GetComponent<Food>() != null)
+                stateManager.EatState(col.transform.GetComponent<Food>());
+                else
                 stateManager.EatState();
                 if (entity.food.Contains(col.transform))
                     entity.food.Remove(col.transform);
@@ -352,8 +355,9 @@ public class CreatureEatingAction : ActionTemplate {
                 //TODO: Change to use the Food component attached to the gameobject
                 //TODO: Use the food to determine how much energy to gain and hunger to lose
                 //TODO: as well as use it to destroy the gameobject.
-                
-                manager.stateManagement.EatState();
+                if (foodItem.GetComponent<Food>() != null) {
+                    manager.stateManagement.EatState(foodItem.GetComponent<Food>());
+                }
                 GameObject.Destroy(foodItem.gameObject);
                 Completion();
 
@@ -851,7 +855,7 @@ public class FlightAction : ActionTemplate {
         if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.5f) {
             Completion();
         }
-        
+
     }
 
     string currentState = "";

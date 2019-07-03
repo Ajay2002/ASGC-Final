@@ -25,6 +25,11 @@ public class StateManager : MonoBehaviour
         state.energy += 20*((entity.traits.size/3));
     }
 
+    public void EatState (Food food) {
+        state.hunger -= 40*((entity.traits.size/3))*food.value;
+        state.energy += 20*((entity.traits.size/3))*food.value;
+    }
+
     public void ResetState () {
         state.age = 0;
         state.energy = 100;
