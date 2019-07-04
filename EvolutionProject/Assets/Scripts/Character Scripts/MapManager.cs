@@ -72,7 +72,7 @@ public class MapManager : MonoBehaviour
         RaycastHit hit = new RaycastHit();
 
         if (Physics.Raycast(ray, out hit)) {
-            return hit.point;
+            return NearestPointOnMap(hit.point);
         }
         else {
             //GetRandomPoint();
@@ -219,7 +219,7 @@ public class MapManager : MonoBehaviour
                 Vector3 hP = hit.point;
                 hP.y += 0.5f;
                 conditionsMet = true;
-                return hP;
+                return NearestPointOnMap(hP);
             }
         
 

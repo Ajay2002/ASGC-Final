@@ -83,6 +83,7 @@ public class EntityManager : MonoBehaviour
     private bool timerEnabled;
     private float timerSense;
     private void Update() {
+        
         if (timerEnabled == true) {
             if (timerSense > 0) {
                 timerSense -= Time.deltaTime;
