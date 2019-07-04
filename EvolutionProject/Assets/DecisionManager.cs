@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DecisionManager : MonoBehaviour
 {
+
+
     public EntityManager entity;
     public CurrentState state {
         get {
@@ -48,7 +50,100 @@ public class DecisionManager : MonoBehaviour
 
     public void StateActionConversion() {
         if (!currentlyPerformingAction) {
-            stationaryT = 0f;
+
+            // if (state.age >= 10)
+            // RunNonLinearTest();
+            // else 
+            if (entity.isNeuralNet)
+            RunNonLinearTest();
+            else
+            RunLinearTest();
+
+        }
+    }
+
+    private void RunNonLinearTest() {
+
+        List<float> inputs = new List<float>();
+        for (int i = 0; i < 8; i++) {
+            if (i == 0) {
+                inputs.Add((100-state.healthView)*traits.HI);
+            }
+            else if (i == 1) {
+                inputs.Add(state.reproductivenessView*traits.RI);
+            }
+            else if (i == 2) {
+                inputs.Add(state.hungerView*traits.HI);
+            }
+            else if (i == 3) {
+                inputs.Add(state.sleepView*traits.SI);
+            }
+            else if (i == 4) {
+                inputs.Add((100-state.energyView)*0.1f);
+            }
+            else if (i == 5) {
+                inputs.Add((state.fearView)*traits.FI);
+            }
+            else if (i == 6) {
+                inputs.Add(state.ageView*traits.AI);
+            }
+
+        }
+
+        inputs.Add(entity.food.Count);
+        inputs.Add(entity.enemies.Count);
+        inputs.Add(entity.creatures.Count);
+
+
+        List<float> outputs = new List<float>();
+
+        outputs = entity.network.RunNetwork(inputs);
+        float highestScore = 0f;
+        int highest = 0;
+
+        for (int i = 0; i < outputs.Count; i++) {
+            if (outputs[i]>outputs[highest]) {
+                highest = i;
+            }
+        }
+
+        if (highest == 0) {
+                LowHealth();
+                currentlyWantingTo = "Increase Health";
+                currentlyPerformingAction = true;
+            }
+            else if (highest == 1) {
+                if (state.ageView >= 10) {
+                HighReproductivity();
+                currentlyWantingTo = "Reproduce";
+                currentlyPerformingAction = true;
+                }
+            }
+            else if (highest == 2) {
+                FoodRequired();
+                currentlyWantingTo = "Eat";
+                currentlyPerformingAction = true;
+            }
+            else if (highest == 3) {
+                LowSleep();
+                currentlyWantingTo = "Sleep";
+                currentlyPerformingAction = true;
+            }
+            else if (highest == 4) {
+                LowEnergy();
+                currentlyWantingTo = "Increase Energy";
+                currentlyPerformingAction = true;
+            }
+            else if (highest == 5) {
+                HighFear();
+                currentlyWantingTo = "Fight or Flight";
+                currentlyPerformingAction = true;
+            }
+
+    }
+
+    private void RunLinearTest() {
+        stationaryT = 0f;
             float highestScore = 0f;
             int highest = 0;
             for (int i = 0; i < 8; i++) {
@@ -121,7 +216,6 @@ public class DecisionManager : MonoBehaviour
                 currentlyWantingTo = "Fight or Flight";
                 currentlyPerformingAction = true;
             }
-        }
     }
 
     private void LowHealth() {

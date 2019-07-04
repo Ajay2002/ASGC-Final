@@ -135,7 +135,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74d1fc61e60d3394cac2685d2709588b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyValue: 0
-  hungerValue: 0
-  healthValue: 0
+  value: 1
   canPreyEat: 1

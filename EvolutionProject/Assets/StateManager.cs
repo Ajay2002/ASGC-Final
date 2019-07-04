@@ -21,7 +21,7 @@ public class StateManager : MonoBehaviour
     private void StateUpdate() {
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
-        state.age += 0.2f * Time.deltaTime;
+        state.age += 0.6f * Time.deltaTime;
 
         if (state.age >= 100) {
             GameObject.Destroy(this.gameObject);
@@ -34,7 +34,7 @@ public class StateManager : MonoBehaviour
             state.sleepiness = Mathf.Clamp(state.sleepiness+2*Time.deltaTime,0f,100f);
         }
 
-        if (state.age <= 50 && state.age >= 20) {
+        if (state.age <= 50 && state.age >= 10) {
             state.reproductiveness += 3 * Time.deltaTime * entity.traits.attractiveness;
         }
         else if (state.age >= 50 && state.age <= 75) {

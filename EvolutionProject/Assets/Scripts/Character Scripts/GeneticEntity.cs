@@ -60,7 +60,7 @@ public class GeneticEntity : MonoBehaviour
     bool timerEnabled = false;
     bool completionCheck = false;
 
-    
+ 
 
     private void Update() {
         if (timerEnabled == true) {

@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a21b78335e241941a08f5161555cde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initial: 1
+  initial: 0
   traits:
     manager: {fileID: 0}
     surroundingCheckCooldown: 0
@@ -72,6 +72,10 @@ MonoBehaviour:
     RI: 0
   decision: {fileID: 8730529500624669334}
   type: 1
+  network:
+    biases: []
+    fitness: 0
+    random: 0
   parentA: {fileID: 0}
   parentB: {fileID: 0}
   enemies: []
@@ -81,6 +85,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   controller: {fileID: 8730529500624669337}
   stateManagement: {fileID: 8730529500624669335}
+  isNeuralNet: 0
 --- !u!114 &8730529500624669335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementCost: 0.1
+  controller: {fileID: 1545710247410228593}
   subState: 
   goalAccomplished: 1
   currentState: 5
@@ -339,11 +345,22 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[2]
       value: 
       objectReference: {fileID: 2100000, guid: 3fa647fd3df7e44428c9607cba3f9c0a, type: 2}
+    - target: {fileID: -6057140222963153312, guid: 40816b85811ef274a80f0d3695e4a54a,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6c48987041333774888aa46ea74a4f74, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40816b85811ef274a80f0d3695e4a54a, type: 3}
 --- !u!4 &8933299456359919627 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 40816b85811ef274a80f0d3695e4a54a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4504655471547538193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1545710247410228593 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: 40816b85811ef274a80f0d3695e4a54a,
     type: 3}
   m_PrefabInstance: {fileID: 4504655471547538193}
   m_PrefabAsset: {fileID: 0}

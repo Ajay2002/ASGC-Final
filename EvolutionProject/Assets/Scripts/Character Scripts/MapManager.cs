@@ -12,6 +12,9 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
 
+    public int hiddenLayer,hiddenNeuron;
+    public bool tryNetwork = false;
+
     public List<FoodSpawnerScriptableObject> foodSpawnerScriptableObjects;
 
     public List<float> worldSpawnedFoodSpawnPeriods;

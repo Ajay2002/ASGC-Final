@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Jobs;
+using Unity.Entities;
 
 public class ActionManager : MonoBehaviour
 {
     [Header("Action Elements")]
     public float movementCost = 0.2f;
+    public Animator controller;
     
     public string subState = "";
     public bool goalAccomplished = true;
@@ -31,6 +34,7 @@ public class ActionManager : MonoBehaviour
     private bool movementProcessed;
 
     private void Awake() {
+        
         entity.manager = GameObject.FindObjectOfType<MapManager>();
         //agent = GetComponent<NavMeshAgent>();
         
@@ -113,7 +117,7 @@ public class ActionManager : MonoBehaviour
 
     //Breed request from 'm'
     public bool BreedRequest (EntityManager m) {
-
+        if (m != null)
         if (m.stateManagement.fitness >= entity.manager.GetAverageFitness(m.type)) {
 
             if (m.traits.attractiveness >= entity.traits.attractiveness-0.4f) {
@@ -198,6 +202,9 @@ public class ActionManager : MonoBehaviour
 	{
         // if ( agent.isOnNavMesh) {
         //     agent.ResetPath();
+            if (controller != null) {
+                controller.speed = speed/3;
+            }            
             this.target = target.position;
             // agent.speed = speed;
             // agent.SetDestination(target.position + (transform.position - target.position) * distPerc);
@@ -208,8 +215,12 @@ public class ActionManager : MonoBehaviour
 
 	public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
 	{   
+
         // if ( agent.isOnNavMesh) {
         //     agent.ResetPath();
+             if (controller != null) {
+                controller.speed = speed/3;
+            }          
             this.target = target;
             // agent.speed = speed;
             // agent.SetDestination(target + (transform.position - target) * distPerc);
@@ -222,7 +233,7 @@ public class ActionManager : MonoBehaviour
     private void MovementUpdate ()
 	{
 		if (!movementProcessed && currentAction != null)
-		if (Vector3.Distance(transform.position,target) <= 0.2f )
+		if (Vector3.Distance(transform.position,target) <= 0.6f )
 		{
             currentAction.MovementComplete(invocationStatement);
             movementProcessed = true;
@@ -284,6 +295,7 @@ public class ActionManager : MonoBehaviour
     #endregion
     
 }
+
 
 public abstract class ActionTemplate {
 
@@ -396,6 +408,8 @@ public class EntitySleepingAction : ActionTemplate {
     string currentState = "";
 
     public override void Begin(EntityManager m) {
+        if (m == null)
+        Completion();
         this.m = m;
         foundSafePlaceToSleep = false;
         randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
@@ -686,7 +700,7 @@ public class BreedingAction : ActionTemplate {
                         if (manager.bredWith.Contains(manager.enemies[i]))
                             {continue;}
                         
-                        if (manager.enemies[i].stateManagement.state.age < 20 || manager.stateManagement.state.age < 20)
+                        if (manager.enemies[i].stateManagement.state.age < 10 || manager.stateManagement.state.age < 10)
                             {continue;}
 
                         if (manager.parentA != null && manager.parentB != null) {
@@ -771,9 +785,65 @@ public class BreedingAction : ActionTemplate {
         e.stateManagement.ReproductionState();
         manager.stateManagement.ReproductionState();
 
-        //manager.manager.GetRandomPointAwayFrom(manager.position,manager.traits.sightRange)
-        Vector3 pos = e.position + e.transform.forward*0.5f;
-        EntityManager newEntity = manager.manager.SpawnEntity(pos).GetComponent<EntityManager>();
+        Vector3 pos = manager.manager.GetRandomPointAwayFrom(manager.position,manager.traits.sightRange);
+        //Vector3 pos = e.position + e.transform.forward*0.5f;
+        EntityManager newEntity;
+        if (GTYPE.Creature == manager.type)
+        newEntity = manager.manager.SpawnEntity(pos).GetComponent<EntityManager>();
+        else
+        newEntity = manager.manager.SpawnEntityEnemy(pos).GetComponent<EntityManager>();
+        
+        if (manager.isNeuralNet && e.isNeuralNet) {
+        NNetwork A = e.network;
+        NNetwork B = manager.network;
+        
+        NNetwork Child1 = new NNetwork();
+        Child1.Initialise(manager.manager.hiddenLayer,manager.manager.hiddenNeuron,10,5);
+
+        for (int w = 0; w < Child1.weights.Count; w++)
+        {
+            if (UnityEngine.Random.Range(0.01f,1.0f) < manager.manager.mutationChance) {
+                for (int x = 0; x < Child1.weights[w].RowCount; x++)
+                {
+                    for (int y = 0; y < Child1.weights[w].ColumnCount; y++)
+                    {
+                        Child1.weights[w][x, y] = UnityEngine.Random.Range(-1f, 1f);
+                    }
+                }
+            }
+            else {
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.5f)
+                {//(Matrix<float> A, Matrix<float> B) = CrossOver(population[AIndex].weights[w], population[BIndex].weights[w]);
+                    Child1.weights[w]=(A.weights[w]);
+                }
+                else {
+                    Child1.weights[w]=(B.weights[w]);
+                }
+            }
+        }
+
+        for (int b = 0; b < Child1.biases.Count; b++)
+        {
+            if (UnityEngine.Random.Range(0.01f,1.0f) < manager.manager.mutationChance) {
+                Child1.biases[b] = UnityEngine.Random.Range(-1f,1f);
+            }
+            else {
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.5f)
+                {
+                    Child1.biases[b]=(A.biases[b]);
+                }
+                else
+                {
+                    Child1.biases[b] = (B.biases[b]);
+                }
+            }
+
+        }
+
+        newEntity.network = Child1;
+        newEntity.isNeuralNet = manager.isNeuralNet;
+        }
+
         
     
         #region  Trait Modification
@@ -820,6 +890,8 @@ public class BreedingAction : ActionTemplate {
         newEntity.stateManagement.state.hunger = 0;
         newEntity.stateManagement.state.health = 100;
         newEntity.stateManagement.state.reproductiveness = 0f;
+
+        
 
         newEntity.parentA = this.manager;
         newEntity.parentB = e;

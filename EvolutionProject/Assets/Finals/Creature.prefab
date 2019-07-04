@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a21b78335e241941a08f5161555cde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initial: 1
+  initial: 0
   traits:
     manager: {fileID: 0}
     surroundingCheckCooldown: 0
@@ -150,6 +150,10 @@ MonoBehaviour:
     RI: 0
   decision: {fileID: 8769435504991402762}
   type: 0
+  network:
+    biases: []
+    fitness: 0
+    random: 0
   parentA: {fileID: 0}
   parentB: {fileID: 0}
   enemies: []
@@ -159,6 +163,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   controller: {fileID: 8769435504991402763}
   stateManagement: {fileID: 8769435504991402761}
+  isNeuralNet: 0
 --- !u!114 &8769435504991402761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementCost: 0.1
+  controller: {fileID: 5592940140259915559}
   subState: 
   goalAccomplished: 1
   currentState: 5
@@ -264,11 +270,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3796067724021642260}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: ef0c76a6b55d06a40aa5670755c08d84,
-        type: 3}
-      propertyPath: m_Name
-      value: Rabbit
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -339,16 +340,32 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.43344
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: ef0c76a6b55d06a40aa5670755c08d84,
+        type: 3}
+      propertyPath: m_Name
+      value: Rabbit
+      objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: c5ccac27f053a5e4dadf80a29eb941ab, type: 2}
+    - target: {fileID: -6057140222963153312, guid: ef0c76a6b55d06a40aa5670755c08d84,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6c48987041333774888aa46ea74a4f74, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef0c76a6b55d06a40aa5670755c08d84, type: 3}
 --- !u!4 &2527679020987030109 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
+    type: 3}
+  m_PrefabInstance: {fileID: 7381024185406599495}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5592940140259915559 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: ef0c76a6b55d06a40aa5670755c08d84,
     type: 3}
   m_PrefabInstance: {fileID: 7381024185406599495}
   m_PrefabAsset: {fileID: 0}
