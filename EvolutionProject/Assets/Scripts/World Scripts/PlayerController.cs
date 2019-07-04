@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
 	public Vector3 entityHeight;
 
-	private readonly List<Transform> selectedEntityTransforms = new List<Transform>();
+	public readonly List<Transform> selectedEntityTransforms = new List<Transform>();
 
 	private float checkTime;
 
