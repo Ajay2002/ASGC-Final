@@ -21,7 +21,7 @@ public class StateManager : MonoBehaviour
     private void StateUpdate() {
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
-        state.age += 2 * Time.deltaTime;
+        state.age += 0.3f * Time.deltaTime;
 
         if (state.age >= 100) {
             GameObject.Destroy(this.gameObject);
@@ -35,23 +35,23 @@ public class StateManager : MonoBehaviour
         }
 
         if (state.age <= 50 && state.age >= 20) {
-            state.reproductiveness += 1 * Time.deltaTime * Random.Range(1f,1.5f);
+            state.reproductiveness += 2 * Time.deltaTime * Random.Range(1f,1.5f);
         }
         else if (state.age >= 50 && state.age <= 75) {
-            state.reproductiveness -= 1 * Time.deltaTime * Random.Range(1,1.5f);
+            state.reproductiveness -= 2 * Time.deltaTime * Random.Range(1,1.5f);
         }
         
 
-        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*1.3f*entity.traits.size),0f,100f);
+        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*1.2f*entity.traits.size),0f,100f);
 
         if (state.hunger >= 95) {
             state.health -= Time.deltaTime*20;
-            state.energy -= Time.deltaTime;
+            state.energy -= Time.deltaTime*3;
         }
 
         if (state.sleepiness >= 95) {
-            state.health -= Time.deltaTime*3;
-            state.energy -= Time.deltaTime;
+            state.health -= Time.deltaTime*20;
+            state.energy -= Time.deltaTime*3;
         }
 
         if (state.energy <= 5) {
@@ -106,19 +106,24 @@ public class StateManager : MonoBehaviour
     }
 
     public void Pursuit (EntityManager e) {
-        if (e != null && entity != null)
-        state.fear += entity.traits.strength*10+e.traits.size*2+e.traits.speed*10;
+        if (e != null && entity != null) {
+            state.fear += entity.traits.strength*10+e.traits.size*2+e.traits.speed*10;
+            fitnessAddition+=0.05f;
+        }
     }
 
     public void ReproductionState() {
         state.energy -= 70;
         state.hunger += 30;
         state.sleepiness += 20;
-        state.reproductiveness -= 100;
+        state.reproductiveness -= 60;
+        fitnessAddition+=30;
     }
+
+    private float fitnessAddition = 0f;
     
     public float EvaluateFitness() {
-        return ((100-state.ageView)+state.energyView+(100-state.hungerView)+(100-state.sleepView)+(100-state.fearView)+state.health*2)/10;
+        return (((100-state.ageView)+state.energyView+(100-state.hungerView)+(100-state.sleepView)+(100-state.fearView)+state.health*2)/10)+fitnessAddition;
     }
 
 }
