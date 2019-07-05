@@ -224,11 +224,12 @@ public class PlayerController : MonoBehaviour
 				continue;
 			}
 
+			entity.GetComponent<NavMeshAgent>().enabled    = false;
 			entity.GetComponent<EntityManager>().enabled   = false;
 			entity.GetComponent<StateManager>().enabled    = false;
 			entity.GetComponent<DecisionManager>().enabled = false;
 			entity.GetComponent<ActionManager>().enabled   = false;
-			entity.gameObject.layer  = 2;
+			entity.gameObject.layer                        = 2;
 		}
 	}
 
@@ -299,6 +300,7 @@ public class PlayerController : MonoBehaviour
 				//Drag Finished
 				drag.transform.position = drag.position;
 
+				drag.transform.GetComponent<NavMeshAgent>().enabled    = true;
 				drag.transform.GetComponent<EntityManager>().enabled   = true;
 				drag.transform.GetComponent<StateManager>().enabled    = true;
 				drag.transform.GetComponent<DecisionManager>().enabled = true;
