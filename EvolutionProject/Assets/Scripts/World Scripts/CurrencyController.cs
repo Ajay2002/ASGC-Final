@@ -19,6 +19,7 @@ public class CurrencyController : MonoBehaviour
     private void Start()
     {
         if (Instance == null) Instance = this;
+        MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
         StartCoroutine(nameof(PopulationCurrencyIncrease));
     }
 
@@ -32,7 +33,6 @@ public class CurrencyController : MonoBehaviour
     private void OnValidate ()
     {
         if (currencyAmountUpperBound < 0) currencyAmountUpperBound = -1;
-        
     }
 
     public bool AddCurrency (int amount)
