@@ -8699,7 +8699,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2520a9eeb382f6a44b01401ba6baf347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuTabs:
+  menuTabButtons:
+  - {fileID: 2106049421}
+  - {fileID: 1576550895}
+  - {fileID: 1375082302}
+  - {fileID: 886202043}
+  - {fileID: 232150883}
+  menuTabObjects:
   - {fileID: 365834699}
   - {fileID: 1273739720}
   - {fileID: 1151757694}

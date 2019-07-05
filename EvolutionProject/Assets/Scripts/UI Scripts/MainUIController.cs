@@ -10,8 +10,10 @@ public class MainUIController : MonoBehaviour
 {
 	public static MainUIController Instance;
 
-	[FormerlySerializedAs("MenuTabs")]
-	public List<GameObject> menuTabs;
+	public List<GameObject> menuTabButtons;
+	public List<GameObject> menuTabObjects;
+	
+	public readonly List<Tuple<GameObject, GameObject>> menuTabs = new List<Tuple<GameObject, GameObject>>();
 	public List<GameObject> simSpeedButtons;
 
 	public TextMeshProUGUI currencyText;
@@ -31,18 +33,37 @@ public class MainUIController : MonoBehaviour
 	private void Start ()
 	{
 		if (Instance == null) Instance = this;
+		
+		if (menuTabButtons.Count != menuTabObjects.Count) throw new Exception("menuTabButtons and menuTabObjects are different lengths.");
+
+		for (int i = 0; i < menuTabButtons.Count; i++)
+		{
+			if (menuTabButtons[i] == null || menuTabObjects[i] == null) throw new Exception("gameobjects in menuTabButtons and menuTabObjects cannot be null.");
+			menuTabs.Add(new Tuple<GameObject, GameObject>(menuTabButtons[i], menuTabObjects[i]));
+		}
+		
+		MinimiseAllMenuTabs();
 	}
 
 	public void OpenMenuTab (GameObject tab)
 	{
 		MinimiseAllMenuTabs();
 		tab.SetActive(true);
+
+		foreach ((GameObject menuTabButton, GameObject menuTab) in menuTabs)
+		{
+			if (menuTab != tab) continue;
+			
+			menuTabButton.GetComponent<Image>().color = menuTabButton.GetComponent<Button>().colors.pressedColor;
+			break;
+		}
 	}
 
 	public void MinimiseAllMenuTabs ()
 	{
-		foreach (GameObject tab in menuTabs)
+		foreach ((GameObject tabButton, GameObject tab) in menuTabs)
 		{
+			tabButton.GetComponent<Image>().color = tabButton.GetComponent<Button>().colors.normalColor;
 			tab.SetActive(false);
 		}
 	}
