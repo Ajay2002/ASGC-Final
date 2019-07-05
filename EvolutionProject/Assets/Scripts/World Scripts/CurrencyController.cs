@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class CurrencyController : MonoBehaviour
 {
     public static CurrencyController Instance;
-
+    
+    [SerializeField]
+    private float timeBetweenPopulationCurrencyIncrease;
+    
     [SerializeField, Min(0)]
     private int currencyAmountUpperBound;
 
@@ -15,7 +19,14 @@ public class CurrencyController : MonoBehaviour
     private void Start()
     {
         if (Instance == null) Instance = this;
-        
+        StartCoroutine(nameof(PopulationCurrencyIncrease));
+    }
+
+    private IEnumerator PopulationCurrencyIncrease ()
+    {
+        AddCurrency(50);
+        yield return new WaitForSeconds(timeBetweenPopulationCurrencyIncrease);
+        StartCoroutine(nameof(PopulationCurrencyIncrease));
     }
 
     private void OnValidate ()
@@ -24,13 +35,15 @@ public class CurrencyController : MonoBehaviour
         
     }
 
-    public bool AddCurrency (int amount) //
+    public bool AddCurrency (int amount)
     {
         bool unclamped = currencyAmountUpperBound == -1 || !(currentCurrencyAmount + Mathf.Abs(amount) > currencyAmountUpperBound);
 
         currentCurrencyAmount += Mathf.Abs(amount);
 
         if (currencyAmountUpperBound != -1) currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
+
+        MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
 
         return unclamped;
     }
@@ -43,6 +56,8 @@ public class CurrencyController : MonoBehaviour
         currentCurrencyAmount -= Mathf.Abs(amount);
         
         currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
+        
+        MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
 
         return sufficientCurrency;
     }
