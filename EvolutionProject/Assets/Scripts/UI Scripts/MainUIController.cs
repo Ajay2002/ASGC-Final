@@ -43,6 +43,7 @@ public class MainUIController : MonoBehaviour
 		}
 		
 		MinimiseAllMenuTabs();
+		ChangeSimSpeed(2);
 	}
 
 	public void OpenMenuTab (GameObject tab)

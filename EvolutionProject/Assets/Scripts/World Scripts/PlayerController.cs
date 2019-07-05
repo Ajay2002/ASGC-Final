@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
 	private Vector3 boxSelectEndPosition;
 
 	private readonly List<FinishingDrag> finishingDrags = new List<FinishingDrag>();
+	
+	private static readonly int BEING_DRAGGED = Animator.StringToHash("beingDragged");
 
 	private struct FinishingDrag
 	{
@@ -229,7 +231,9 @@ public class PlayerController : MonoBehaviour
 			entity.GetComponent<StateManager>().enabled    = false;
 			entity.GetComponent<DecisionManager>().enabled = false;
 			entity.GetComponent<ActionManager>().enabled   = false;
-			entity.gameObject.layer                        = 2;
+			
+			//entity.GetChild(0).GetComponent<Animator>().SetBool(BEING_DRAGGED, true);
+			entity.gameObject.layer  = 2;
 		}
 	}
 
@@ -244,7 +248,7 @@ public class PlayerController : MonoBehaviour
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		Vector3 currentMouseWorldPosition = hit.point;
-
+		
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
 			if (selectedEntityTransforms[i] == null)
@@ -294,7 +298,7 @@ public class PlayerController : MonoBehaviour
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
 			FinishingDrag drag = finishingDrags[i];
-
+			
 			if (Vector3.SqrMagnitude(drag.position - drag.transform.position) < 0.005f)
 			{
 				//Drag Finished
@@ -305,6 +309,8 @@ public class PlayerController : MonoBehaviour
 				drag.transform.GetComponent<StateManager>().enabled    = true;
 				drag.transform.GetComponent<DecisionManager>().enabled = true;
 				drag.transform.GetComponent<ActionManager>().enabled   = true;
+				
+				//drag.transform.GetChild(0).GetComponent<Animator>().SetBool(BEING_DRAGGED, false);
 
 				drag.transform.gameObject.layer = 0;
 
@@ -321,7 +327,7 @@ public class PlayerController : MonoBehaviour
 	private Vector3 DragDisplacementFunction (int i)
 	{
 		const float radianAngle = 137.5f / 360 * Mathf.PI * 2;
-		const float c           = 0.5f;
+		const float c           = 1f;
 
 		Vector3 displacement = new Vector3(c * Mathf.Sqrt(i) * Mathf.Cos(i * radianAngle), 0,
 										   c * Mathf.Sqrt(i) * Mathf.Sin(i * radianAngle));
@@ -348,20 +354,34 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 
-	// private void OnDrawGizmos ()
-	// {
-	// 	if (!selecting) return;
-	//
-	// 	Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
-	// 								 0,
-	// 								 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
-	// 								);
-	//
-	// 	Vector3 size = new Vector3((boxSelectEndPosition.x - boxSelectStartPosition.x),
-	// 							   0.01f,
-	// 							   (boxSelectEndPosition.z - boxSelectStartPosition.z)
-	// 							  );
-	//
-	// 	Gizmos.DrawWireCube(centre, size);
-	// }
+	private void OnDrawGizmos ()
+	{
+		if (dragging)
+		{
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+			RaycastHit hit;
+
+			LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
+
+			if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
+
+			Vector3 currentMouseWorldPosition = hit.point;
+			
+			for (int i = 0; i < selectedEntityTransforms.Count; i++)
+			{
+				Gizmos.DrawSphere(currentMouseWorldPosition   + Vector3.up +
+								  DragDisplacementFunction(i) + entityHeight, 0.1f);
+				Gizmos.DrawLine(currentMouseWorldPosition   + Vector3.up +
+								DragDisplacementFunction(i) + entityHeight,
+								currentMouseWorldPosition   +
+								DragDisplacementFunction(i) + entityHeight);
+			}
+		}
+		
+		foreach (FinishingDrag drag in finishingDrags)
+		{
+			Gizmos.DrawSphere(drag.position, 0.1f);
+		}
+	}
 }
