@@ -44,6 +44,8 @@
           </e>
         </e>
         <e p="EntityManager.cs" t="Include" />
+        <e p="Pathfinder.cs" t="Include" />
+        <e p="PathNode.cs" t="Include" />
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
         </e>
