@@ -18,10 +18,12 @@ public class EntityManager : MonoBehaviour
     //Action Management
     public void SuccessfulAction(string action) {
         decision.currentlyPerformingAction = false;
+        decision.StateActionConversion();
     }
 
     public void FailedAction(string action) {
         decision.currentlyPerformingAction = false;
+        decision.StateActionConversion();
     }
     
     //Sensory management & entity setup

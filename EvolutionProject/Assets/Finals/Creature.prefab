@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 5917668487079361239}
   - component: {fileID: 5556628690567974894}
   - component: {fileID: 5556628690567974895}
+  - component: {fileID: 3616273002224691840}
   m_Layer: 0
   m_Name: Creature
   m_TagString: Player
@@ -109,7 +110,7 @@ Transform:
   m_GameObject: {fileID: 3796067724021642261}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -43.42532, y: 0, z: 8.125212}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.51297003, y: 0.51297003, z: 0.51297003}
   m_Children:
   - {fileID: 2527679020987030109}
   - {fileID: 3796067723881131337}
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a21b78335e241941a08f5161555cde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initial: 0
+  initial: 1
   traits:
     manager: {fileID: 0}
     surroundingCheckCooldown: 0
@@ -220,6 +221,7 @@ MonoBehaviour:
   currentState: 5
   entity: {fileID: 8769435504991402760}
   stateManager: {fileID: 8769435504991402761}
+  agent: {fileID: 0}
 --- !u!114 &5917668487079361239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +265,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.90000004, y: 1.5280809, z: 1.2}
   m_Center: {x: -0.000000004803577, y: 0.23249173, z: 0.1}
+--- !u!195 &3616273002224691840
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3796067724021642261}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 1
 --- !u!1001 &7381024185406599495
 PrefabInstance:
   m_ObjectHideFlags: 0

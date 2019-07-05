@@ -10,7 +10,7 @@ public class ActionManager : MonoBehaviour
     [Header("Action Elements")]
     public float movementCost = 0.2f;
     public Animator controller;
-    
+
     public string subState = "";
     public bool goalAccomplished = true;
 
@@ -28,20 +28,20 @@ public class ActionManager : MonoBehaviour
     [Header("Components")]
     public EntityManager entity;
     public StateManager stateManager;
-    //public NavMeshAgent  agent;
+    public NavMeshAgent  agent;
 
     [HideInInspector]
     private bool movementProcessed;
 
     private void Awake() {
         
-        entity.manager = GameObject.FindObjectOfType<MapManager>();
-        //agent = GetComponent<NavMeshAgent>();
+        
+        agent = GetComponent<NavMeshAgent>();
         
     }
 
     private void Start() {
-       
+       entity.manager = GameObject.FindObjectOfType<MapManager>();
     }
 
     ActionTemplate currentAction;
@@ -57,9 +57,9 @@ public class ActionManager : MonoBehaviour
     }
 
     public void Eat(bool begin) {
-
+        currentState = ActionState.Eating;
         if (begin) {
-            currentState = ActionState.Eating;
+            
             if (entity.type == GTYPE.Creature) {
                 currentAction = new CreatureEatingAction();
                 currentAction.Begin(entity);
@@ -140,9 +140,10 @@ public class ActionManager : MonoBehaviour
     }
 
     
-
+    // /target.position + (transform.position - target.position) * distPerc
     public void ActionCompletion() {
         //agent.ResetPath();
+    
         movementProcessed = true;
         subState = "";
         currentState = ActionState.Nothing;
@@ -197,56 +198,68 @@ public class ActionManager : MonoBehaviour
     string invocationStatement = "";
     Vector3 target;
     
+    List<Vector3> currentPath = new List<Vector3>();
     //TODO: Soon this will use A* however for now we will use the Navigation.AI
 	public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
 	{
-        // if ( agent.isOnNavMesh) {
-        //     agent.ResetPath();
+         if ( agent.isOnNavMesh) {
+             agent.ResetPath();
             if (controller != null) {
                 controller.speed = speed/3;
             }            
-            this.target = target.position;
-            // agent.speed = speed;
-            // agent.SetDestination(target.position + (transform.position - target.position) * distPerc);
+            this.target = target.position ;
+            agent.speed = speed;
+             agent.SetDestination(target.position);
             movementProcessed = false;
             invocationStatement = invocationTarget;
-        //}
+         
+        }
+    }
+
+    bool foundPath = false;
+    public void FoundPath (List<PathNode> nodes) {
+        for (int i = 0; i < nodes.Count; i++) {
+            currentPath.Add(nodes[i].transform.position);
+        }
+
+        currentPath.Add(target);
+        foundPath = true;
     }
 
 	public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
 	{   
 
-        // if ( agent.isOnNavMesh) {
-        //     agent.ResetPath();
+         if ( agent.isOnNavMesh) {
+             agent.ResetPath();
              if (controller != null) {
                 controller.speed = speed/3;
             }          
-            this.target = target;
-            // agent.speed = speed;
-            // agent.SetDestination(target + (transform.position - target) * distPerc);
+            this.target = target ;
+            agent.speed = speed;
+             agent.SetDestination(target);
             movementProcessed = false;
             invocationStatement = invocationTarget;
-        //}
+  
+        }
     }
 
     Vector3 look;
+    int currentPathPoint = 0;
+
     private void MovementUpdate ()
 	{
 		if (!movementProcessed && currentAction != null)
-		if (Vector3.Distance(transform.position,target) <= 0.6f )
+		if (Vector3.Distance(transform.position,target) <= 0.9f || agent.remainingDistance <= 0.6f)
 		{
             currentAction.MovementComplete(invocationStatement);
             movementProcessed = true;
 		}
 		else
 		{
-            Vector3 d = (target-transform.position).normalized*entity.traits.speed*Time.deltaTime;
-            d.y = 0;
-            transform.position += d;
-            look = Vector3.Lerp(transform.position+transform.forward,transform.position+d,0.8f);
-            transform.LookAt(look);
-			stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost;
-		}
+                
+            stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 2;
+            
+        }
 	}
 
     #endregion
