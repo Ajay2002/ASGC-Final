@@ -821,18 +821,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 232150886}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: OpenMenuTab
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1695096689}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &232150886
@@ -910,7 +899,7 @@ RectTransform:
   m_Children:
   - {fileID: 1884990802}
   m_Father: {fileID: 1123703772}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -959,18 +948,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 288406113}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: ChangeSimSpeed
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &288406113
@@ -1296,7 +1274,7 @@ GameObject:
   - component: {fileID: 365834702}
   - component: {fileID: 365834701}
   m_Layer: 5
-  m_Name: LogPanel
+  m_Name: OpenMenuPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1728,18 +1706,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 491361746}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: ChangeSimSpeed
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &491361746
@@ -3435,18 +3402,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 886202046}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: OpenMenuTab
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 724633144}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &886202046
@@ -4092,18 +4048,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1026078357}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: ChangeSimSpeed
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1026078357
@@ -4652,8 +4597,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 288406111}
   - {fileID: 1342046697}
+  - {fileID: 288406111}
   - {fileID: 1026078355}
   - {fileID: 491361744}
   m_Father: {fileID: 1809536775}
@@ -5850,7 +5795,7 @@ RectTransform:
   m_Children:
   - {fileID: 310052768}
   m_Father: {fileID: 1123703772}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5899,18 +5844,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1342046699}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: ChangeSimSpeed
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1342046699
@@ -6471,18 +6405,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1375082305}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: OpenMenuTab
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1151757694}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1375082305
@@ -7420,18 +7343,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1576550898}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: OpenMenuTab
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1273739720}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1576550898
@@ -8598,9 +8510,8 @@ GameObject:
   - component: {fileID: 1809536774}
   - component: {fileID: 1809536773}
   - component: {fileID: 1809536772}
-  - component: {fileID: 1809536776}
   m_Layer: 5
-  m_Name: MainUI
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8640,7 +8551,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -8687,39 +8598,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1809536776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1809536771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2520a9eeb382f6a44b01401ba6baf347, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuTabButtons:
-  - {fileID: 2106049421}
-  - {fileID: 1576550895}
-  - {fileID: 1375082302}
-  - {fileID: 886202043}
-  - {fileID: 232150883}
-  menuTabObjects:
-  - {fileID: 365834699}
-  - {fileID: 1273739720}
-  - {fileID: 1151757694}
-  - {fileID: 724633144}
-  - {fileID: 1695096689}
-  simSpeedButtons:
-  - {fileID: 288406110}
-  - {fileID: 1342046696}
-  - {fileID: 1026078354}
-  - {fileID: 491361743}
-  currencyText: {fileID: 492661569}
-  populationText: {fileID: 962114572}
-  slowSimSpeed: 0.5
-  fastSimSpeed: 5
 --- !u!4 &1816652231 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
@@ -9573,10 +9451,6 @@ RectTransform:
   m_Children:
   - {fileID: 1354525212}
   - {fileID: 365834700}
-  - {fileID: 1273739721}
-  - {fileID: 1151757695}
-  - {fileID: 724633145}
-  - {fileID: 1695096690}
   m_Father: {fileID: 1809536775}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9703,18 +9577,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2062296330}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: MinimiseAllMenuTabs
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2062296330
@@ -10027,18 +9890,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2106049424}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1809536776}
-        m_MethodName: OpenMenuTab
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 365834699}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2106049424
