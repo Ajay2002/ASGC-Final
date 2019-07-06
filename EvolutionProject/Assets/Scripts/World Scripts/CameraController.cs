@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	public Transform axis;
+
 	public Vector3 minPosLimits;
 	public Vector3 maxPosLimits;
 
@@ -36,7 +38,7 @@ public class CameraController : MonoBehaviour
 		if (-zoomMagnitude * Mathf.Sin(rot) + zoomPosition.y > maxPosLimits.y) zoomMagnitude = -(maxPosLimits.y - zoomPosition.y) / Mathf.Sin(rot);
 		if (-zoomMagnitude * Mathf.Sin(rot) + zoomPosition.y < minPosLimits.y) zoomMagnitude = -(minPosLimits.y - zoomPosition.y) / Mathf.Sin(rot);
 		zoomPosition += transform.forward * zoomMagnitude;
-
-		transform.position = translatePosition + zoomPosition;
+		Vector3 move = axis.TransformDirection(translatePosition);
+		transform.position = move + zoomPosition;
 	}
 }

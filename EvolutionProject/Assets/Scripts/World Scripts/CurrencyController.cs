@@ -19,6 +19,7 @@ public class CurrencyController : MonoBehaviour
     private void Start()
     {
         if (Instance == null) Instance = this;
+        if(MainUIController.Instance != null)
         MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
         StartCoroutine(nameof(PopulationCurrencyIncrease));
     }
@@ -43,6 +44,7 @@ public class CurrencyController : MonoBehaviour
 
         if (currencyAmountUpperBound != -1) currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
 
+        if (MainUIController.Instance != null)
         MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
 
         return unclamped;
@@ -57,6 +59,7 @@ public class CurrencyController : MonoBehaviour
         
         currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
         
+        if (MainUIController.Instance != null)
         MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
 
         return sufficientCurrency;
