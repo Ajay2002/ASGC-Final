@@ -119,7 +119,7 @@ NavMeshSettings:
     accuratePlacement: 1
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: d1685cf1dd7a0334d8e476d6a905554e, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 8bb0d3a7b5c71b74e92f118c80597ada, type: 2}
 --- !u!1001 &23749195
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -516,7 +516,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113036917}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.9, y: -0.49, z: -8}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 114.22, y: 1, z: 137.76}
   m_Children:
   - {fileID: 1800555833}
@@ -2143,9 +2143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9c09cdba62680445b012b53cdc68fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minPosLimits: {x: -25, y: 5, z: -30}
-  maxPosLimits: {x: 25, y: 20, z: 30}
-  moveSpeed: 20
+  minPosLimits: {x: -54, y: 5, z: -85}
+  maxPosLimits: {x: 55, y: 35, z: 50}
+  moveSpeed: 40
   zoomSpeed: 1.5
 --- !u!114 &534669907
 MonoBehaviour:
@@ -2884,6 +2884,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527679020987030109, guid: d7ff0a0bc1633164d8c5e080714efbc1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7ff0a0bc1633164d8c5e080714efbc1, type: 3}
@@ -4313,14 +4318,14 @@ MonoBehaviour:
   - 0.1
   worldSpawnedFoodScriptableObjects:
   - {fileID: 11400000, guid: b99b3416388e24742ba9fdb60f96b305, type: 2}
-  maxAmountOfFood: 0
+  maxAmountOfFood: 1000
   amountOfFood: 0
   enemyGraph: 1
   graph: Speed
   help: {fileID: 1073496427}
   entity: {fileID: 7582951549450326883, guid: 03fc8448b839f6a41b49927dfacac2fc, type: 3}
   mutationChance: 0.03
-  area: {x: 98.9, y: 0, z: 98.2}
+  area: {x: 114.22, y: 0, z: 137.76}
   enemyEntity: {fileID: 451379056244026256, guid: e61595fd62f3c7c4fa877816ec8df99d,
     type: 3}
   idealTraits:
