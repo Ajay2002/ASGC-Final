@@ -257,7 +257,7 @@ public class ActionManager : MonoBehaviour
 		else
 		{
                 
-            stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 2;
+            stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 10;
             
         }
 	}
@@ -858,41 +858,42 @@ public class BreedingAction : ActionTemplate {
         }
 
         
-    
+        //newEntity.traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,2f)  : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.surroundingCheckCooldown : e.traits.surroundingCheckCooldown);
+        
         #region  Trait Modification
-        newEntity.traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,2f) : ((manager.traits.surroundingCheckCooldown+e.traits.surroundingCheckCooldown)/2);
+        newEntity.traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,2f)  : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.surroundingCheckCooldown : e.traits.surroundingCheckCooldown);
     
-        newEntity.traits.decisionCoolDown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,5f) : ((manager.traits.decisionCoolDown+e.traits.decisionCoolDown)/2);
+        newEntity.traits.decisionCoolDown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,5f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.decisionCoolDown : e.traits.decisionCoolDown);
         
-        newEntity.traits.speed = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? (UnityEngine.Random.Range(0.01f,1f)*5) : ((manager.traits.speed+e.traits.speed)/2);
+        newEntity.traits.speed = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? (UnityEngine.Random.Range(0.01f,1f)*5) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.speed : e.traits.speed);
     
-        newEntity.traits.size = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f)*3 : ((manager.traits.size+e.traits.size)/2);
+        newEntity.traits.size = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f)*3 : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.size : e.traits.size);
         
-        newEntity.traits.attractiveness = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.attractiveness+e.traits.attractiveness)/2);
+        newEntity.traits.attractiveness = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.attractiveness : e.traits.attractiveness);
     
-        newEntity.traits.sightRange = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f)*10 : ((manager.traits.sightRange+e.traits.sightRange)/2);
+        newEntity.traits.sightRange = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f)*10 : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.sightRange : e.traits.sightRange);
     
-        newEntity.traits.dangerSense = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.dangerSense+e.traits.dangerSense)/2);
+        newEntity.traits.dangerSense = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.dangerSense : e.traits.dangerSense);
     
-        newEntity.traits.strength = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.strength+e.traits.strength)/2);
+        newEntity.traits.strength = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.strength : e.traits.strength);
     
-        newEntity.traits.heatResistance = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.heatResistance+e.traits.heatResistance)/2);
+        newEntity.traits.heatResistance = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.heatResistance : e.traits.heatResistance);
     
-        newEntity.traits.intellect  =UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.intellect+e.traits.intellect)/2);
+        newEntity.traits.intellect  =UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.intellect : e.traits.intellect);
     
-        newEntity.traits.brute = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : ((manager.traits.brute+e.traits.brute)/2);
+        newEntity.traits.brute = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.01f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.brute : e.traits.brute);
         
-        newEntity.traits.HI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.HI+e.traits.HI)/2);
+        newEntity.traits.HI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.HI : e.traits.HI);
     
-        newEntity.traits.AI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.AI+e.traits.AI)/2);
+        newEntity.traits.AI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.AI : e.traits.AI);
 
-        newEntity.traits.FI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.FI+e.traits.FI)/2);
+        newEntity.traits.FI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.FI : e.traits.FI);
     
-        newEntity.traits.HUI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.HUI+e.traits.HUI)/2);
+        newEntity.traits.HUI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.HUI : e.traits.HUI);
 
-        newEntity.traits.SI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.SI+e.traits.SI)/2);
+        newEntity.traits.SI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.SI : e.traits.SI);
     
-        newEntity.traits.RI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : ((manager.traits.RI+e.traits.RI)/2);
+        newEntity.traits.RI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.RI : e.traits.RI);
         #endregion
 
         //State Resets

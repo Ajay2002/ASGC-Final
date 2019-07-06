@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a21b78335e241941a08f5161555cde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initial: 1
+  initial: 0
   traits:
     manager: {fileID: 0}
     surroundingCheckCooldown: 0

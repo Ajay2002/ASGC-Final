@@ -176,8 +176,46 @@ public class GeneticUIController : MonoBehaviour
 
             if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(expensePerAmount),true)==true) {
                 
-                // averageTraits.speed += t.speed;
-                
+                if (s == "speed") {
+                    averageTraits.speed = Mathf.Clamp(averageTraits.speed+amount,0f,5f);
+                }
+                else if (s == "size") {
+                    averageTraits.speed = Mathf.Clamp(averageTraits.size+amount,0f,3f);
+                }
+                else if (s == "sightRange") {
+                    averageTraits.sightRange = Mathf.Clamp(averageTraits.sightRange+amount,0f,5f);
+                }
+                else if (s == "attractiveness") {
+                    averageTraits.attractiveness = Mathf.Clamp(averageTraits.attractiveness+amount,0f,1f);
+                }
+                else if (s == "dangerSense") {
+                    averageTraits.dangerSense = Mathf.Clamp(averageTraits.dangerSense+amount,0f,1f);
+                }
+                else if (s == "strength") {
+                    averageTraits.strength = Mathf.Clamp(averageTraits.strength+amount,0f,1f);
+                }
+                else if (s == "heatResistance") {
+                    averageTraits.heatResistance = Mathf.Clamp(averageTraits.heatResistance+amount,0f,1f);
+                }
+                else if (s == "intellect") {
+                    averageTraits.intellect = Mathf.Clamp(averageTraits.intellect+amount,0f,1f);
+                }
+
+                else if (s == "HUI") {
+                    averageTraits.HUI = Mathf.Clamp(averageTraits.HUI+amount,0f,1f);
+                }
+                else if (s == "HI") {
+                    averageTraits.HI = Mathf.Clamp(averageTraits.HI+amount,0f,1f);
+                }
+                else if (s == "SI") {
+                    averageTraits.SI = Mathf.Clamp(averageTraits.SI+amount,0f,1f);
+                }
+                else if (s == "RI") {
+                    averageTraits.RI = Mathf.Clamp(averageTraits.RI+amount,0f,1f);
+                }
+                else if (s == "FI") {
+                    averageTraits.FI = Mathf.Clamp(averageTraits.FI+amount,0f,1f);
+                }
                 // averageTraits.size += t.size;
                 // averageTraits.sightRange += t.sightRange;
                 // averageTraits.attractiveness += t.attractiveness;
