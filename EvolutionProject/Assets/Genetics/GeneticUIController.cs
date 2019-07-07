@@ -180,7 +180,7 @@ public class GeneticUIController : MonoBehaviour
                     averageTraits.speed = Mathf.Clamp(averageTraits.speed+amount,0f,5f);
                 }
                 else if (s == "size") {
-                    averageTraits.speed = Mathf.Clamp(averageTraits.size+amount,0f,3f);
+                    averageTraits.size = Mathf.Clamp(averageTraits.size+amount,0f,3f);
                 }
                 else if (s == "sightRange") {
                     averageTraits.sightRange = Mathf.Clamp(averageTraits.sightRange+amount,0f,5f);

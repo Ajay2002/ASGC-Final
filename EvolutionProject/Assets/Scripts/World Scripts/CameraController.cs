@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
 
 	private void Update ()
 	{
-		Vector3 shift = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed * Time.deltaTime *
+		Vector3 shift = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed *
 						((zoomPosition.y - minPosLimits.y) / (maxPosLimits.y - minPosLimits.y) * 0.5f + 0.5f); //Slowing down movement when zoomed in
 
 		float newX = Mathf.Clamp(translatePosition.x + shift.x, minPosLimits.x, maxPosLimits.x);

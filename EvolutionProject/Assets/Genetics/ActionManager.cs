@@ -158,6 +158,14 @@ public class ActionManager : MonoBehaviour
         target = transform.position;
     }
 
+    public void ForceBreed (EntityManager e) {
+        entity.decision.currentlyPerformingAction = true;
+        ActionCompletion();
+        currentState = ActionState.Breeding;
+        BreedingAction a = new BreedingAction();
+        currentAction = a;
+        a.BeginForce(this.entity,e);
+    }
 
     #region  Eating Management
     
@@ -611,12 +619,69 @@ public class BreedingAction : ActionTemplate {
     public override void Begin(EntityManager m) {
 
         manager = m;
-//        Debug.LogError("What the hell age set");
-                manager.stateManagement.state.age = 30;
+        //manager.stateManagement.state.age = 30;
         state = "lookingForMate";
         randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
         m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
 
+    }
+
+    public void BeginForce (EntityManager m, EntityManager other) {
+        manager = m;
+        mate = other;
+
+
+
+         if (manager == null || mate == null)
+            {Debug.Log("Illegal Mating Conditions, Send Error Warning -- doesn't exist");return;}
+
+        if (manager.bredWith.Contains(mate))
+            {Debug.Log("Illegal Mating Conditions, Send Error Warning -- mated before");return;}
+        
+        if (mate.stateManagement.state.age < 20 || manager.stateManagement.state.age < 20)
+            {Debug.Log("Illegal Mating Conditions, Send Error Warning -- age");return;}
+
+        if (manager.parentA != null && manager.parentB != null) {
+            if (mate == manager.parentA) {
+                Debug.Log("Illegal Mating Conditions, Send Error Warning -- similar parents");return;}
+
+            if (mate == manager.parentB){
+                Debug.Log("Illegal Mating Conditions, Send Error Warning -- similar parents 2");return;}
+    
+            if (mate.parentA != null && mate.parentB != null) {
+                if (mate.parentA == manager.parentA || mate.parentA == manager.parentB) {
+                    Debug.Log("Illegal Mating Conditions, Send Error Warning -- similar parents 3");
+                    return;
+                    
+                }
+                if (mate.parentB == manager.parentB || mate.parentB == manager.parentB) {
+                    Debug.Log("Illegal Mating Conditions, Send Error Warning -- 4");
+                    return;
+
+                }
+
+                
+                
+
+            }
+
+        }
+
+        if (manager.parentA != null && manager.parentB != null) {
+            if (mate.parentA == this.manager) {
+                Debug.Log("Illegal Mating Conditions, Send Error Warning -- similar parents -- 5");
+                return;
+            }
+
+            if (mate.parentB == this.manager) {
+                Debug.Log("Illegal Mating Conditions, Send Error Warning -- similar parents -- 6");
+                return;
+
+            }
+        }
+        //Debug.Log("Began Mate");
+        state = "mating";
+        BeginForceMating();
     }
 
     public override void Completion() {
@@ -642,40 +707,33 @@ public class BreedingAction : ActionTemplate {
                     bool foundBreeding = false;
                     EntityManager found = new EntityManager();
                     for (int i = 0; i < manager.creatures.Count; i++) {
-                        if (manager.creatures[i] == null)
+                                  if (manager.creatures[i] == null)
                             {continue;}
 
                         if (manager.bredWith.Contains(manager.creatures[i]))
                             {continue;}
                         
-                        if (manager.creatures[i].stateManagement.state.age < 20 || manager.stateManagement.state.age < 20)
+                        if (manager.creatures[i].stateManagement.state.age < 10 || manager.stateManagement.state.age < 10)
                             {continue;}
 
-                        if (manager.parentA != null && manager.parentB != null) {
-                            if (manager.creatures[i] == manager.parentA)
-                                continue;
+                        
+                        if (manager.parentA != null && manager.creatures[i] == manager.parentA)
+                            continue;
 
-                            if (manager.creatures[i] == manager.parentB)
-                                continue;
+                        if (manager.parentB != null && manager.creatures[i] == manager.parentB)
+                            continue;
 
-                            if (manager.creatures[i].parentA != null && manager.creatures[i].parentB != null) {
-                                if (manager.creatures[i].parentA == manager.parentA || manager.creatures[i].parentA == manager.parentB)
-                                    continue;
-                                if (manager.creatures[i].parentB == manager.parentB || manager.creatures[i].parentB == manager.parentB)
-                                    continue;
+                        
+                        if ((manager.creatures[i].parentA != null && manager.parentA != null && manager.creatures[i].parentA == manager.parentA) || (manager.creatures[i].parentA != null && manager.parentB != null && manager.creatures[i].parentA == manager.parentB))
+                            continue;
+                        if ((manager.creatures[i].parentB != null && manager.parentB != null && manager.creatures[i].parentB == manager.parentB) || (manager.creatures[i].parentB != null && manager.parentB != null && manager.creatures[i].parentB == manager.parentB))
+                            continue;
+                        
+                        if (manager.creatures[i].parentA != null && manager.creatures[i].parentA == this.manager)
+                            continue;
 
-                                
-                                if (manager.creatures[i].parentA == this.manager)
-                                continue;
-
-                                if (manager.creatures[i].parentB == this.manager)
-                                continue;
-
-                            }
-
-                                
-
-                        }
+                        if (manager.creatures[i].parentB != null && manager.creatures[i].parentB == this.manager)
+                        continue;
 
                         if (manager.stateManagement.fitness > manager.creatures[i].stateManagement.fitness)
                         continue;
@@ -716,31 +774,24 @@ public class BreedingAction : ActionTemplate {
                         if (manager.enemies[i].stateManagement.state.age < 10 || manager.stateManagement.state.age < 10)
                             {continue;}
 
-                        if (manager.parentA != null && manager.parentB != null) {
-                            if (manager.enemies[i] == manager.parentA)
-                                continue;
+                        
+                        if (manager.parentA != null && manager.enemies[i] == manager.parentA)
+                            continue;
 
-                            if (manager.enemies[i] == manager.parentB)
-                                continue;
+                        if (manager.parentB != null && manager.enemies[i] == manager.parentB)
+                            continue;
 
-                            if (manager.enemies[i].parentA != null && manager.enemies[i].parentB != null) {
-                                if (manager.enemies[i].parentA == manager.parentA || manager.enemies[i].parentA == manager.parentB)
-                                    continue;
-                                if (manager.enemies[i].parentB == manager.parentB || manager.enemies[i].parentB == manager.parentB)
-                                    continue;
+                        
+                        if ((manager.enemies[i].parentA != null && manager.parentA != null && manager.enemies[i].parentA == manager.parentA) || (manager.enemies[i].parentA != null && manager.parentB != null && manager.enemies[i].parentA == manager.parentB))
+                            continue;
+                        if ((manager.enemies[i].parentB != null && manager.parentB != null && manager.enemies[i].parentB == manager.parentB) || (manager.enemies[i].parentB != null && manager.parentB != null && manager.enemies[i].parentB == manager.parentB))
+                            continue;
+                        
+                        if (manager.enemies[i].parentA != null && manager.enemies[i].parentA == this.manager)
+                            continue;
 
-                                
-                                if (manager.enemies[i].parentA == this.manager)
-                                continue;
-
-                                if (manager.enemies[i].parentB == this.manager)
-                                continue;
-
-                            }
-
-                                
-
-                        }
+                        if (manager.enemies[i].parentB != null && manager.enemies[i].parentB == this.manager)
+                        continue;
 
                         if (manager.stateManagement.fitness > manager.enemies[i].stateManagement.fitness)
                         continue;
@@ -789,6 +840,19 @@ public class BreedingAction : ActionTemplate {
 
     }
 
+     private void BeginForceMating() {
+
+        //Change the state of the other to a breed wait
+        //Move to other entity
+        //Wait 1 second
+        //Breed
+        mate.controller.BreedConfirmed(manager);
+        //manager.controller.MoveTo(mate.position,manager.traits.speed,"reachedMate",0.7f);
+        state = "mating";
+        Breed(mate);
+
+    }
+    
 
     private void Breed (EntityManager e) {
 
@@ -919,10 +983,11 @@ public class BreedingAction : ActionTemplate {
 
     public override void MovementComplete(string statement) {
         if (statement == "reachedRandomPoint") {
+
             Completion();
         }
         else if (statement == "reachedMate") {
-
+            
             if (mate != null)
             Breed(mate);
 
