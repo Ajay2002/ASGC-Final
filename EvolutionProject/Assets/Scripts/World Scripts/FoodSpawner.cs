@@ -1,24 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class FoodSpawner : MonoBehaviour
 {
     private FoodSpawnerScriptableObject foodSpawnerScriptable;
+
+    private bool paused;
     
     public void Initialise (FoodSpawnerScriptableObject foodSpawnerScriptable)
     {
         this.foodSpawnerScriptable = foodSpawnerScriptable;
         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-    }
-    
-    void Start()
-    {
         StartCoroutine(nameof(FoodGen));
+    }
+
+    public void SetPauseSpawning (bool p)
+    {
+        paused = p;
+        if (!paused) StartCoroutine(nameof(FoodGen));
     }
 
     private IEnumerator FoodGen()
     {
+        if (paused) yield break;
+        
         if (MapManager.Instance.amountOfFood < MapManager.Instance.maxAmountOfFood)
         {
             Vector2 randOffset = Random.insideUnitCircle * foodSpawnerScriptable.spawnDistance;
