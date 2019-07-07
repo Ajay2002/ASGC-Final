@@ -16,4 +16,4 @@ MonoBehaviour:
   food: {fileID: 11400000, guid: b99b3416388e24742ba9fdb60f96b305, type: 2}
   prefab: {fileID: 8116891203356223053, guid: 6517baa9db31aff48ba35348bb2e4d51, type: 3}
   spawnPeriod: 3
-  spawnDistance: 2
+  spawnDistance: 5
