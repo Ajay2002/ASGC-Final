@@ -2417,7 +2417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52271105025fd1f4d8210a543053062d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSelectTime: 10
+  maxDragTime: 10
   selectionBoxSpriteTransform: {fileID: 688356727}
   dragFollowSpeed: 5
   entityHeight: {x: 0, y: 0, z: 0}
