@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -46,6 +47,11 @@ public class MainUIController : MonoBehaviour
 		ChangeSimSpeed(2);
 	}
 
+	private void OnMouseDrag ()
+	{
+		
+	}
+
 	public void OpenMenuTab (GameObject tab)
 	{
 		MinimiseAllMenuTabs();
@@ -75,7 +81,7 @@ public class MainUIController : MonoBehaviour
 		{
 			button.GetComponent<Image>().color = button.GetComponent<Button>().colors.normalColor;
 		}
-		
+			
 		simSpeedButtons[s].GetComponent<Image>().color = simSpeedButtons[s].GetComponent<Button>().colors.pressedColor;
 		
 		SimSpeed simSpeed = (SimSpeed) s;
@@ -106,6 +112,25 @@ public class MainUIController : MonoBehaviour
 	public void UpdateCurrencyDisplay (int currencyAmount)
 	{
 		currencyText.text = StringifyNum(currencyAmount);
+	}
+
+	public void InstanceAsDragging (int index)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		RaycastHit hit;
+
+		LayerMask mask = ~(1 << 2); //Collides with all layers except layer 2
+
+		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
+
+		Vector3 currentMouseWorldPosition = hit.point;
+		
+		FoodSpawnerScriptableObject toInstanciate = MapManager.Instance.foodSpawnerScriptableObjects[index];
+
+		GameObject fs = Instantiate(toInstanciate.prefab, currentMouseWorldPosition + Vector3.up, quaternion.identity);
+		PlayerController.Instance.ClearSelect();
+		PlayerController.Instance.AddTransformToSelect(fs.transform);
 	}
 
 	private String StringifyNum (int i)

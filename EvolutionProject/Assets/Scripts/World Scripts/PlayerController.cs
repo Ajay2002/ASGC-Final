@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 	private Vector3 boxSelectEndPosition;
 
 	private readonly List<FinishingDrag> finishingDrags = new List<FinishingDrag>();
-	
+
 	private static readonly int BEING_DRAGGED = Animator.StringToHash("beingDragged");
 
 	private struct FinishingDrag
@@ -43,36 +43,42 @@ public class PlayerController : MonoBehaviour
 		if (Instance == null) Instance = this;
 
 		selectionBoxSprite = selectionBoxSpriteTransform.GetComponent<SpriteRenderer>();
-		selectionBoxSpriteTransform.gameObject.SetActive(false);
+
+		//selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
 	private void Update ()
 	{
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
-		if (Input.GetMouseButtonDown(1)) BeginDrag();
-		if (dragging && (Input.GetMouseButton(0)   || Input.GetMouseButton(1))) UpdateDrag();
-		if (dragging && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))) EndDrag();
+		if (!MouseInputUIBlocker.BlockedByUI && Input.GetMouseButtonDown(1)) BeginDrag();
+		if (dragging                         && (Input.GetMouseButton(0)   || Input.GetMouseButton(1))) UpdateDrag();
+		if (dragging                         && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))) EndDrag();
 
 		FinishDrags();
 
 		if (!dragging)
 		{
-			if (Input.GetMouseButtonDown(0)) BeginBoxSelect();
-			if (selecting && Input.GetMouseButton(0)) UpdateBoxSelect();
-			if (selecting && Input.GetMouseButtonUp(0)) EndBoxSelect();
+			if (!MouseInputUIBlocker.BlockedByUI && Input.GetMouseButtonDown(0)) BeginBoxSelect();
+			if (selecting                        && Input.GetMouseButton(0)) UpdateBoxSelect();
+			if (selecting                        && Input.GetMouseButtonUp(0)) EndBoxSelect();
 		}
 	}
 
 
 	#region Selection Methods
 
+	public void AddTransformToSelect (Transform t)
+	{
+		selectedEntityTransforms.Add(t);
+	}
+
 	private void SelectCurrent (Ray ray)
 	{
 		RaycastHit hit;
 
-		if (!Physics.Raycast(ray, out hit) || 
-		!hit.transform.parent.CompareTag("Player")) return;
+		if (!Physics.Raycast(ray, out hit) ||
+			!hit.transform.parent.CompareTag("Player")) return;
 
 		if (selectedEntityTransforms.Contains(hit.transform.parent))
 		{
@@ -192,7 +198,7 @@ public class PlayerController : MonoBehaviour
 		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
-	private void ClearSelect ()
+	public void ClearSelect ()
 	{
 		foreach (Transform entity in selectedEntityTransforms)
 		{
@@ -207,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
 	#region Dragging Methods
 
-	private void BeginDrag ()
+	public void BeginDrag ()
 	{
 		dragging = true;
 
@@ -226,14 +232,21 @@ public class PlayerController : MonoBehaviour
 				continue;
 			}
 
-			entity.GetComponent<NavMeshAgent>().enabled    = false;
-			entity.GetComponent<EntityManager>().enabled   = false;
-			entity.GetComponent<StateManager>().enabled    = false;
-			entity.GetComponent<DecisionManager>().enabled = false;
-			entity.GetComponent<ActionManager>().enabled   = false;
-			
-			//entity.GetChild(0).GetComponent<Animator>().SetBool(BEING_DRAGGED, true);
-			entity.gameObject.layer  = 2;
+			if (entity.GetComponent<EntityManager>() != null)
+			{
+				entity.GetComponent<EntityManager>().enabled   = false;
+				entity.GetComponent<StateManager>().enabled    = false;
+				entity.GetComponent<DecisionManager>().enabled = false;
+				entity.GetComponent<ActionManager>().enabled   = false;
+				entity.GetComponent<NavMeshAgent>().enabled    = false;
+
+				//entity.GetChild(0).GetComponent<Animator>().SetBool(BEING_DRAGGED, true);
+			}
+
+			FoodSpawner fs = entity.GetComponent<FoodSpawner>();
+			if (fs != null) fs.SetPauseSpawning(true);
+
+			entity.gameObject.layer = 2;
 		}
 	}
 
@@ -248,7 +261,7 @@ public class PlayerController : MonoBehaviour
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		Vector3 currentMouseWorldPosition = hit.point;
-		
+
 		for (int i = 0; i < selectedEntityTransforms.Count; i++)
 		{
 			if (selectedEntityTransforms[i] == null)
@@ -298,19 +311,25 @@ public class PlayerController : MonoBehaviour
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
 			FinishingDrag drag = finishingDrags[i];
-			
+
 			if (Vector3.SqrMagnitude(drag.position - drag.transform.position) < 0.005f)
 			{
 				//Drag Finished
 				drag.transform.position = drag.position;
 
-				drag.transform.GetComponent<NavMeshAgent>().enabled    = true;
-				drag.transform.GetComponent<EntityManager>().enabled   = true;
-				drag.transform.GetComponent<StateManager>().enabled    = true;
-				drag.transform.GetComponent<DecisionManager>().enabled = true;
-				drag.transform.GetComponent<ActionManager>().enabled   = true;
-				
-				//drag.transform.GetChild(0).GetComponent<Animator>().SetBool(BEING_DRAGGED, false);
+				if (drag.transform.GetComponent<EntityManager>() != null)
+				{
+					drag.transform.GetComponent<EntityManager>().enabled   = true;
+					drag.transform.GetComponent<StateManager>().enabled    = true;
+					drag.transform.GetComponent<DecisionManager>().enabled = true;
+					drag.transform.GetComponent<ActionManager>().enabled   = true;
+					drag.transform.GetComponent<NavMeshAgent>().enabled    = true;
+
+					//drag.transform.GetChild(0).GetComponent<Animator>().SetBool(BEING_DRAGGED, false);
+				}
+
+				FoodSpawner fs = drag.transform.GetComponent<FoodSpawner>();
+				if (fs != null) fs.SetPauseSpawning(false);
 
 				drag.transform.gameObject.layer = 0;
 
@@ -367,7 +386,7 @@ public class PlayerController : MonoBehaviour
 			if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 			Vector3 currentMouseWorldPosition = hit.point;
-			
+
 			for (int i = 0; i < selectedEntityTransforms.Count; i++)
 			{
 				Gizmos.DrawSphere(currentMouseWorldPosition   + Vector3.up +
@@ -378,7 +397,7 @@ public class PlayerController : MonoBehaviour
 								DragDisplacementFunction(i) + entityHeight);
 			}
 		}
-		
+
 		foreach (FinishingDrag drag in finishingDrags)
 		{
 			Gizmos.DrawSphere(drag.position, 0.1f);
