@@ -294,6 +294,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3796067724021642260}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: ef0c76a6b55d06a40aa5670755c08d84,
+        type: 3}
+      propertyPath: m_Name
+      value: Rabbit
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -364,21 +369,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.43344
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: ef0c76a6b55d06a40aa5670755c08d84,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8b4b3dedce090ab42a4f5d608d52c1a5, type: 2}
     - target: {fileID: -6057140222963153312, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 6c48987041333774888aa46ea74a4f74, type: 2}
-    - target: {fileID: -927199367670048503, guid: ef0c76a6b55d06a40aa5670755c08d84,
-        type: 3}
-      propertyPath: m_Name
-      value: Rabbit
-      objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: ef0c76a6b55d06a40aa5670755c08d84,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: c5ccac27f053a5e4dadf80a29eb941ab, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef0c76a6b55d06a40aa5670755c08d84, type: 3}
 --- !u!4 &2527679020987030109 stripped

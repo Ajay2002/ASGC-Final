@@ -84,19 +84,19 @@ public class PlayerController : MonoBehaviour
 		RaycastHit hit;
 
 		if (!Physics.Raycast(ray, out hit) ||
-			!hit.transform.parent.CompareTag("Player")) return;
+			!hit.transform.CompareTag("Player")) return;
 
-		if (selectedEntityTransforms.Contains(hit.transform.parent))
+		if (selectedEntityTransforms.Contains(hit.transform))
 		{
 			hit.transform.GetComponent<EntityGlowOnSelect>().SetSelected(false); //Remove Highlighting from Entities
 
-			selectedEntityTransforms.Remove(hit.transform.parent);
+			selectedEntityTransforms.Remove(hit.transform);
 		}
 		else
 		{
-			hit.transform.parent.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
+			hit.transform.GetComponent<EntityGlowOnSelect>().SetSelected(true); //Add Highlighting to Entities
 
-			selectedEntityTransforms.Add(hit.transform.parent);
+			selectedEntityTransforms.Add(hit.transform);
 		}
 	}
 
