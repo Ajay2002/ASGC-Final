@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 77c37c36b9a4f3e449d488400bf10773
+=======
+guid: 95e65a1fde753cf42aed1146d3f67213
+>>>>>>> Got LODS
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable:
