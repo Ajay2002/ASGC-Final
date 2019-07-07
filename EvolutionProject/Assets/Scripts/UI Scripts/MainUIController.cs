@@ -6,10 +6,22 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MainUIController : MonoBehaviour
 {
 	public static MainUIController Instance;
+	
+	public enum SimSpeed
+	{
+		PAUSED,
+		SLOW,
+		NORMAL,
+		FAST
+	}
+
+	[HideInInspector]
+	public GraphicRaycaster raycaster;
 
 	public List<GameObject> menuTabButtons;
 	public List<GameObject> menuTabObjects;
@@ -23,17 +35,13 @@ public class MainUIController : MonoBehaviour
 	public float slowSimSpeed = 0.5f;
 	public float fastSimSpeed = 5;
 
-	public enum SimSpeed
-	{
-		PAUSED,
-		SLOW,
-		NORMAL,
-		FAST
-	}
+	private Transform currentUIDrag;
 
 	private void Start ()
 	{
 		if (Instance == null) Instance = this;
+
+		raycaster = GetComponent<GraphicRaycaster>();
 		
 		if (menuTabButtons.Count != menuTabObjects.Count) throw new Exception("menuTabButtons and menuTabObjects are different lengths.");
 
@@ -46,12 +54,7 @@ public class MainUIController : MonoBehaviour
 		MinimiseAllMenuTabs();
 		ChangeSimSpeed(2);
 	}
-
-	private void OnMouseDrag ()
-	{
-		
-	}
-
+	
 	public void OpenMenuTab (GameObject tab)
 	{
 		MinimiseAllMenuTabs();
@@ -126,11 +129,9 @@ public class MainUIController : MonoBehaviour
 
 		Vector3 currentMouseWorldPosition = hit.point;
 		
-		FoodSpawnerScriptableObject toInstanciate = MapManager.Instance.foodSpawnerScriptableObjects[index];
+		FoodSpawnerScriptableObject toInstantiate = MapManager.Instance.foodSpawnerScriptableObjects[index];
 
-		GameObject fs = Instantiate(toInstanciate.prefab, currentMouseWorldPosition + Vector3.up, quaternion.identity);
-		PlayerController.Instance.ClearSelect();
-		PlayerController.Instance.AddTransformToSelect(fs.transform);
+		GameObject fs = Instantiate(toInstantiate.prefab, MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition), quaternion.identity);
 	}
 
 	private String StringifyNum (int i)

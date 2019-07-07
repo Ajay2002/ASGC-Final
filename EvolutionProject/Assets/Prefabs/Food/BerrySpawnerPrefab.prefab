@@ -87,6 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7250232191150188915}
   - component: {fileID: -7910730809916898150}
+  - component: {fileID: 5316899769752209734}
   m_Layer: 0
   m_Name: BerrySpawnerPrefab
   m_TagString: Untagged
@@ -121,3 +122,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0159f16768fbcd446a30246af1841428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5316899769752209734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8116891203356223053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286414d56353e4b4fada40e4894ae8fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColour: {r: 0.8509804, g: 0.654902, b: 0.07450981, a: 0}
+  colourLerpSpeed: 5

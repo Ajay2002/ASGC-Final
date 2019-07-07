@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
 		selectionBoxSprite = selectionBoxSpriteTransform.GetComponent<SpriteRenderer>();
 
-		//selectionBoxSpriteTransform.gameObject.SetActive(false);
+		selectionBoxSpriteTransform.gameObject.SetActive(false);
 	}
 
 	private void Update ()
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
 
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
-		boxSelectEndPosition = MapManager.Instance.NearestPointOnMap(hit.point);
+		boxSelectEndPosition = MapManager.Instance.NearestPointInMapArea(hit.point);
 
 		//Update the graphics for the selection box
 		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
