@@ -236,4 +236,13 @@ public class MapManager : MonoBehaviour
         
         throw new Exception("NearestPointOnMap failed, nav mesh error");
     }
+
+    public Vector3 NearestPointInMapArea (Vector3 offPoint)
+    {
+        return new Vector3(
+                           Mathf.Clamp(offPoint.x, transform.position.x - area.x / 2, transform.position.x + area.x / 2),
+                           Mathf.Clamp(offPoint.y, transform.position.y - area.y / 2, transform.position.y + area.y / 2),
+                           Mathf.Clamp(offPoint.z, transform.position.z - area.z / 2, transform.position.z + area.z / 2)
+                           );
+    }
 }
