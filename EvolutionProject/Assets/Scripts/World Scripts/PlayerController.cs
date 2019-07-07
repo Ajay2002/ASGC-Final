@@ -5,10 +5,14 @@ using MathNet.Numerics.Distributions;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
 	public static PlayerController Instance;
+
+	[FormerlySerializedAs("maxSelectTime")]
+	public float maxDragTime;
 
 	public  Transform      selectionBoxSpriteTransform;
 	private SpriteRenderer selectionBoxSprite;
@@ -27,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
 	private Vector3 boxSelectStartPosition;
 	private Vector3 boxSelectEndPosition;
+
+	private float dragStartTime;
 
 	private readonly List<FinishingDrag> finishingDrags = new List<FinishingDrag>();
 
@@ -52,8 +58,8 @@ public class PlayerController : MonoBehaviour
 		//if (MouseInputUIBlocker.BlockedByUI) return;
 
 		if (!MouseInputUIBlocker.BlockedByUI && Input.GetMouseButtonDown(1)) BeginDrag();
-		if (dragging                         && (Input.GetMouseButton(0)   || Input.GetMouseButton(1))) UpdateDrag();
-		if (dragging                         && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))) EndDrag();
+		if (dragging                         && (Input.GetMouseButton(0)                                || Input.GetMouseButton(1))) UpdateDrag();
+		if (dragging                         && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Time.time - dragStartTime > maxDragTime)) EndDrag();
 
 		FinishDrags();
 
@@ -148,17 +154,13 @@ public class PlayerController : MonoBehaviour
 									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
 									);
 
-		Vector3 size = new Vector2((boxSelectEndPosition.x - boxSelectStartPosition.x) / selectionBoxSpriteTransform.lossyScale.x,
-								   (boxSelectEndPosition.z - boxSelectStartPosition.z) / selectionBoxSpriteTransform.lossyScale.y
-								  );
-
 		selectionBoxSpriteTransform.position = centre;
-		selectionBoxSprite.size              = size;
+		selectionBoxSprite.size              = GetSelectionSize();
 	}
 
 	private void EndBoxSelect ()
 	{
-		selecting = false;
+		selecting     = false;
 
 		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false) ClearSelect();
 
@@ -174,16 +176,29 @@ public class PlayerController : MonoBehaviour
 
 		GameObject[] entityObjects = GameObject.FindGameObjectsWithTag("Player");
 
+		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
+									 0,
+									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
+									);
+
+		Vector3 size = GetSelectionSize();
+
+		float minX = Mathf.Min(centre.x - size.x / 2, centre.x + size.x / 2);
+		float maxX = Mathf.Max(centre.x - size.x / 2, centre.x + size.x / 2);
+		float minZ = Mathf.Min(centre.z - size.y / 2, centre.z + size.y / 2);
+		float maxZ = Mathf.Max(centre.z - size.y / 2, centre.z + size.y / 2);
+
 		foreach (GameObject eo in entityObjects)
 		{
 			if (eo.name == "Model") continue;
 
 			Vector3 pos = eo.transform.position;
 
-			float minX = Mathf.Min(boxSelectStartPosition.x, boxSelectEndPosition.x);
-			float minZ = Mathf.Min(boxSelectStartPosition.z, boxSelectEndPosition.z);
-			float maxX = Mathf.Max(boxSelectStartPosition.x, boxSelectEndPosition.x);
-			float maxZ = Mathf.Max(boxSelectStartPosition.z, boxSelectEndPosition.z);
+			pos = pos - centre;
+
+			pos = Quaternion.Euler(0, -45, 0) * pos;
+
+			pos = pos + centre;
 
 			if (minX < pos.x && pos.x < maxX &&
 				minZ < pos.z && pos.z < maxZ)
@@ -208,6 +223,25 @@ public class PlayerController : MonoBehaviour
 		selectedEntityTransforms.Clear();
 	}
 
+	private Vector3 GetSelectionSize ()
+	{
+		float a   = Camera.main.transform.rotation.eulerAngles.y;
+		float sin = Mathf.Sin(a / 180 * Mathf.PI);
+		float cos = Mathf.Cos(a / 180 * Mathf.PI);
+		float tan = Mathf.Tan(a / 180 * Mathf.PI);
+
+		float x1 = (tan * tan * boxSelectStartPosition.x - tan * boxSelectStartPosition.z + boxSelectEndPosition.x + tan * boxSelectEndPosition.z) / (tan * tan + 1);
+
+		float height = (boxSelectStartPosition.x - x1) / cos;
+		float width  = (boxSelectEndPosition.x   - x1) / cos;
+
+		Vector3 lossyScale = selectionBoxSpriteTransform.lossyScale;
+
+		return new Vector2(width  / lossyScale.x,
+						   height / lossyScale.y
+						  );
+	}
+
 	#endregion
 
 
@@ -216,7 +250,8 @@ public class PlayerController : MonoBehaviour
 	public void BeginDrag ()
 	{
 		dragging = true;
-
+		dragStartTime = Time.time;
+		
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
 			if (selectedEntityTransforms.Contains(finishingDrags[i].transform)) finishingDrags.RemoveAt(i);
@@ -280,6 +315,7 @@ public class PlayerController : MonoBehaviour
 	private void EndDrag ()
 	{
 		dragging = false;
+		dragStartTime = 0;
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
