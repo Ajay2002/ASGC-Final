@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Food
   - Enemy
+  - UIDraggable
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - 
   - PostProcessing
   - Ground
-  - 
+  - PathNode
   - 
   - 
   - 

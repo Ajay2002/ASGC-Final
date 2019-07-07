@@ -194,7 +194,6 @@ public class CreatureEntity : GeneticEntity_T
                 friends[i].bredWith.Add(this);
                 bredWith.Add(friends[i]);
                 foundBreeding = true;
-//                print ("Breeeeedingg");
                 Breed(friends[i]);
                 break;
             }

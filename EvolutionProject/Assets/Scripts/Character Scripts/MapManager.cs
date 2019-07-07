@@ -11,12 +11,24 @@ using Random = UnityEngine.Random;
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
-    
+
+    public int hiddenLayer,hiddenNeuron;
+    public bool tryNetwork = false;
+
+    public List<FoodSpawnerScriptableObject> foodSpawnerScriptableObjects;
+
+    public List<float> worldSpawnedFoodSpawnPeriods;
+    public List<FoodScriptableObject> worldSpawnedFoodScriptableObjects;
+
+    public List<Tuple<float, FoodScriptableObject>> worldSpawnedFood;
+
+    public int maxAmountOfFood;
+    public int amountOfFood;
+
     public bool enemyGraph = false;
     public string graph;
     public GraphHelp help;
     public GameObject entity;
-    public GameObject foodObject;
     public float mutationChance;
     public Vector3 area;
 
@@ -24,22 +36,26 @@ public class MapManager : MonoBehaviour
 
     public GeneticTraits idealTraits;
 
-    private void Start ()
-    {
-        if (Instance == null) Instance = this;
-    }
-
     private void OnDrawGizmos() {
         
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(transform.position, area);
         
     }
+    
+    private IEnumerator FoodGen(int i)
+    {
+        if (amountOfFood < maxAmountOfFood)
+        {
+            Food f = Instantiate(worldSpawnedFood[i].Item2.prefab, NearestPointOnMap(GetRandomPoint()), Quaternion.identity).GetComponent<Food>();
+            f.value      = worldSpawnedFood[i].Item2.value;
+            f.canPreyEat = worldSpawnedFood[i].Item2.canPreyEat;
 
-    private IEnumerator FoodGen() {
-        Instantiate(foodObject,GetRandomPoint(),Quaternion.identity);
-        yield return new WaitForSeconds(0.1f);
-        StartCoroutine("FoodGen");
+            amountOfFood++;
+        }
+
+        yield return new WaitForSeconds(worldSpawnedFood[i].Item1);
+        StartCoroutine(nameof(FoodGen), i);
     }
 
     public Vector3 GetRandomPoint () {
@@ -56,7 +72,8 @@ public class MapManager : MonoBehaviour
         RaycastHit hit = new RaycastHit();
 
         if (Physics.Raycast(ray, out hit)) {
-            return hit.point;
+            //Debug.DrawRay(hit.point,Vector3.up,Color.red,10);
+            return NearestPointOnMap(hit.point);
         }
         else {
             //GetRandomPoint();
@@ -66,12 +83,50 @@ public class MapManager : MonoBehaviour
 
     }
 
+    public float GetAverageFitness (GTYPE type) {
+        
+        EntityManager[] m = GameObject.FindObjectsOfType<EntityManager>();
+
+        int L = 0;
+        float avg = 0;
+        for (int i = 0; i < m.Length; i++) {
+            if (m[i].type == type) {
+                L++;
+                avg += m[i].stateManagement.fitness;
+            }
+        }
+
+        return avg/L;
+
+    }
+
     private void Awake()
     {
-        StartCoroutine("FoodGen");
+        if (Instance == null) Instance = this;
+        
+        if (foodSpawnerScriptableObjects == null) foodSpawnerScriptableObjects = new List<FoodSpawnerScriptableObject>();
+        if (worldSpawnedFood == null) worldSpawnedFood = new List<Tuple<float, FoodScriptableObject>>();
+        if (worldSpawnedFoodSpawnPeriods == null) worldSpawnedFoodSpawnPeriods = new List<float>();
+        if (worldSpawnedFoodScriptableObjects == null) worldSpawnedFoodScriptableObjects = new List<FoodScriptableObject>();
+        
+        
+        for (int i = 0; i < 10; i++)
+        {
+            FoodSpawner fs = Instantiate(foodSpawnerScriptableObjects[0].prefab, GetRandomPoint(), Quaternion.identity).GetComponent<FoodSpawner>();
+            fs.Initialise(foodSpawnerScriptableObjects[0]);
+        }
 
-        help.AddGraph("SelectedTrait",Color.blue);
-        help.AddGraph("Population",Color.red);
+        help.AddGraph("SelectedTrait", Color.blue);
+        help.AddGraph("Population",    Color.red);
+        
+        
+        if (worldSpawnedFoodSpawnPeriods.Count != worldSpawnedFoodScriptableObjects.Count) throw new Exception("World Spawned Food Spawn Periods is not the " +
+                                                                                                                        "same length as World Spawned Food Scriptable Objects.");
+
+        for (int i = 0; i < worldSpawnedFoodSpawnPeriods.Count; i++)
+            worldSpawnedFood.Add(new Tuple<float, FoodScriptableObject>(worldSpawnedFoodSpawnPeriods[i], worldSpawnedFoodScriptableObjects[i]));
+
+        for (int i = 0; i < worldSpawnedFood.Count; i++) StartCoroutine(nameof(FoodGen), i);
     }
 
     float t = 0;
@@ -82,12 +137,12 @@ public class MapManager : MonoBehaviour
         t += Time.deltaTime;
 
         float average = 0f;
-        GeneticEntity_T[] T = GameObject.FindObjectsOfType<GeneticEntity_T>();
+        EntityManager[] T = GameObject.FindObjectsOfType<EntityManager>();
         int L  = 0;
         for (int i = 0; i < T.Length; i++) {
-            if (enemyGraph && T[i].type == GeneticEntity_T.GeneticType.Creature)
+            if (enemyGraph && T[i].type == GTYPE.Creature)
                 continue;
-            if (!enemyGraph && T[i].type == GeneticEntity_T.GeneticType.Predator)
+            if (!enemyGraph && T[i].type == GTYPE.Predator)
                 continue;
 
             if (graph == "Speed")
@@ -165,7 +220,7 @@ public class MapManager : MonoBehaviour
                 Vector3 hP = hit.point;
                 hP.y += 0.5f;
                 conditionsMet = true;
-                return hP;
+                return NearestPointOnMap(hP);
             }
         
 
@@ -180,5 +235,14 @@ public class MapManager : MonoBehaviour
         }
         
         throw new Exception("NearestPointOnMap failed, nav mesh error");
+    }
+
+    public Vector3 NearestPointInMapArea (Vector3 offPoint)
+    {
+        return new Vector3(
+                           Mathf.Clamp(offPoint.x, transform.position.x - area.x / 2, transform.position.x + area.x / 2),
+                           Mathf.Clamp(offPoint.y, transform.position.y - area.y / 2, transform.position.y + area.y / 2),
+                           Mathf.Clamp(offPoint.z, transform.position.z - area.z / 2, transform.position.z + area.z / 2)
+                           );
     }
 }
