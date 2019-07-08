@@ -10489,7 +10489,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2520a9eeb382f6a44b01401ba6baf347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
+  tooltipPrefab: {fileID: 205562594295896527, guid: 66fedd4f8cd1e914d832fef64f9c87b4,
+    type: 3}
   tooltips: []
   menuTabButtons:
   - {fileID: 2106049421}
@@ -10512,7 +10513,7 @@ MonoBehaviour:
   populationText: {fileID: 962114572}
   slowSimSpeed: 0.5
   fastSimSpeed: 5
-  lettuceSpawnRateText: {fileID: 0}
+  lettuceSpawnRateText: {fileID: 626879269}
 --- !u!4 &1816652231 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
