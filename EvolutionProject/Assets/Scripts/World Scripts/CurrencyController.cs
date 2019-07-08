@@ -56,8 +56,8 @@ public class CurrencyController : MonoBehaviour
         if (cancelOnInsufficientCurrency && !sufficientCurrency) return false;
         
         currentCurrencyAmount -= Mathf.Abs(amount);
-        
-        currentCurrencyAmount = Mathf.Clamp(currentCurrencyAmount, 0, currencyAmountUpperBound);
+
+        currentCurrencyAmount = currentCurrencyAmount < 0 ? 0 : currentCurrencyAmount;
         
         if (MainUIController.Instance != null)
         MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
