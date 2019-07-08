@@ -18,7 +18,10 @@ public class NotificationManager : MonoBehaviour
     public Texture2D messageImage;
 
     [Header("UI Elements")]
+    public Transform start;
+    public Transform end;
     public Transform panel;
+    public RectTransform panelRect;
     public Image image;
     public TextMeshProUGUI text;
     public Button button;
@@ -33,7 +36,9 @@ public class NotificationManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {   
-        initialPosition = panel.position;
+        
+        initialPosition = panelRect.anchoredPosition;
+        
         panel.gameObject.SetActive(false);
         currentState=ProcessState.Closing;
         if (Instance == null) Instance = this;
@@ -51,9 +56,11 @@ public class NotificationManager : MonoBehaviour
 
     float t=0f;
     void Update() {
- 
+        
         if (currentState == ProcessState.Finished) {
+            
             if (notifications.Count > 0) {
+                
                 panel.gameObject.SetActive(true);
                 currentNotification = notifications.Dequeue();
                 LoadNotification(currentNotification);
@@ -63,11 +70,13 @@ public class NotificationManager : MonoBehaviour
         }
 
         if (currentState == ProcessState.Opening) {
-
-            float d = Vector3.Distance(panel.position, initialPosition+openPosition);
+            Vector3 move = Vector3.zero;
+            move.x =panelRect.sizeDelta.x*2;
+            move.y =panelRect.sizeDelta.y;
+            float d = Vector3.Distance(panel.position, start.position);
 
             if (d >= 0.1f) {
-                panel.position = Vector3.Lerp(panel.position, initialPosition+openPosition, 0.2f);
+                panel.position = Vector3.Lerp(panel.position, start.position, 0.2f);
             }
             else {
 
@@ -90,11 +99,12 @@ public class NotificationManager : MonoBehaviour
         }
 
         if (currentState == ProcessState.Closing) {
-
-            float d = Vector3.Distance(panel.position, initialPosition+closePosition);
+            Vector3 move = Vector3.zero;
+            move.x = -panelRect.sizeDelta.x/2;
+            float d = Vector3.Distance(panel.position, end.position);
 
             if (d >= 0.1f) {
-                panel.position = Vector3.Lerp(panel.position, initialPosition+closePosition, 0.2f);
+                panel.position = Vector3.Lerp(panel.position, end.position, 0.2f);
             }
             else {
 

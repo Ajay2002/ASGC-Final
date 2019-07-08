@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - UIDraggable
   - GrassBiome
+  - DesertBiome
   layers:
   - Default
   - TransparentFX

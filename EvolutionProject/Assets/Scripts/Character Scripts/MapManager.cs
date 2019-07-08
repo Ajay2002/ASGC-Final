@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
@@ -10,6 +11,12 @@ using Random = UnityEngine.Random;
 
 public class MapManager : MonoBehaviour
 {
+    [Header("Biome Management")]
+    public NavMeshSurface surface;
+    public Transform biomeInstance;
+    public float buttonDistanceThreshold;
+    public List<Mesh> biomes = new List<Mesh>();
+    public List<Material> biomeMaterials = new List<Material>();
     public static MapManager Instance;
 
     public int hiddenLayer,hiddenNeuron;
@@ -80,6 +87,98 @@ public class MapManager : MonoBehaviour
         }
 
         return transform.position;
+
+    }
+
+    public void CreateNewBiome (Vector3 position, Button sender) {
+
+        
+        
+        
+        BiomeType t = BiomeType.Grass;
+        Material mat=biomeMaterials[0];
+        int s = Random.Range(0,4);
+        if (s == 0) {mat = biomeMaterials[s];t=BiomeType.Grass;};
+        if (s == 1) {mat = biomeMaterials[s];t=BiomeType.Desert;};
+        if (s == 2) {mat = biomeMaterials[s];t=BiomeType.Snow;};
+        if (s == 3) {mat = biomeMaterials[s];t=BiomeType.Forest;};
+
+        int biomeSelection = Random.Range(0,biomes.Count);
+
+        
+        if (CurrencyController.Instance.RemoveCurrency(1000,true)) {
+            NotificationManager.Instance.CreateNotification(NotificationType.Message,"Successfully created a new biome of type " + t.ToString() + "!",false,1);
+            
+            GameObject newBiome = (GameObject)Instantiate(biomeInstance.gameObject,position,biomeInstance.transform.rotation);
+            int r = Random.Range(0,5);
+            newBiome.transform.eulerAngles += new Vector3(0,0,90*r);
+            Biome b = newBiome.transform.GetComponent<Biome>();
+            newBiome.transform.GetComponent<MeshRenderer>().material = mat;
+            newBiome.transform.GetComponent<MeshCollider>().sharedMesh=biomes[biomeSelection];
+            newBiome.transform.GetComponent<MeshFilter>().mesh = biomes[biomeSelection];
+            b.type = t;
+
+            Button closest=b.buttons[0];
+            for (int i = 0; i < b.buttons.Count; i++) {
+                if (Vector3.Distance(b.buttons[i].transform.position,sender.transform.position)<Vector3.Distance(closest.transform.position,sender.transform.position)) {
+                    closest = b.buttons[i];
+                }
+            }
+
+            GameObject.Destroy(closest.gameObject);
+            GameObject.Destroy(sender.gameObject);
+
+            surface.BuildNavMesh();
+            area += (newBiome.transform.position-transform.position)*2;
+
+            Biome[] biomesr = GameObject.FindObjectsOfType<Biome>();
+
+            for (int i = 0; i < biomesr.Length; i++) {
+                for (int x = 0; x < biomesr.Length; x++) {
+
+                    if (biomesr[i]==biomes[x] || i==x)
+                    continue;
+
+                    for (int c = 0; c < biomesr[i].buttons.Count; c++) {
+
+                        for (int d = 0; d < biomesr[x].buttons.Count; d++) {
+                            
+                            if (biomesr[i].buttons[c]==null || biomesr[x].buttons[d]==null)
+                            continue;
+
+                            if (Vector3.Distance(biomesr[i].buttons[c].transform.position,biomesr[x].buttons[d].transform.position)<=buttonDistanceThreshold) {
+
+                                GameObject.Destroy(biomesr[i].buttons[c].transform.gameObject);
+                                GameObject.Destroy(biomesr[x].buttons[d].transform.gameObject);
+
+                            }
+
+
+                        }
+
+                    }
+
+
+
+                }
+            }
+
+        }
+        else {
+            NotificationManager.Instance.CreateNotification(NotificationType.Cost,"Insufficient funds to create a new biome! ",false,0.2f);
+
+        }
+        //Randomly Select Biome Type
+        //Charge
+        //Disable opposite button on the mesh
+        //Create the biome
+        //Update the mesh renderer & mesh collider
+        //Assign the materials
+        //Change the tag of the biome
+        //Update the NavMesh
+        //Assign Biome Type to the Biome
+        //Update bounds of this map manager to encompass. 
+        //Kill the Button that sent it.
 
     }
 
