@@ -84,8 +84,7 @@ public class PlayerController : MonoBehaviour
 		RaycastHit hit;
 
 	
-		if (!Physics.Raycast(ray, out hit) || hit.transform.parent == null || (!hit.transform.parent.CompareTag("Player"))) return;
-		if (hit.transform.parent == null) return;
+		if (!Physics.Raycast(ray, out hit) || !hit.transform.CompareTag("Player")) return;
 
 		if (selectedEntityTransforms.Contains(hit.transform))
 		{

@@ -9,8 +9,6 @@
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="ActionManager.cs" t="Include" />
-        <e p="DecisionManager.cs" t="Include" />
         <e p="Editor" t="Include">
           <e p="EntityInspectorEditor.cs" t="Include" />
           <e p="NetworkEditor.cs" t="Include" />
@@ -43,10 +41,16 @@
             </e>
           </e>
         </e>
-        <e p="EntityManager.cs" t="Include" />
-        <e p="GeneticUIController.cs" t="Include" />
-        <e p="Pathfinder.cs" t="Include" />
-        <e p="PathNode.cs" t="Include" />
+        <e p="Genetics" t="Include">
+          <e p="ActionManager.cs" t="Include" />
+          <e p="CombineManager.cs" t="Include" />
+          <e p="DecisionManager.cs" t="Include" />
+          <e p="EntityManager.cs" t="Include" />
+          <e p="GeneticUIController.cs" t="Include" />
+          <e p="Pathfinder.cs" t="Include" />
+          <e p="PathNode.cs" t="Include" />
+          <e p="StateManager.cs" t="Include" />
+        </e>
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
         </e>
@@ -248,7 +252,6 @@
             </e>
           </e>
         </e>
-        <e p="StateManager.cs" t="Include" />
         <e p="TextMesh Pro" t="Include">
           <e p="Fonts" t="Include">
             <e p="LiberationSans - OFL.txt" t="Include" />
