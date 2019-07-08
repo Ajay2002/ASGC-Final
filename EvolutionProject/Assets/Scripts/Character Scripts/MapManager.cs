@@ -130,8 +130,9 @@ public class MapManager : MonoBehaviour
     }
 
     float t = 0;
+    
     private void Update() {
-        
+       
         t += Time.deltaTime;
 
         float average = 0f;
