@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bb413ed9bc445d469fc52a67f7f78bf, type: 3}
+  m_Name: CurrencyTooltip
+  m_EditorClassIdentifier: 
+  ID: currency
+  heading: Currency
+  text: <#FFFF00><link="currency">Currency</link></color> is what is used to purchase
+    <#FFFF00><link="mutation">mutations</link></color>, <#FFFF00><link="merge">merges</link></color>,
+    and <#FFFF00><link="placemet">placemets</link></color>.

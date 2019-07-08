@@ -8,6 +8,8 @@ public class UIDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
 	public int objectToInstantiate;
 
+	public List<GameObject> objectsToDisableOnDrag;
+
 	private Transform properParent;
 	private int siblingIndex;
 
@@ -28,6 +30,11 @@ public class UIDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		transform.parent = transform.parent.parent;
 		blankSpot.SetSiblingIndex(siblingIndex);
 		image.color = new Color(image.color.r, image.color.g, image.color.b, 0.5f);
+
+		foreach (GameObject o in objectsToDisableOnDrag)
+		{
+			o.SetActive(false);
+		}
 	}
 
 	public void OnDrag (PointerEventData eventData)
@@ -42,5 +49,10 @@ public class UIDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		blankSpot.SetSiblingIndex(properParent.childCount - 1);
 		transform.SetSiblingIndex(siblingIndex);
 		image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+		
+		foreach (GameObject o in objectsToDisableOnDrag)
+		{
+			o.SetActive(true);
+		}
 	}
 }

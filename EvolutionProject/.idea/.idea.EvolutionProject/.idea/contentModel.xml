@@ -51,12 +51,16 @@
           <e p="PathNode.cs" t="Include" />
           <e p="StateManager.cs" t="Include" />
         </e>
+        <e p="NotificationManager.cs" t="Include" />
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
         </e>
         <e p="ScriptableObjects" t="Include">
-          <e p="FoodScriptableObject.cs" t="Include" />
-          <e p="FoodSpawnerScriptableObject.cs" t="Include" />
+          <e p="Food" t="Include">
+            <e p="FoodScriptableObject.cs" t="Include" />
+            <e p="FoodSpawnerScriptableObject.cs" t="Include" />
+          </e>
+          <e p="TooltipScriptableObject.cs" t="Include" />
         </e>
         <e p="Scripts" t="Include">
           <e p="Character Scripts" t="Include">
@@ -96,6 +100,7 @@
           <e p="UI Scripts" t="Include">
             <e p="MainUIController.cs" t="Include" />
             <e p="MouseInputUIBlocker.cs" t="Include" />
+            <e p="OnHoverDisplayTooltip.cs" t="Include" />
             <e p="UIDraggable.cs" t="Include" />
           </e>
           <e p="World Scripts" t="Include">

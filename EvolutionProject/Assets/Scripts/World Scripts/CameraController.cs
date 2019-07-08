@@ -45,15 +45,10 @@ public class CameraController : MonoBehaviour
 		if (-zoomMagnitude * Mathf.Sin(rot) + zoomPosition.y < minPosLimits.y) zoomMagnitude = -(minPosLimits.y - zoomPosition.y) / Mathf.Sin(rot);
 		zoomPosition += transform.forward * zoomMagnitude;
 		Vector3 move = axis.TransformDirection(translatePosition);
+		transform.position = move + zoomPosition;
 
-		if (camera.orthographic)
-		{
-			camera.orthographicSize     = zoomMagnitude;
-			glowCamera.orthographicSize = zoomMagnitude;
-		}
-		else
-		{
-			transform.position = move + zoomPosition;
-		}
+		if (!camera.orthographic) return;
+		camera.orthographicSize     = zoomPosition.y;
+		glowCamera.orthographicSize = zoomPosition.y;
 	}
 }
