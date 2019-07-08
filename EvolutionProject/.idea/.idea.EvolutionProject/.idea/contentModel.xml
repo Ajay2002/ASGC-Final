@@ -51,6 +51,12 @@
           <e p="PathNode.cs" t="Include" />
           <e p="StateManager.cs" t="Include" />
         </e>
+        <e p="Materials" t="Include">
+          <e p="LandTypes" t="Include">
+            <e p="LocalNavMeshBuilder.cs" t="Include" />
+            <e p="NavMeshSourceTag.cs" t="Include" />
+          </e>
+        </e>
         <e p="NotificationManager.cs" t="Include" />
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
@@ -101,6 +107,7 @@
             <e p="MainUIController.cs" t="Include" />
             <e p="MouseInputUIBlocker.cs" t="Include" />
             <e p="OnHoverDisplayTooltip.cs" t="Include" />
+            <e p="ResizeToFitText.cs" t="Include" />
             <e p="UIDraggable.cs" t="Include" />
           </e>
           <e p="World Scripts" t="Include">
