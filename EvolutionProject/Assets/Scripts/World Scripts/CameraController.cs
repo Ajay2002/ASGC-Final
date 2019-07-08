@@ -16,16 +16,22 @@ public class CameraController : MonoBehaviour
 	private Vector3 translatePosition;
 	private Vector3 zoomPosition;
 
+	private new Camera camera;
+	private     Camera glowCamera;
+
 	private void Start ()
 	{
 		var position = transform.position;
 		translatePosition = new Vector3(position.x, 0,          position.z);
 		zoomPosition      = new Vector3(0,          position.y, 0);
+
+		camera     = GetComponent<Camera>();
+		glowCamera = transform.GetChild(0).GetComponent<Camera>();
 	}
 
 	private void Update ()
 	{
-		Vector3 shift = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed *
+		Vector3 shift = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed * Time.unscaledDeltaTime *
 						((zoomPosition.y - minPosLimits.y) / (maxPosLimits.y - minPosLimits.y) * 0.5f + 0.5f); //Slowing down movement when zoomed in
 
 		float newX = Mathf.Clamp(translatePosition.x + shift.x, minPosLimits.x, maxPosLimits.x);
@@ -39,6 +45,15 @@ public class CameraController : MonoBehaviour
 		if (-zoomMagnitude * Mathf.Sin(rot) + zoomPosition.y < minPosLimits.y) zoomMagnitude = -(minPosLimits.y - zoomPosition.y) / Mathf.Sin(rot);
 		zoomPosition += transform.forward * zoomMagnitude;
 		Vector3 move = axis.TransformDirection(translatePosition);
-		transform.position = move + zoomPosition;
+
+		if (camera.orthographic)
+		{
+			camera.orthographicSize     = zoomMagnitude;
+			glowCamera.orthographicSize = zoomMagnitude;
+		}
+		else
+		{
+			transform.position = move + zoomPosition;
+		}
 	}
 }

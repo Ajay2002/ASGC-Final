@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MathNet.Numerics.Distributions;
+using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
@@ -59,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
 		if (!MouseInputUIBlocker.BlockedByUI && Input.GetMouseButtonDown(1)) BeginDrag();
 		if (dragging                         && (Input.GetMouseButton(0)                                || Input.GetMouseButton(1))) UpdateDrag();
-		if (dragging                         && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Time.time - dragStartTime > maxDragTime)) EndDrag();
+		if (dragging                         && (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Time.unscaledTime - dragStartTime > maxDragTime)) EndDrag();
 
 		FinishDrags();
 
@@ -122,18 +123,7 @@ public class PlayerController : MonoBehaviour
 
 		//Update the graphics for the selection box
 		selectionBoxSpriteTransform.gameObject.SetActive(true);
-
-		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
-									 0.1f,
-									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
-									);
-
-		Vector3 size = new Vector2((boxSelectEndPosition.x - boxSelectStartPosition.x) / selectionBoxSpriteTransform.lossyScale.x,
-								   (boxSelectEndPosition.z - boxSelectStartPosition.z) / selectionBoxSpriteTransform.lossyScale.y
-								  );
-
-		selectionBoxSpriteTransform.position = centre;
-		selectionBoxSprite.size              = size;
+		BoxSelectGraphics();
 	}
 
 	private void UpdateBoxSelect ()
@@ -149,11 +139,17 @@ public class PlayerController : MonoBehaviour
 		boxSelectEndPosition = MapManager.Instance.NearestPointInMapArea(hit.point);
 
 		//Update the graphics for the selection box
+		BoxSelectGraphics();
+	}
+
+	private void BoxSelectGraphics ()
+	{
 		Vector3 centre = new Vector3((boxSelectStartPosition.x + boxSelectEndPosition.x) / 2,
 									 0.1f,
 									 (boxSelectStartPosition.z + boxSelectEndPosition.z) / 2
 									);
 
+		selectionBoxSpriteTransform.rotation = Quaternion.Euler(90, Camera.main.transform.rotation.eulerAngles.y, 0);
 		selectionBoxSpriteTransform.position = centre;
 		selectionBoxSprite.size              = GetSelectionSize();
 	}
@@ -247,10 +243,10 @@ public class PlayerController : MonoBehaviour
 
 	#region Dragging Methods
 
-	public void BeginDrag ()
+	public void BeginDrag ()	
 	{
 		dragging = true;
-		dragStartTime = Time.time;
+		dragStartTime = Time.unscaledTime;
 		
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
@@ -308,7 +304,7 @@ public class PlayerController : MonoBehaviour
 			selectedEntityTransforms[i].position = Vector3.Lerp(selectedEntityTransforms[i].position,
 																currentMouseWorldPosition   + Vector3.up +
 																DragDisplacementFunction(i) + entityHeight,
-																Time.deltaTime * dragFollowSpeed / Time.timeScale);
+																Time.unscaledDeltaTime * dragFollowSpeed);
 		}
 	}
 
@@ -375,7 +371,7 @@ public class PlayerController : MonoBehaviour
 			}
 
 			drag.transform.position = Vector3.Lerp(drag.transform.position, drag.position,
-												   Time.deltaTime * dragFollowSpeed / Time.timeScale);
+												   Time.unscaledDeltaTime * dragFollowSpeed);
 		}
 	}
 
