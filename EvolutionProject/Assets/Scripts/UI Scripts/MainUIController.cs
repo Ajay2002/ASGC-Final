@@ -160,6 +160,8 @@ public class MainUIController : MonoBehaviour
 		GameObject tt = Instantiate(tooltipPrefab);
 		tt.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = tooltip.heading;
 		tt.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = tooltip.text;
+		tt.transform.GetChild(2).GetComponent<TextMeshProUGUI>().ForceMeshUpdate();
+		tt.transform.GetChild(2).GetComponent<ResizeToFitText>().Resize();		
 		return tt;
 	}
 	

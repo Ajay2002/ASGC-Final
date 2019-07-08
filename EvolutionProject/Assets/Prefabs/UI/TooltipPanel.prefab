@@ -205,6 +205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2296008614453a548b1bad25679063a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayTooltipWithoutText: 0
+  tooltipID: 
   text_TMP: {fileID: 205562594869769387}
 --- !u!1 &205562594869769385
 GameObject:
@@ -217,6 +219,7 @@ GameObject:
   - component: {fileID: 205562594869769384}
   - component: {fileID: 205562594869769386}
   - component: {fileID: 205562594869769387}
+  - component: {fileID: 1337378856625264058}
   m_Layer: 5
   m_Name: TooltipText
   m_TagString: Untagged
@@ -241,7 +244,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 360, y: 200}
+  m_SizeDelta: {x: 360, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &205562594869769386
 CanvasRenderer:
@@ -271,7 +274,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: New Textasdasdasdasdadsasda
+  m_text: text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -340,10 +343,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 205562594869769387}
-    characterCount: 27
+    characterCount: 4
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -363,6 +366,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1337378856625264058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 205562594869769385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f03f4e1e5cc7c041aafb3e7e3257800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shouldExpandHeight: 1
 --- !u!1 &205562595441235918
 GameObject:
   m_ObjectHideFlags: 0
