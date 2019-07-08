@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 public class MainUIController : MonoBehaviour
 {
 	public static MainUIController Instance;
-	
+
 	public enum SimSpeed
 	{
 		PAUSED,
@@ -20,14 +20,15 @@ public class MainUIController : MonoBehaviour
 		FAST
 	}
 
-	[HideInInspector]
-	public GraphicRaycaster raycaster;
+	public GameObject tooltipPrefab;
+	
+	public List<TooltipScriptableObject> tooltips;
 
 	public List<GameObject> menuTabButtons;
 	public List<GameObject> menuTabObjects;
-	
+
 	public readonly List<Tuple<GameObject, GameObject>> menuTabs = new List<Tuple<GameObject, GameObject>>();
-	public List<GameObject> simSpeedButtons;
+	public          List<GameObject>                    simSpeedButtons;
 
 	public TextMeshProUGUI currencyText;
 	public TextMeshProUGUI populationText;
@@ -35,14 +36,14 @@ public class MainUIController : MonoBehaviour
 	public float slowSimSpeed = 0.5f;
 	public float fastSimSpeed = 5;
 
+	public TextMeshProUGUI lettuceSpawnRateText;
+
 	private Transform currentUIDrag;
 
 	private void Start ()
 	{
 		if (Instance == null) Instance = this;
 
-		raycaster = GetComponent<GraphicRaycaster>();
-		
 		if (menuTabButtons.Count != menuTabObjects.Count) throw new Exception("menuTabButtons and menuTabObjects are different lengths.");
 
 		for (int i = 0; i < menuTabButtons.Count; i++)
@@ -50,11 +51,14 @@ public class MainUIController : MonoBehaviour
 			if (menuTabButtons[i] == null || menuTabObjects[i] == null) throw new Exception("gameobjects in menuTabButtons and menuTabObjects cannot be null.");
 			menuTabs.Add(new Tuple<GameObject, GameObject>(menuTabButtons[i], menuTabObjects[i]));
 		}
+
+		TooltipScriptableObject[] objects = Resources.LoadAll<TooltipScriptableObject>("ScriptableObjects/Tooltips");
+		tooltips.AddRange(objects);
 		
 		MinimiseAllMenuTabs();
 		ChangeSimSpeed(2);
 	}
-	
+
 	public void OpenMenuTab (GameObject tab)
 	{
 		MinimiseAllMenuTabs();
@@ -63,7 +67,7 @@ public class MainUIController : MonoBehaviour
 		foreach ((GameObject menuTabButton, GameObject menuTab) in menuTabs)
 		{
 			if (menuTab != tab) continue;
-			
+
 			menuTabButton.GetComponent<Image>().color = menuTabButton.GetComponent<Button>().colors.pressedColor;
 			break;
 		}
@@ -84,9 +88,9 @@ public class MainUIController : MonoBehaviour
 		{
 			button.GetComponent<Image>().color = button.GetComponent<Button>().colors.normalColor;
 		}
-			
+
 		simSpeedButtons[s].GetComponent<Image>().color = simSpeedButtons[s].GetComponent<Button>().colors.pressedColor;
-		
+
 		SimSpeed simSpeed = (SimSpeed) s;
 
 		switch (simSpeed)
@@ -114,7 +118,7 @@ public class MainUIController : MonoBehaviour
 
 	public void UpdateCurrencyDisplay (int currencyAmount)
 	{
-		currencyText.text = StringifyNum(currencyAmount);
+		currencyText.text = "<link=\"currency\">" + StringifyNum(currencyAmount) + "</link>";
 	}
 
 	public void InstanceAsDragging (int index)
@@ -128,13 +132,38 @@ public class MainUIController : MonoBehaviour
 		if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask)) return;
 
 		Vector3 currentMouseWorldPosition = hit.point;
-		
+
 		FoodSpawnerScriptableObject toInstantiate = MapManager.Instance.foodSpawnerScriptableObjects[index];
 
 		GameObject fs = Instantiate(toInstantiate.prefab, MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition), quaternion.identity);
 	}
 
-	private String StringifyNum (int i)
+	public void ChangeLettuceSpawnRate (float amount)
+	{
+		const int cost = 10000;
+		
+		if (1 / MapManager.Instance.worldSpawnedFood[0].Item1 + amount <= 0) return;
+		if (!CurrencyController.Instance.RemoveCurrency(cost, true)) return;
+		
+		MapManager.Instance.worldSpawnedFood[0] =
+			new Tuple<float, FoodScriptableObject>(1 / (1 / MapManager.Instance.worldSpawnedFood[0].Item1 + amount), MapManager.Instance.worldSpawnedFood[0].Item2);
+
+		lettuceSpawnRateText.text = "Lettuce Spawn Rate: " + (1 / MapManager.Instance.worldSpawnedFood[0].Item1);
+	}
+
+	public GameObject CreateTooltip (string tooltipID)
+	{
+		TooltipScriptableObject tooltip = tooltips.Find(x => x.ID.Equals(tooltipID));
+
+		if (tooltip == null) return null;
+		
+		GameObject tt = Instantiate(tooltipPrefab);
+		tt.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = tooltip.heading;
+		tt.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = tooltip.text;
+		return tt;
+	}
+	
+	private string StringifyNum (int i)
 	{
 		return $"{i:#,##0.##}";
 	}
