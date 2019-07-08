@@ -132,8 +132,6 @@ public class MapManager : MonoBehaviour
     float t = 0;
     private void Update() {
         
-        if (Input.GetKeyDown(KeyCode.Space))
-            Application.LoadLevel(0);
         t += Time.deltaTime;
 
         float average = 0f;

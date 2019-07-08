@@ -163,6 +163,56 @@ public class GeneticUIController : MonoBehaviour
         Increment(action,modification,price);
     }
 
+    public void Duplicate() {
+        
+        //200 be the price of deletion per entity
+        float charge = controller.selectedEntityTransforms.Count*10000;
+
+        if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(charge),true)) {
+            for (int i = 0; i < controller.selectedEntityTransforms.Count; i++) {
+                if (controller.selectedEntityTransforms[i] == null)
+                continue;
+                //Add bred with
+                EntityManager m = Instantiate(controller.selectedEntityTransforms[i].gameObject,MapManager.Instance.GetRandomPoint(),Quaternion.identity).GetComponent<EntityManager>();
+                m.initial = false;
+                m.GetComponent<EntityGlowOnSelect>().SetSelected(false);
+                m.controller.ActionCompletion();
+
+                for (int c = 0; c < controller.selectedEntityTransforms.Count; c++) {
+                    if (controller.selectedEntityTransforms[c] != null)
+                    m.bredWith.Add(controller.selectedEntityTransforms[c].GetComponent<EntityManager>());
+                }
+
+            }
+        }
+        else {
+            //Send Warning
+        }
+
+    }
+
+    public void Delete() {
+
+        //200 be the price of deletion per entity
+        float charge = controller.selectedEntityTransforms.Count*500;
+
+        if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(charge),true)) {
+            for (int i = 0; i < controller.selectedEntityTransforms.Count; i++) {
+
+                GameObject.Destroy(controller.selectedEntityTransforms[i].gameObject);
+
+            }
+        }
+        else {
+            //Send Warning
+        }
+
+    }
+
+    public void Close() {
+        sidePanel.gameObject.SetActive(false);
+    }
+
     public void Increment (string s, float amount, float expensePerAmount) {
         for (int i = 0; i < controller.selectedEntityTransforms.Count; i++) {
 

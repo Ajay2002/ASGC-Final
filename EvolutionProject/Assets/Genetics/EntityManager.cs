@@ -66,7 +66,6 @@ public class EntityManager : MonoBehaviour
 
         if (initial) {
             Randomise();
-
             if (manager.tryNetwork) {
                 network = new NNetwork();
                 network.Initialise(manager.hiddenLayer,manager.hiddenNeuron,10,5);
