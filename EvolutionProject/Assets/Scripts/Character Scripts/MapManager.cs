@@ -276,7 +276,7 @@ public class MapManager : MonoBehaviour
     }
 
     public Transform SpawnEntity (Vector3 position) {
-        GameObject go = (GameObject)GameObject.Instantiate(entity,position,Quaternion.identity);
+        GameObject go = Instantiate(entity,position,Quaternion.identity);
         return go.transform;
     }
 
