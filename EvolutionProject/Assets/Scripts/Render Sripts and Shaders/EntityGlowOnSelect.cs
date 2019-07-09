@@ -26,7 +26,7 @@ public class EntityGlowOnSelect : MonoBehaviour
 			currentColor.a >= targetColour.a - 0.01f && currentColor.a <= targetColour.a + 0.01f)
 			return;
 
-		currentColor = Color.Lerp(currentColor, targetColour, Time.deltaTime * colourLerpSpeed);
+		currentColor = Color.Lerp(currentColor, targetColour, Time.unscaledDeltaTime * colourLerpSpeed);
 
 		foreach (Material glowMaterial in glowMaterials)
 		{

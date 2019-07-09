@@ -136,6 +136,8 @@ public class MainUIController : MonoBehaviour
 		FoodSpawnerScriptableObject toInstantiate = MapManager.Instance.foodSpawnerScriptableObjects[index];
 
 		GameObject fs = Instantiate(toInstantiate.prefab, MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition), quaternion.identity);
+		FoodSpawner fsComponent = fs.GetComponent<FoodSpawner>();
+		if (fsComponent != null) fsComponent.Initialise(toInstantiate);
 	}
 
 	public void ChangeLettuceSpawnRate (float amount)
