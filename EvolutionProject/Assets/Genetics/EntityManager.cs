@@ -69,18 +69,18 @@ public class EntityManager : MonoBehaviour
 
         MapManager.Instance.GetBiomeTypeFromPosition(transform.position, out creatureBiomeType);
 
-        if (creatureBiomeType==BiomeType.Grass){
-            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[0];
-        }
-        else if (creatureBiomeType==BiomeType.Snow) {
-            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[1];
-        }
-        else if (creatureBiomeType==BiomeType.Desert) {
-            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[2];
-        }
-        else if (creatureBiomeType==BiomeType.Forest) {
-            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[3];
-        }
+        // if (creatureBiomeType==BiomeType.Grass){
+        //     renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[0];
+        // }
+        // else if (creatureBiomeType==BiomeType.Snow) {
+        //     renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[1];
+        // }
+        // else if (creatureBiomeType==BiomeType.Desert) {
+        //     renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[2];
+        // }
+        // else if (creatureBiomeType==BiomeType.Forest) {
+        //     renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[3];
+        // }
 
         if (initial) {
             Randomise();
