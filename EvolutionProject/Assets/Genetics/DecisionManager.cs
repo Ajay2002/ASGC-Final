@@ -24,19 +24,28 @@ public class DecisionManager : MonoBehaviour
         StationaryChecking();
     }
 
-    ActionManager.ActionState currentActionState = ActionManager.ActionState.Nothing;
+    ActionState currentActionState = ActionState.Nothing;
 
     private void StationaryChecking() {
 
-        if (currentActionState == entity.controller.currentState) {
+        if ( entity.controller.avgVelocity.magnitude <= 0.05f) {
             stationaryT += Time.deltaTime;
         }
         else {
             stationaryT = 0f;
         }
 
-        if (stationaryT >= 10) {
+        if (entity.controller.currentState == ActionState.Sleeping || entity.controller.currentState == ActionState.Breeding)
+        if (stationaryT >= 8) {
             currentlyPerformingAction = false;
+            entity.controller.ActionCompletion();
+            stationaryT = 0f;
+        }
+
+        if (entity.controller.currentState == ActionState.Eating || entity.controller.currentState == ActionState.Running)
+        if (stationaryT >= 2) {
+            currentlyPerformingAction = false;
+
             entity.controller.ActionCompletion();
             stationaryT = 0f;
         }
@@ -225,7 +234,7 @@ public class DecisionManager : MonoBehaviour
             return;
         }
         else {
-            LowSleep();
+            FoodRequired();
             return;
         }
         
@@ -252,7 +261,7 @@ public class DecisionManager : MonoBehaviour
             return;
         }
         else {
-            LowSleep();
+            FoodRequired();
             return;
         }
 

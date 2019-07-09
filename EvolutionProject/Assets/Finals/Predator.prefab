@@ -72,6 +72,7 @@ MonoBehaviour:
     SI: 0
     RI: 0
   decision: {fileID: 8730529500624669334}
+  renderer: {fileID: 6169644870131594948}
   type: 1
   network:
     biases: []
@@ -86,6 +87,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   controller: {fileID: 8730529500624669337}
   stateManagement: {fileID: 8730529500624669335}
+  creatureBiomeType: 0
   isNeuralNet: 0
 --- !u!114 &8730529500624669335
 MonoBehaviour:
@@ -144,6 +146,7 @@ MonoBehaviour:
   entity: {fileID: 8730529500624669332}
   stateManager: {fileID: 8730529500624669335}
   agent: {fileID: 0}
+  avgVelocity: {x: 0, y: 0, z: 0}
 --- !u!54 &-8068033892949714370
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -379,6 +382,12 @@ PrefabInstance:
 --- !u!4 &8933299456359919627 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 40816b85811ef274a80f0d3695e4a54a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4504655471547538193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6169644870131594948 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
     type: 3}
   m_PrefabInstance: {fileID: 4504655471547538193}
   m_PrefabAsset: {fileID: 0}

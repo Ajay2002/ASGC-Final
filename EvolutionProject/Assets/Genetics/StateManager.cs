@@ -21,7 +21,7 @@ public class StateManager : MonoBehaviour
     private void StateUpdate() {
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
-        state.age += 0.3f * Time.deltaTime;
+        state.age += 0.8f * Time.deltaTime;
 
         if (state.age >= 100) {
             GameObject.Destroy(this.gameObject);

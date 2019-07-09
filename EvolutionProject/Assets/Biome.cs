@@ -21,23 +21,23 @@ public class Biome : MonoBehaviour
     public void UpSender (Button obj) {
 
         Vector3 pos = transform.position-transform.up*upScale;
-        MapManager.Instance.CreateNewBiome(pos,obj);
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.forward*upScale);
 
     }
 
     public void RightSender (Button obj) {
         Vector3 pos = transform.position+transform.right*scale;
-        MapManager.Instance.CreateNewBiome(pos,obj);
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.right*scale);
     }
 
     public void LeftSender (Button obj) {
         Vector3 pos = transform.position-transform.right*scale;
-        MapManager.Instance.CreateNewBiome(pos,obj);
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.right*scale);
     }
 
     public void DownSender (Button obj) {
         Vector3 pos = transform.position+transform.up*upScale;
-        MapManager.Instance.CreateNewBiome(pos,obj);
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.forward*upScale);
     }
 
 }

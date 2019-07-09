@@ -150,6 +150,7 @@ MonoBehaviour:
     SI: 0
     RI: 0
   decision: {fileID: 8769435504991402762}
+  renderer: {fileID: 969278294533299346}
   type: 0
   network:
     biases: []
@@ -164,6 +165,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   controller: {fileID: 8769435504991402763}
   stateManagement: {fileID: 8769435504991402761}
+  creatureBiomeType: 0
   isNeuralNet: 0
 --- !u!114 &8769435504991402761
 MonoBehaviour:
@@ -222,6 +224,7 @@ MonoBehaviour:
   entity: {fileID: 8769435504991402760}
   stateManager: {fileID: 8769435504991402761}
   agent: {fileID: 0}
+  avgVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5917668487079361239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,12 +310,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.029
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.076
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
@@ -357,23 +360,18 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.43344
+      value: 0.35694334
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.43344
+      value: 0.35694334
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.43344
+      value: 0.35694334
       objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: ef0c76a6b55d06a40aa5670755c08d84,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 8b4b3dedce090ab42a4f5d608d52c1a5, type: 2}
     - target: {fileID: -6057140222963153312, guid: ef0c76a6b55d06a40aa5670755c08d84,
         type: 3}
       propertyPath: m_Controller
@@ -384,6 +382,12 @@ PrefabInstance:
 --- !u!4 &2527679020987030109 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: ef0c76a6b55d06a40aa5670755c08d84,
+    type: 3}
+  m_PrefabInstance: {fileID: 7381024185406599495}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &969278294533299346 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1504981713932161579, guid: ef0c76a6b55d06a40aa5670755c08d84,
     type: 3}
   m_PrefabInstance: {fileID: 7381024185406599495}
   m_PrefabAsset: {fileID: 0}

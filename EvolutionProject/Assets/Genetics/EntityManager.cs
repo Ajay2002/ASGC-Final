@@ -28,6 +28,7 @@ public class EntityManager : MonoBehaviour
     
     //Sensory management & entity setup
     [Header("Sensory Elements")]
+    public MeshRenderer renderer;
     public GTYPE type;
     public NNetwork network;
     public EntityManager parentA, parentB;
@@ -51,6 +52,8 @@ public class EntityManager : MonoBehaviour
     public ActionManager controller;
     public StateManager stateManagement;
 
+    public BiomeType creatureBiomeType;
+
     private void OnDrawGizmos() {
         Gizmos.DrawWireSphere(transform.position,traits.sightRange);
     }
@@ -63,6 +66,21 @@ public class EntityManager : MonoBehaviour
         manager = GameObject.FindObjectOfType<MapManager>();
         controller = GetComponent<ActionManager>();
         traits.manager = manager;
+
+        MapManager.Instance.GetBiomeTypeFromPosition(transform.position, out creatureBiomeType);
+
+        if (creatureBiomeType==BiomeType.Grass){
+            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[0];
+        }
+        else if (creatureBiomeType==BiomeType.Snow) {
+            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[1];
+        }
+        else if (creatureBiomeType==BiomeType.Desert) {
+            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[2];
+        }
+        else if (creatureBiomeType==BiomeType.Forest) {
+            renderer.sharedMaterials[1]=MapManager.Instance.biomeFurMaterials[3];
+        }
 
         if (initial) {
             Randomise();
@@ -101,7 +119,7 @@ public class EntityManager : MonoBehaviour
         network.Initialise(5,10,7,5);
         traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.1f,2f);
         
-        traits.decisionCoolDown = UnityEngine.Random.Range(0.1f,5f);
+        traits.decisionCoolDown = UnityEngine.Random.Range(0.1f,1f);
         
         traits.speed = UnityEngine.Random.Range(0.01f,1f)*5;
     

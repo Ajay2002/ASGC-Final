@@ -198,7 +198,8 @@ public class GeneticUIController : MonoBehaviour
 
         if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(charge),true)) {
             for (int i = 0; i < controller.selectedEntityTransforms.Count; i++) {
-
+                
+                if (controller.selectedEntityTransforms[i]!=null)
                 GameObject.Destroy(controller.selectedEntityTransforms[i].gameObject);
 
             }

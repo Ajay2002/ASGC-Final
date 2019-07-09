@@ -5,6 +5,12 @@ using UnityEngine.AI;
 using UnityEngine.Jobs;
 using Unity.Entities;
 
+/* Extra Things 
+
+1. Removed the move to for breeding
+2. Removed something in the eating actions :/
+
+ */
 public class ActionManager : MonoBehaviour
 {
     [Header("Action Elements")]
@@ -14,14 +20,7 @@ public class ActionManager : MonoBehaviour
     public string subState = "";
     public bool goalAccomplished = true;
 
-    public enum ActionState {
-        Eating,
-        Sleeping,
-        Fighting,
-        Running,
-        Breeding,
-        Nothing
-    }
+   
 
     public ActionState currentState;
 
@@ -37,7 +36,7 @@ public class ActionManager : MonoBehaviour
         
         
         agent = GetComponent<NavMeshAgent>();
-        
+        agent.updatePosition=false;
     }
 
     private void Start() {
@@ -46,7 +45,10 @@ public class ActionManager : MonoBehaviour
 
     ActionTemplate currentAction;
 
+    private Vector3 lastPosition;
     private void Update() {
+
+        
         if (currentAction != null && currentState != ActionState.Nothing)
         MovementUpdate();
 
@@ -54,7 +56,18 @@ public class ActionManager : MonoBehaviour
             currentAction.Update();
         }
 
+        avgVelocity = (transform.position-lastPosition)/Time.deltaTime;
+        lastPosition = transform.position;
+
+        if (subState=="waitingForM") {
+            if(m2==null)
+                ActionCompletion();
+        }
+
+
     }
+
+    public Vector3 avgVelocity;
 
     public void Eat(bool begin) {
         currentState = ActionState.Eating;
@@ -130,8 +143,11 @@ public class ActionManager : MonoBehaviour
 
     }
 
+    EntityManager m2;
     
     public void BreedConfirmed(EntityManager m) {
+        m2=m;
+        subState="waitingForM";
         StopMovement();
         transform.LookAt(m.transform.position);
         subState = "";
@@ -142,7 +158,7 @@ public class ActionManager : MonoBehaviour
     
     // /target.position + (transform.position - target.position) * distPerc
     public void ActionCompletion() {
-        //agent.ResetPath();
+        agent.ResetPath();
     
         movementProcessed = true;
         subState = "";
@@ -154,8 +170,8 @@ public class ActionManager : MonoBehaviour
     }
 
     public void StopMovement() {
-        movementProcessed = true;
-        target = transform.position;
+        movementProcessed=true;
+        agent.ResetPath();
     }
 
     public void ForceBreed (EntityManager e) {
@@ -210,7 +226,7 @@ public class ActionManager : MonoBehaviour
     //TODO: Soon this will use A* however for now we will use the Navigation.AI
 	public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
 	{
-         if ( agent.isOnNavMesh) {
+         //if ( agent.isOnNavMesh) {
              agent.ResetPath();
             if (controller != null) {
                 controller.speed = speed/3;
@@ -220,8 +236,8 @@ public class ActionManager : MonoBehaviour
              agent.SetDestination(target.position);
             movementProcessed = false;
             invocationStatement = invocationTarget;
-         
-        }
+
+        //}
     }
 
     bool foundPath = false;
@@ -237,34 +253,59 @@ public class ActionManager : MonoBehaviour
 	public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
 	{   
 
-         if ( agent.isOnNavMesh) {
+         //if ( agent.isOnNavMesh) {
              agent.ResetPath();
-             if (controller != null) {
-                controller.speed = speed/3;
-            }          
+            //  if (controller != null) {
+            //     controller.speed = speed/3;
+            // }          
             this.target = target ;
             agent.speed = speed;
              agent.SetDestination(target);
             movementProcessed = false;
             invocationStatement = invocationTarget;
   
-        }
+        //}
     }
 
     Vector3 look;
     int currentPathPoint = 0;
-
+    protected float _distanceStearingTarget;
+    public float failsafeSpeed=0.5f;
     private void MovementUpdate ()
 	{
 		if (!movementProcessed && currentAction != null)
 		if (Vector3.Distance(transform.position,target) <= 0.9f || agent.remainingDistance <= 0.6f)
 		{
+            controller.speed=0f;
             currentAction.MovementComplete(invocationStatement);
             movementProcessed = true;
 		}
 		else
 		{
-                
+            if (Time.timeScale >= 1.0f && agent.hasPath) {
+                NavMeshHit hit;
+                float maxAgentTravelDistance = Time.deltaTime * agent.speed;
+        
+                //If at the end of path, stop agent.
+                if (
+                    agent.SamplePathPosition(NavMesh.AllAreas, maxAgentTravelDistance, out hit) ||
+                    agent.remainingDistance <= agent.stoppingDistance
+                ) {
+                    controller.speed=0f;
+                    currentAction.MovementComplete(invocationStatement);
+                    movementProcessed = true;
+                }
+                //Else, move the actor and manually update the agent pos
+                else {
+                    transform.position = transform.position+(hit.position-transform.position).normalized*entity.traits.speed*Time.deltaTime;
+                    agent.nextPosition = transform.position;
+                }
+            }
+
+            
+
+            controller.speed=entity.traits.speed/2;
+//            print (gameObject.name+":"+avgVelocity.magnitude);
             stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 10;
             
         }
@@ -317,7 +358,14 @@ public class ActionManager : MonoBehaviour
     
 }
 
-
+ public enum ActionState {
+        Eating,
+        Sleeping,
+        Fighting,
+        Running,
+        Breeding,
+        Nothing
+    }
 public abstract class ActionTemplate {
 
     public EntityManager manager;
@@ -340,7 +388,7 @@ public class CreatureEatingAction : ActionTemplate {
 
     public override void Begin(EntityManager m) {
         manager = m;
-        randomPointOnMap = m.manager.GetRandomPointAwayFrom(m.transform.position,m.traits.sightRange);
+        randomPointOnMap = m.manager.GetRandomPoint();
         reachedDestination = false;
         m.controller.MoveTo(randomPointOnMap,m.traits.speed,"goingToTarget",0f);
         currentState = "movingToTarget";
@@ -353,8 +401,12 @@ public class CreatureEatingAction : ActionTemplate {
     Transform foodItem;
 
     public override void Update() {
-
-        if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.5f) {
+        if (currentState == "movingToTarget") {
+            if (manager.controller.avgVelocity.magnitude <= 0.05f) {
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+            }
+        }
+        if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.6f) {
             Completion();
         }
 
@@ -442,7 +494,13 @@ public class EntitySleepingAction : ActionTemplate {
 
     public override void Update() {
 
-        if (Vector3.Distance(m.position,randomPoint) <= 0.5f && currentState == "lookingForPlaceToSleep") {
+        if (currentState == "lookingForPlaceToSleep") {
+            if (m.controller.avgVelocity.magnitude <= 0.05f) {
+                m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
+            }
+        }
+
+        if (Vector3.Distance(m.position,randomPoint) <= 0.7f && currentState == "lookingForPlaceToSleep") {
             randomPoint = m.manager.GetRandomPointAwayFrom(m.position,m.traits.sightRange);
             m.controller.MoveTo(randomPoint,m.traits.speed,"reachedRandomPoint",0f);
             currentState = "lookingForPlaceToSleep";
@@ -686,19 +744,27 @@ public class BreedingAction : ActionTemplate {
 
     public override void Completion() {
         manager.controller.Breed(false);
+        mate=null;
+        state="";
     }
 
     float timeSinceBreedReq = 0f;
 
     public override void Update() {
-
+        
         if (mate == null) {
             state = "lookingForMate";
             manager.controller.MoveTo(randomPoint,manager.traits.speed,"reachedRandomPoint",0f);
         }
 
-        if (Vector3.Distance(manager.position,randomPoint) <= 0.5f && state == "lookingForMate") {
+        if (Vector3.Distance(manager.position,randomPoint) <= 0.6f && state == "lookingForMate") {
             Completion();
+        }
+
+        if (state == "lookingForMate") {
+            if (manager.controller.avgVelocity.magnitude <= 0.05f) {
+                manager.controller.MoveTo(randomPoint,manager.traits.speed,"reachedRandomPoint",0f);
+            }
         }
 
         if (state == "lookingForMate") {
@@ -747,14 +813,23 @@ public class BreedingAction : ActionTemplate {
                         //Send a request
                         if (found != null) {
                             //Debug.Log("Request Send");
-                            if (found.controller.BreedRequest(manager)) {
-                                state = "mating";
-                                mate = found;
-                                BeginMating();
+                            // if (found.controller.BreedRequest(manager)) {
+                            //     state = "mating";
+                            //     mate = found;
+                            //     BeginMating();
+                            // }
+
+                            mate=found;
+                            if (manager.stateManagement.fitness >= mate.manager.GetAverageFitness(manager.type)) {
+
+                                    if (manager.traits.attractiveness >= mate.traits.attractiveness-0.4f) {
+                                        
+                                        state = "mating";
+                                        BeginMating();
+                                    }
+
                             }
-                            else {
-                                ///Debug.Log("Request Failed");
-                            }
+                            
                         }
 
                     }
@@ -833,10 +908,10 @@ public class BreedingAction : ActionTemplate {
         //Move to other entity
         //Wait 1 second
         //Breed
-        mate.controller.BreedConfirmed(manager);
+        //mate.controller.BreedConfirmed(manager);
         manager.controller.MoveTo(mate.position,manager.traits.speed,"reachedMate",0.7f);
         state = "mating";
-        
+        Breed(mate);
 
     }
 
@@ -846,6 +921,7 @@ public class BreedingAction : ActionTemplate {
         //Move to other entity
         //Wait 1 second
         //Breed
+        
         mate.controller.BreedConfirmed(manager);
         //manager.controller.MoveTo(mate.position,manager.traits.speed,"reachedMate",0.7f);
         state = "mating";
@@ -927,7 +1003,7 @@ public class BreedingAction : ActionTemplate {
         #region  Trait Modification
         newEntity.traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,2f)  : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.surroundingCheckCooldown : e.traits.surroundingCheckCooldown);
     
-        newEntity.traits.decisionCoolDown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,5f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.decisionCoolDown : e.traits.decisionCoolDown);
+        newEntity.traits.decisionCoolDown = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0.1f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.decisionCoolDown : e.traits.decisionCoolDown);
         
         newEntity.traits.speed = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? (UnityEngine.Random.Range(0.01f,1f)*5) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.speed : e.traits.speed);
     
@@ -978,18 +1054,19 @@ public class BreedingAction : ActionTemplate {
         e.stateManagement.ReproductionState();
         manager.stateManagement.ReproductionState();
         Completion();
-        e.controller.ActionCompletion();
+        //e.controller.ActionCompletion();
     }
 
     public override void MovementComplete(string statement) {
         if (statement == "reachedRandomPoint") {
 
             Completion();
+            if (mate!=null)
+            mate.controller.ActionCompletion();
         }
         else if (statement == "reachedMate") {
             
-            if (mate != null)
-            Breed(mate);
+            
 
         }
     }

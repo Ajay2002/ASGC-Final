@@ -12,11 +12,14 @@ using Random = UnityEngine.Random;
 public class MapManager : MonoBehaviour
 {
     [Header("Biome Management")]
+    public LayerMask groundMask;
+    public Vector3 bounds;
     public NavMeshSurface surface;
     public Transform biomeInstance;
     public float buttonDistanceThreshold;
     public List<Mesh> biomes = new List<Mesh>();
     public List<Material> biomeMaterials = new List<Material>();
+    public List<Material> biomeFurMaterials = new List<Material>();
     public static MapManager Instance;
 
     public int hiddenLayer,hiddenNeuron;
@@ -90,7 +93,29 @@ public class MapManager : MonoBehaviour
 
     }
 
-    public void CreateNewBiome (Vector3 position, Button sender) {
+    public bool GetBiomeTypeFromPosition (Vector3 pos, out BiomeType typeReturn) {
+        Ray ray = new Ray(pos+Vector3.up*2, Vector3.down);
+        RaycastHit hit = new RaycastHit();
+
+        if (Physics.Raycast(ray, out hit,1000, groundMask)) {
+            //Debug.DrawRay(hit.point,Vector3.up,Color.red,10);
+            if (hit.transform.GetComponent<Biome>() != null) {
+                typeReturn = hit.transform.GetComponent<Biome>().type;
+                return true;
+            }
+        }
+        else {
+            typeReturn = BiomeType.Grass;
+            return false;
+            //GetRandomPoint();
+        }
+        
+        typeReturn = BiomeType.Grass;
+        return false;
+    }
+
+    int bPress = 1;
+    public void CreateNewBiome (Vector3 position, Button sender, Vector3 ext) {
 
         
         
@@ -99,16 +124,16 @@ public class MapManager : MonoBehaviour
         Material mat=biomeMaterials[0];
         int s = Random.Range(0,4);
         if (s == 0) {mat = biomeMaterials[s];t=BiomeType.Grass;};
-        if (s == 1) {mat = biomeMaterials[s];t=BiomeType.Desert;};
-        if (s == 2) {mat = biomeMaterials[s];t=BiomeType.Snow;};
+        if (s == 1) {mat = biomeMaterials[s];t=BiomeType.Snow;};
+        if (s == 2) {mat = biomeMaterials[s];t=BiomeType.Desert;};
         if (s == 3) {mat = biomeMaterials[s];t=BiomeType.Forest;};
 
         int biomeSelection = Random.Range(0,biomes.Count);
 
         
-        if (CurrencyController.Instance.RemoveCurrency(1000,true)) {
+        if (CurrencyController.Instance.RemoveCurrency(10*bPress,true)) {
             NotificationManager.Instance.CreateNotification(NotificationType.Message,"Successfully created a new biome of type " + t.ToString() + "!",false,1);
-            
+            bPress++;
             GameObject newBiome = (GameObject)Instantiate(biomeInstance.gameObject,position,biomeInstance.transform.rotation);
             int r = Random.Range(0,5);
             newBiome.transform.eulerAngles += new Vector3(0,0,90*r);
@@ -129,13 +154,18 @@ public class MapManager : MonoBehaviour
             GameObject.Destroy(sender.gameObject);
 
             surface.BuildNavMesh();
-            area += (newBiome.transform.position-transform.position)*2;
+            area += ext+bounds;
+
 
             Biome[] biomesr = GameObject.FindObjectsOfType<Biome>();
-
+            Vector3 avg = Vector3.zero;
             for (int i = 0; i < biomesr.Length; i++) {
+                avg += biomesr[i].transform.position;
                 for (int x = 0; x < biomesr.Length; x++) {
-
+                    if (i<0||x<0)
+                    continue;
+                    if(i>biomesr.Length-1||x>biomesr.Length)
+                    continue;
                     if (biomesr[i]==biomes[x] || i==x)
                     continue;
 
@@ -162,6 +192,10 @@ public class MapManager : MonoBehaviour
 
                 }
             }
+
+            avg/=biomesr.Length;
+            avg.y = transform.position.y;
+            transform.position = avg;
 
         }
         else {
