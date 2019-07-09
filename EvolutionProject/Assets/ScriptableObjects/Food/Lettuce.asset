@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081c77f89ea112f44bc5599888fab32c, type: 3}
+  m_Name: Lettuce
+  m_EditorClassIdentifier: 
+  type: lettuce
+  prefab: {fileID: 4572454454203280157, guid: 2741559eb45336848a892de37e0f28a9, type: 3}
+  value: 5
+  canPreyEat: 1

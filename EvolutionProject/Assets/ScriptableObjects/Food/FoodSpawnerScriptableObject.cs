@@ -11,4 +11,6 @@ public class FoodSpawnerScriptableObject : ScriptableObject
     public GameObject prefab;
     public float spawnPeriod;
     public float spawnDistance;
+
+    public int cost;
 }

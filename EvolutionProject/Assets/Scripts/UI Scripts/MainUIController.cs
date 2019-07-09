@@ -123,6 +123,19 @@ public class MainUIController : MonoBehaviour
 
 	public void InstanceAsDragging (int index)
 	{
+		const int cost = 100000;
+		
+		FoodSpawnerScriptableObject toInstantiate = null;
+		if (index != -1)
+		{
+			toInstantiate = MapManager.Instance.foodSpawnerScriptableObjects[index];
+			if (!CurrencyController.Instance.RemoveCurrency(toInstantiate.cost, true)) return;
+		}
+		else
+		{
+			if (!CurrencyController.Instance.RemoveCurrency(cost, true)) return;			
+		}
+		
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
@@ -133,11 +146,17 @@ public class MainUIController : MonoBehaviour
 
 		Vector3 currentMouseWorldPosition = hit.point;
 
-		FoodSpawnerScriptableObject toInstantiate = MapManager.Instance.foodSpawnerScriptableObjects[index];
-
-		GameObject fs = Instantiate(toInstantiate.prefab, MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition), quaternion.identity);
-		FoodSpawner fsComponent = fs.GetComponent<FoodSpawner>();
-		if (fsComponent != null) fsComponent.Initialise(toInstantiate);
+		if (index != -1 && toInstantiate != null)
+		{
+			GameObject  fs          = Instantiate(toInstantiate.prefab, MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition), quaternion.identity);
+			FoodSpawner fsComponent = fs.GetComponent<FoodSpawner>();
+			if (fsComponent != null) fsComponent.Initialise(toInstantiate);
+		}
+		else
+		{
+			Transform e = MapManager.Instance.SpawnEntity(MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition));
+			e.GetComponent<EntityManager>().initial = true;
+		}
 	}
 
 	public void ChangeLettuceSpawnRate (float amount)

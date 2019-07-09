@@ -17,3 +17,4 @@ MonoBehaviour:
   prefab: {fileID: 8116891203356223053, guid: 6517baa9db31aff48ba35348bb2e4d51, type: 3}
   spawnPeriod: 3
   spawnDistance: 5
+  cost: 1000
