@@ -5490,16 +5490,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbeaa931204f9c54c83acef401556707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
+  bounds: {x: 0, y: 0, z: 0}
   surface: {fileID: 0}
   biomeInstance: {fileID: 0}
   buttonDistanceThreshold: 0
   biomes: []
   biomeMaterials: []
+  biomeFurMaterials: []
   hiddenLayer: 0
   hiddenNeuron: 0
   tryNetwork: 0
   foodSpawnerScriptableObjects:
   - {fileID: 11400000, guid: b27ff65e910d36544a53c4a890a3b126, type: 2}
+  - {fileID: 11400000, guid: 30fe0e3036aa3cb48a23efd56b082f7d, type: 2}
   worldSpawnedFoodSpawnPeriods:
   - 0.1
   worldSpawnedFoodScriptableObjects:
@@ -7342,7 +7348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579a187a4d214f9449013fe6e56ab306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToInstantiate: 0
+  objectToInstantiate: 1
   objectsToDisableOnDrag:
   - {fileID: 961868918}
 --- !u!1 &1320993402 stripped

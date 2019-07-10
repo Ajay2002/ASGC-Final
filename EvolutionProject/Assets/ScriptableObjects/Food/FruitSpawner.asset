@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fdb200fd8fa3148aa01374401087b2, type: 3}
+  m_Name: FruitSpawner
+  m_EditorClassIdentifier: 
+  type: fruit
+  food: {fileID: 11400000, guid: c211eec846e937b4c94e946138bb7d37, type: 2}
+  prefab: {fileID: 6488720178141326241, guid: 2d498e821127af34ea16c77a5d3012cd, type: 3}
+  spawnPeriod: 5
+  spawnDistance: 5
+  cost: 5000
