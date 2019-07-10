@@ -306,7 +306,7 @@ public class ActionManager : MonoBehaviour
 
             controller.speed=entity.traits.speed/2;
 //            print (gameObject.name+":"+avgVelocity.magnitude);
-            stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 10;
+            stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 0;
             
         }
 	}
@@ -413,12 +413,14 @@ public class CreatureEatingAction : ActionTemplate {
         if (currentState == "movingToTarget") {
 
             if (manager.food.Count > 0) {
-                if (manager.food[0] != null) {
-
+                for (int i = 0; i <manager.food.Count; i++) {
+                if (manager.food[i] != null  && manager.food[i].GetComponent<Food>().lockedOn == null) {
+                    manager.food[i].GetComponent<Food>().lockedOn = manager;
                     currentState = "movingToSeperate";
-                    foodItem = manager.food[0];
+                    foodItem = manager.food[i];
                     manager.controller.MoveTo(foodItem.position,manager.traits.speed,"goingToFood",0f);
                     
+                }
                 }
             }
 
