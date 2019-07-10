@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 081c77f89ea112f44bc5599888fab32c, type: 3}
-  m_Name: Lettuce
+  m_Name: Fruit
   m_EditorClassIdentifier: 
-  type: lettuce
-  prefab: {fileID: 4572454454203280157, guid: 2741559eb45336848a892de37e0f28a9, type: 3}
-  value: 7
+  type: fruit
+  prefab: {fileID: 3932756915268534051, guid: 36d619ee279288642ac966b919be4d60, type: 3}
+  value: 42
   canPreyEat: 1
