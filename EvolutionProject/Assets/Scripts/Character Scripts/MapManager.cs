@@ -83,7 +83,14 @@ public class MapManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit)) {
             //Debug.DrawRay(hit.point,Vector3.up,Color.red,10);
-            return NearestPointOnMap(hit.point);
+            Vector3 nPM = NearestPointOnMap(hit.point);
+            Biome b = GetBiomeFromPosition(nPM);
+
+            if (b != null) {
+                return b.getRandomPointGround(nPM);
+            }
+            else 
+            return nPM;
         }
         else {
             //GetRandomPoint();
@@ -112,6 +119,27 @@ public class MapManager : MonoBehaviour
         
         typeReturn = BiomeType.Grass;
         return false;
+    }
+
+    public Biome GetBiomeFromPosition (Vector3 pos) {
+        Ray ray = new Ray(pos+Vector3.up*2, Vector3.down);
+        RaycastHit hit = new RaycastHit();
+
+        if (Physics.Raycast(ray, out hit,1000, groundMask)) {
+            //Debug.DrawRay(hit.point,Vector3.up,Color.red,10);
+            if (hit.transform.GetComponent<Biome>() != null) {
+                //typeReturn = hit.transform.GetComponent<Biome>().type;
+                return hit.transform.GetComponent<Biome>();
+            }
+        }
+        else {
+            //typeReturn = BiomeType.Grass;
+            return null;
+            //GetRandomPoint();
+        }
+        
+
+        return null;
     }
 
     int bPress = 1;
@@ -363,6 +391,16 @@ public class MapManager : MonoBehaviour
     {
         NavMeshHit hit;
         if (NavMesh.SamplePosition(offPoint, out hit, Mathf.Infinity, NavMesh.AllAreas)) {
+            return hit.position;
+        }
+        
+        throw new Exception("NearestPointOnMap failed, nav mesh error");
+    }
+
+    public Vector3 NearestPointOnMapWater (Vector3 offPoint)
+    {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(offPoint, out hit, Mathf.Infinity, 3)) {
             return hit.position;
         }
         

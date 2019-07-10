@@ -21,7 +21,9 @@ public class StateManager : MonoBehaviour
     private void StateUpdate() {
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
-        state.age += 0.8f * Time.deltaTime;
+        state.age += 0.3f * Time.deltaTime;
+
+        state.thirst += 0.7f*Time.deltaTime;
 
         if (state.age >= 100) {
             GameObject.Destroy(this.gameObject);
@@ -38,7 +40,7 @@ public class StateManager : MonoBehaviour
             state.reproductiveness += 2 * Time.deltaTime * Random.Range(1f,1.5f);
         }
         else if (state.age >= 50 && state.age <= 75) {
-            state.reproductiveness -= 2 * Time.deltaTime * Random.Range(1,1.5f);
+            state.reproductiveness -= 0.2f * Time.deltaTime;
         }
         
 
@@ -126,4 +128,10 @@ public class StateManager : MonoBehaviour
         return (((100-state.ageView)+state.energyView+(100-state.hungerView)+(100-state.sleepView)+(100-state.fearView)+state.health*2)/10)+fitnessAddition;
     }
 
+    public void DrankWaterState() {
+        state.thirst -= 40;
+        state.reproductiveness+=10;
+        state.energy += 20;
+        state.health+=10;
+    }
 }

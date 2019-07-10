@@ -16,6 +16,7 @@ public class GeneticUIController : MonoBehaviour
     public TextMeshProUGUI energy;
     public TextMeshProUGUI hunger;
     public TextMeshProUGUI fear;
+    public TextMeshProUGUI thirst;
     public TextMeshProUGUI sleepiness;
 
     [Header("Traits")]
@@ -34,7 +35,7 @@ public class GeneticUIController : MonoBehaviour
     public TextMeshProUGUI FI;
     public TextMeshProUGUI SI;
     public TextMeshProUGUI RI;
-
+    public TextMeshProUGUI TI;
 
     private void Awake() {
         
@@ -160,6 +161,22 @@ public class GeneticUIController : MonoBehaviour
         string action=temp[0];
         float modification= float.Parse(temp[1]);
         float price = float.Parse(temp[2]);
+        Increment(action,modification,price);
+    }
+
+    public void IncrementParamsPositive (string fullS) {
+        string[] temp = fullS.Split(',');
+        string action=temp[0];
+        float modification= float.Parse(temp[1]);
+        float price = Mathf.Abs(float.Parse(temp[2]));
+        Increment(action,modification,price);
+    }
+
+    public void IncrementParamsNegative (string fullS) {
+        string[] temp = fullS.Split(',');
+        string action=temp[0];
+        float modification= float.Parse(temp[1]);
+        float price = -Mathf.Abs(float.Parse(temp[2]));
         Increment(action,modification,price);
     }
 

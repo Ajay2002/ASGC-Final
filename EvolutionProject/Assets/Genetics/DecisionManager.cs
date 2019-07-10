@@ -73,6 +73,7 @@ public class DecisionManager : MonoBehaviour
 
     private void RunNonLinearTest() {
 
+        Debug.LogError("Non-Linear Testing doesn't Include Thirst");
         List<float> inputs = new List<float>();
         for (int i = 0; i < 8; i++) {
             if (i == 0) {
@@ -96,7 +97,6 @@ public class DecisionManager : MonoBehaviour
             else if (i == 6) {
                 inputs.Add(state.ageView*traits.AI);
             }
-
         }
 
         inputs.Add(entity.food.Count);
@@ -193,6 +193,7 @@ public class DecisionManager : MonoBehaviour
                         highest = i;
                     }
                 }
+
             }
 
             if (highest == 0) {
@@ -225,16 +226,23 @@ public class DecisionManager : MonoBehaviour
                 currentlyWantingTo = "Fight or Flight";
                 currentlyPerformingAction = true;
             }
+
+    }
+
+
+    private void HighThirst() {
+        entity.controller.DrinkWater(true);
+        //FoodRequired();
     }
 
     private void LowHealth() {
 
-        if (state.sleepView*traits.SI < state.hungerView*traits.HUI) {
+        if ((state.thirstView)*traits.TI < state.hungerView*traits.HUI) {
             FoodRequired();
             return;
         }
         else {
-            FoodRequired();
+            HighThirst();
             return;
         }
         
@@ -261,7 +269,7 @@ public class DecisionManager : MonoBehaviour
             return;
         }
         else {
-            FoodRequired();
+            LowSleep();
             return;
         }
 

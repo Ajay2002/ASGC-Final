@@ -150,6 +150,8 @@ public class EntityManager : MonoBehaviour
         traits.SI = UnityEngine.Random.Range(0f,1f);
     
         traits.RI = UnityEngine.Random.Range(0f,1f);
+
+        traits.TI = UnityEngine.Random.RandomRange(0f,1f);
     }
 
 }

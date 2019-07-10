@@ -104,6 +104,20 @@ public class ActionManager : MonoBehaviour
 
     }
 
+    public void DrinkWater (bool begin) 
+    {
+        currentState = ActionState.Drinking;
+        if (begin == true) {
+
+            currentAction = new DrinkingAction();
+            currentAction.Begin(entity);
+
+        }
+        else {
+            ActionCompletion();
+        }
+    }
+
     public void Flight(bool begin) {
         currentState = ActionState.Running;
         if (begin) {
@@ -364,6 +378,7 @@ public class ActionManager : MonoBehaviour
         Fighting,
         Running,
         Breeding,
+        Drinking,
         Nothing
     }
 public abstract class ActionTemplate {
@@ -376,6 +391,66 @@ public abstract class ActionTemplate {
     public abstract void MovementComplete (string statement);
 
 }
+
+public class DrinkingAction : ActionTemplate {
+    bool reachedDestination = false;
+    Vector3 randomPointOnMap = new Vector3();
+    bool movingToWater = true;
+
+    public override void Begin(EntityManager m) {
+        manager = m;
+       movingToWater = true;
+       randomPointOnMap = m.manager.NearestPointOnMapWater(m.manager.GetRandomPoint());
+        reachedDestination = false;
+        if (movingToWater)
+        Debug.DrawLine(randomPointOnMap,randomPointOnMap+Vector3.up*100,Color.magenta,20);
+        else
+        Debug.DrawLine(randomPointOnMap,randomPointOnMap+Vector3.up*100,Color.red,20);
+
+        m.controller.MoveTo(randomPointOnMap,m.traits.speed,"goingToTarget",0f);
+        currentState = "movingToTarget";
+    }
+
+    public override void Completion() {
+        manager.controller.DrinkWater(false);
+    }
+
+    public override void Update() {
+        if (currentState == "movingToTarget") {
+            if (manager.controller.avgVelocity.magnitude <= 0.05f) {
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+            }
+        }
+        if (Vector3.Distance(manager.transform.position,randomPointOnMap) <= 0.6f) {
+            Completion();
+        }
+
+    }
+
+    string currentState = "";
+
+    public override void MovementComplete (string statement) {
+        if (statement == "goingToTarget") {
+            Completion();
+        }
+        else if (statement == "goingToFood") {
+            
+                if (movingToWater) {
+                    manager.stateManagement.DrankWaterState();
+                }
+                Completion();
+
+            }
+            else {
+
+                manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
+                currentState = "movingToTarget";
+
+            }
+
+        }
+}
+
 
 
 //Go after the random point
@@ -1036,6 +1111,9 @@ public class BreedingAction : ActionTemplate {
         newEntity.traits.SI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.SI : e.traits.SI);
     
         newEntity.traits.RI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.RI : e.traits.RI);
+        
+        newEntity.traits.TI = UnityEngine.Random.Range(0.01f,1.0f)<manager.manager.mutationChance ? UnityEngine.Random.Range(0f,1f) : (UnityEngine.Random.Range(0.01f,1.0f)<0.5f ? manager.traits.TI : e.traits.TI);
+
         #endregion
 
         //State Resets

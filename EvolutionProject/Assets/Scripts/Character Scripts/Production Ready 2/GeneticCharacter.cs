@@ -414,6 +414,7 @@ public class GeneticTraits
 
 	public float HI;
 	public float AI;
+    public float TI;
 	public float FI;
 	public float HUI;
 	public float SI;
@@ -426,6 +427,7 @@ public struct CurrentState
     public float energyView;
     public float healthView;
     public float ageView;
+    public float thirstView;
     public float fearView;
     public float hungerView;
     public float sleepView;
@@ -450,6 +452,12 @@ public struct CurrentState
             ageView = Mathf.Clamp(value,0,100);
         }
         get {return ageView;}
+    }
+    public float thirst {
+        set {
+            thirstView = Mathf.Clamp(value,0,100);
+        }
+        get{return thirstView;}
     }
 	public float fear  {
         set {
