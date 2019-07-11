@@ -59,7 +59,7 @@ public class Biome : MonoBehaviour
         Ray ray = new Ray(new Vector3(xPoint,yPoint, zPoint), Vector3.down);
         RaycastHit hit = new RaycastHit();
 
-        if (Physics.Raycast(ray, out hit)) {
+        if (Physics.Raycast(ray, out hit, groundMask)) {
             //Debug.DrawRay(hit.point,Vector3.up,Color.red,10);
             return MapManager.Instance.NearestPointOnMap(hit.point);
         }
@@ -102,7 +102,6 @@ public class Biome : MonoBehaviour
             }
         }
         
-        //print ("SUCK MY BALLS");
         return (Vector3.zero,false);
 //        return (NavMesh.SamplePosition(MapManager.Instance.GetRandomPoint(),,false);
     }

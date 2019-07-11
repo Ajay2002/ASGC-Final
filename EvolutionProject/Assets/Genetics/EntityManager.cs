@@ -11,7 +11,10 @@ public class EntityManager : MonoBehaviour
 
     public Vector3 position {
         get {
+            if (this!=null)
             return transform.position;
+            else
+            return Vector3.zero;
         }
     }
 
@@ -36,6 +39,10 @@ public class EntityManager : MonoBehaviour
     public List<EntityManager> creatures = new List<EntityManager>(); //Player Tag
     public List<Transform> food = new List<Transform>(); //Food Tag
     public List<EntityManager> bredWith = new List<EntityManager>();
+
+    public EntityManager claimedBy;
+    public bool isPartOfWave = false;
+
 
     public void SensoryUpdate (List<EntityManager> enemies, List<Transform> food, List<EntityManager> creatures) {
         this.enemies = enemies;

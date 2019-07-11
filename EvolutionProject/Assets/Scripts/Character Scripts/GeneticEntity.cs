@@ -34,6 +34,12 @@ public class GeneticEntity : MonoBehaviour
     public bool currentlyPerformingAction;
     public float timeSinceAction;
 
+    [Header("Fox Traits")]
+    public bool isInWave;
+
+    [Header("Rabbit Traits")]
+    public GeneticEntity claimedByFox;
+
     //Sensory Variables
     public List<GeneticEntity> enemies = new List<GeneticEntity>(); //Enemy Tag
     public List<GeneticEntity> friends = new List<GeneticEntity>(); //Player Tag

@@ -145,6 +145,7 @@ MonoBehaviour:
     brute: 0
     HI: 0
     AI: 0
+    TI: 0
     FI: 0
     HUI: 0
     SI: 0
@@ -162,6 +163,8 @@ MonoBehaviour:
   creatures: []
   food: []
   bredWith: []
+  claimedBy: {fileID: 0}
+  isPartOfWave: 0
   manager: {fileID: 0}
   controller: {fileID: 8769435504991402763}
   stateManagement: {fileID: 8769435504991402761}
@@ -185,6 +188,7 @@ MonoBehaviour:
     energyView: 100
     healthView: 100
     ageView: 0
+    thirstView: 0
     fearView: 0
     hungerView: 0
     sleepView: 0
@@ -225,6 +229,7 @@ MonoBehaviour:
   stateManager: {fileID: 8769435504991402761}
   agent: {fileID: 0}
   avgVelocity: {x: 0, y: 0, z: 0}
+  failsafeSpeed: 0.5
 --- !u!114 &5917668487079361239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +273,7 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0

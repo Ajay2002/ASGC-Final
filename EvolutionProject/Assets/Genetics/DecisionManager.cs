@@ -242,7 +242,7 @@ public class DecisionManager : MonoBehaviour
             return;
         }
         else {
-            HighThirst();
+            FoodRequired();
             return;
         }
         

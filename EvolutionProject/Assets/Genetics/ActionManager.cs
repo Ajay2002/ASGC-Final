@@ -36,7 +36,7 @@ public class ActionManager : MonoBehaviour
         
         
         agent = GetComponent<NavMeshAgent>();
-        agent.updatePosition=false;
+        //agent.updatePosition=false;
     }
 
     private void Start() {
@@ -172,6 +172,7 @@ public class ActionManager : MonoBehaviour
     
     // /target.position + (transform.position - target.position) * distPerc
     public void ActionCompletion() {
+        if (agent.isOnNavMesh)
         agent.ResetPath();
     
         movementProcessed = true;
@@ -239,19 +240,13 @@ public class ActionManager : MonoBehaviour
     List<Vector3> currentPath = new List<Vector3>();
     //TODO: Soon this will use A* however for now we will use the Navigation.AI
 	public void MoveTo (Transform target, float speed, string invocationTarget, float distPerc)
-	{
-         //if ( agent.isOnNavMesh) {
-             agent.ResetPath();
-            if (controller != null) {
-                controller.speed = speed/3;
-            }            
-            this.target = target.position ;
+	{       
+            this.target = target.position;
             agent.speed = speed;
-             agent.SetDestination(target.position);
+            
             movementProcessed = false;
             invocationStatement = invocationTarget;
-
-        //}
+            StopAndReset();
     }
 
     bool foundPath = false;
@@ -266,64 +261,57 @@ public class ActionManager : MonoBehaviour
 
 	public void MoveTo (Vector3 target, float speed, string invocationTarget, float distPerc)
 	{   
-
-         //if ( agent.isOnNavMesh) {
-             agent.ResetPath();
-            //  if (controller != null) {
-            //     controller.speed = speed/3;
-            // }          
             this.target = target ;
             agent.speed = speed;
-             agent.SetDestination(target);
+            
             movementProcessed = false;
             invocationStatement = invocationTarget;
-  
-        //}
+            StopAndReset();
     }
 
     Vector3 look;
     int currentPathPoint = 0;
+    float timeWithoutPath = 0f;
+
     protected float _distanceStearingTarget;
     public float failsafeSpeed=0.5f;
     private void MovementUpdate ()
 	{
-		if (!movementProcessed && currentAction != null)
-		if (Vector3.Distance(transform.position,target) <= 0.9f || agent.remainingDistance <= 0.6f)
-		{
-            controller.speed=0f;
-            currentAction.MovementComplete(invocationStatement);
-            movementProcessed = true;
-		}
-		else
-		{
-            if (Time.timeScale >= 1.0f && agent.hasPath) {
-                NavMeshHit hit;
-                float maxAgentTravelDistance = Time.deltaTime * agent.speed;
-        
-                //If at the end of path, stop agent.
-                if (
-                    agent.SamplePathPosition(NavMesh.AllAreas, maxAgentTravelDistance, out hit) ||
-                    agent.remainingDistance <= agent.stoppingDistance
-                ) {
-                    controller.speed=0f;
-                    currentAction.MovementComplete(invocationStatement);
-                    movementProcessed = true;
-                }
-                //Else, move the actor and manually update the agent pos
-                else {
-                    transform.position = transform.position+(hit.position-transform.position).normalized*entity.traits.speed*Time.deltaTime;
-                    agent.nextPosition = transform.position;
-                }
+		if (!movementProcessed && currentAction != null) {
+            if (Vector3.Distance(transform.position,target) <= 0.9f || (agent.pathPending == false && agent.remainingDistance <= 0.6f))
+            {
+                controller.speed=0f;
+                currentAction.MovementComplete(invocationStatement);
+                movementProcessed = true;
+            }
+            else
+            {
+            
+                controller.speed=entity.traits.speed/2;
+                stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime;
+                
             }
 
-            
+	    }
+    }
 
-            controller.speed=entity.traits.speed/2;
-//            print (gameObject.name+":"+avgVelocity.magnitude);
-            stateManager.state.energy -= stateManager.EnergyMovementCalculation(entity.traits.speed) * movementCost * Time.deltaTime * 0;
-            
-        }
-	}
+    public void GotPath (NavMeshPath queryReturn) {
+        if (agent.isOnNavMesh)
+        agent.ResetPath();
+        //agent.isStopped = false;
+
+        if (queryReturn.status == NavMeshPathStatus.PathInvalid)
+        {ActionCompletion(); return;}    
+        
+        
+        agent.SetPath(queryReturn);
+
+    }
+
+    public void StopAndReset () {
+        //agent.isStopped = true;
+        NavMeshManager.Instance.RequestPath(new NavMeshQuery(transform,GotPath,agent, target,entity.traits.speed));
+    }
 
     #endregion
     
@@ -643,6 +631,7 @@ public class PredatorEatingAction : ActionTemplate {
     EntityManager manager;
     Vector3 randomPointOnMap;
 
+
     public override void Begin(EntityManager m) {
         manager = m;
         randomPointOnMap = m.manager.GetRandomPointAwayFrom(m.transform.position,m.traits.sightRange);
@@ -671,12 +660,14 @@ public class PredatorEatingAction : ActionTemplate {
         if (currentState == "movingToTarget") {
 
             if (manager.creatures.Count > 0) {
-                if (manager.creatures[0] != null) {
-                    
-                    currentState = "movingToSeperate";
-                    foodItem = manager.creatures[0];
-                    manager.controller.MoveTo(foodItem.position,manager.traits.speed,"goingToFood",0f);
-                    foodItem.stateManagement.Pursuit(manager);
+                for (int i = 0; i < manager.creatures.Count; i++) {
+                    if (manager.creatures[i] != null && manager.creatures[i].claimedBy == null) {
+                        manager.creatures[i].claimedBy = this.manager;
+                        currentState = "movingToSeperate";
+                        foodItem = manager.creatures[0];
+                        manager.controller.MoveTo(foodItem.position,manager.traits.speed,"goingToFood",0f);
+                        foodItem.stateManagement.Pursuit(manager);
+                    }
                 }
             }
 
@@ -697,6 +688,8 @@ public class PredatorEatingAction : ActionTemplate {
                     manager.controller.subState = "inPursuit";
                 }
                 else {
+                    //FIXME: Not sure if this is stable yet :/
+                    foodItem.claimedBy = null;
                     manager.controller.MoveTo(randomPointOnMap,manager.traits.speed,"goingToTarget",0f);
                     currentState = "movingToTarget";
                     manager.controller.subState = "backToRandomPointMovement";

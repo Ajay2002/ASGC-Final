@@ -85,18 +85,19 @@ public class MapManager : MonoBehaviour
             //Debug.DrawRay(hit.point,Vector3.up,Color.red,10);
             Vector3 nPM = NearestPointOnMap(hit.point);
             Biome b = GetBiomeFromPosition(nPM);
-
+//            print ("Found Biome? " +(b!=null));
             if (b != null) {
                 return b.getRandomPointGround(nPM);
             }
-            else 
-            return nPM;
+            else { 
+                return nPM;
+            }
         }
         else {
             //GetRandomPoint();
         }
 
-        return transform.position;
+        return NearestPointOnMap(new Vector3(xPoint,1, zPoint));
 
     }
 
@@ -384,7 +385,7 @@ public class MapManager : MonoBehaviour
             }
         
 
-        return transform.position;
+        return GetRandomPoint();
     }
 
     public Vector3 NearestPointOnMap (Vector3 offPoint)
