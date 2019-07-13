@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using MathNet.Numerics.Distributions;
 using Unity.Mathematics;
-
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -34,6 +33,8 @@ public class PlayerController : MonoBehaviour
 	private Vector3 boxSelectEndPosition;
 
 	private float dragStartTime;
+
+	private float timeOfDragCost;
 
 	private readonly List<FinishingDrag> finishingDrags = new List<FinishingDrag>();
 
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour
 	{
 		RaycastHit hit;
 
-	
+
 		if (!Physics.Raycast(ray, out hit) || !hit.transform.CompareTag("Player")) return;
 
 		if (selectedEntityTransforms.Contains(hit.transform))
@@ -156,7 +157,7 @@ public class PlayerController : MonoBehaviour
 
 	private void EndBoxSelect ()
 	{
-		selecting     = false;
+		selecting = false;
 
 		if (Input.GetKey(KeyCode.LeftShift) == false && Input.GetKey(KeyCode.RightShift) == false) ClearSelect();
 
@@ -243,11 +244,12 @@ public class PlayerController : MonoBehaviour
 
 	#region Dragging Methods
 
-	public void BeginDrag ()	
+	public void BeginDrag ()
 	{
-		dragging = true;
-		dragStartTime = Time.unscaledTime;
-		
+		dragging       = true;
+		dragStartTime  = Time.unscaledTime;
+		timeOfDragCost = dragStartTime;
+
 		for (int i = finishingDrags.Count - 1; i >= 0; i--)
 		{
 			if (selectedEntityTransforms.Contains(finishingDrags[i].transform)) finishingDrags.RemoveAt(i);
@@ -283,6 +285,12 @@ public class PlayerController : MonoBehaviour
 
 	private void UpdateDrag ()
 	{
+		if (!UpdateDragCost())
+		{
+			EndDrag();
+			return;
+		}
+
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
@@ -308,9 +316,21 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	private bool UpdateDragCost ()
+	{
+		const float timeBetweenUpdates = 1f;
+		const int   costPerEntity      = 10;
+
+		if (Time.unscaledTime - timeOfDragCost < timeBetweenUpdates) return true;
+		timeOfDragCost = Time.unscaledTime;
+
+		return CurrencyController.Instance.RemoveCurrency(costPerEntity * selectedEntityTransforms.Count, true);
+	}
+
+
 	private void EndDrag ()
 	{
-		dragging = false;
+		dragging      = false;
 		dragStartTime = 0;
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
