@@ -193,6 +193,12 @@ MonoBehaviour:
     hungerView: 0
     sleepView: 0
     reproductivenessView: 0
+  maxAge: 0
+  eatPower: 1
+  hungerIncrease: 1.2
+  sleepPower: 1
+  reproductiveIncrease: 2
+  reproductiveCost: 1
 --- !u!114 &8769435504991402762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b0bb28543981a4d885a85acca20b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementCost: 0.1
+  movementCost: 5
   controller: {fileID: 5592940140259915559}
   subState: 
   goalAccomplished: 1

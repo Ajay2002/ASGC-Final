@@ -73,7 +73,7 @@ public class DecisionManager : MonoBehaviour
 
     private void RunNonLinearTest() {
 
-        Debug.LogError("Non-Linear Testing doesn't Include Thirst");
+       // Debug.LogError("Non-Linear Testing doesn't Include Thirst");
         List<float> inputs = new List<float>();
         for (int i = 0; i < 8; i++) {
             if (i == 0) {
@@ -147,6 +147,9 @@ public class DecisionManager : MonoBehaviour
                 HighFear();
                 currentlyWantingTo = "Fight or Flight";
                 currentlyPerformingAction = true;
+            }
+            else {
+                FoodRequired();
             }
 
     }

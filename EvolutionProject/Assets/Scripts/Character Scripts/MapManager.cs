@@ -165,6 +165,8 @@ public class MapManager : MonoBehaviour
             bPress++;
             GameObject newBiome = (GameObject)Instantiate(biomeInstance.gameObject,position,biomeInstance.transform.rotation);
             int r = Random.Range(0,5);
+            SpawnPoint[] points = newBiome.GetComponentsInChildren<SpawnPoint>();
+            foreach (SpawnPoint p in points) {p.Rotate(r);}
             newBiome.transform.eulerAngles += new Vector3(0,0,90*r);
             Biome b = newBiome.transform.GetComponent<Biome>();
             newBiome.transform.GetComponent<MeshRenderer>().material = mat;
@@ -278,8 +280,8 @@ public class MapManager : MonoBehaviour
             fs.Initialise(foodSpawnerScriptableObjects[0]);
         }
 
-        help.AddGraph("SelectedTrait", Color.blue);
-        help.AddGraph("Population",    Color.red);
+        // help.AddGraph("SelectedTrait", Color.blue);
+        // help.AddGraph("Population",    Color.red);
         
         
         if (worldSpawnedFoodSpawnPeriods.Count != worldSpawnedFoodScriptableObjects.Count) throw new Exception("World Spawned Food Spawn Periods is not the " +
@@ -292,50 +294,56 @@ public class MapManager : MonoBehaviour
     }
 
     float t = 0;
-    
+    float reset = 0f;
     private void Update() {
        
-        t += Time.deltaTime;
+        // if (reset <= 0) {
+        // t += Time.deltaTime;
 
-        float average = 0f;
-        EntityManager[] T = GameObject.FindObjectsOfType<EntityManager>();
-        int L  = 0;
-        for (int i = 0; i < T.Length; i++) {
-            if (enemyGraph && T[i].type == GTYPE.Creature)
-                continue;
-            if (!enemyGraph && T[i].type == GTYPE.Predator)
-                continue;
+        // float average = 0f;
+        // EntityManager[] T = GameObject.FindObjectsOfType<EntityManager>();
+        // int L  = 0;
+        // for (int i = 0; i < T.Length; i++) {
+        //     if (enemyGraph && T[i].type == GTYPE.Creature)
+        //         continue;
+        //     if (!enemyGraph && T[i].type == GTYPE.Predator)
+        //         continue;
 
-            if (graph == "Speed")
-                average += T[i].traits.speed*100;
-            if (graph == "SightRange")
-                average += T[i].traits.sightRange*100;
-            if (graph == "Size")
-                average += T[i].traits.size*100;
-            if (graph == "Strength")
-                average += T[i].traits.strength*100;
-            if (graph == "DangerSense") 
-                average += T[i].traits.dangerSense*100;
-            if (graph == "Attractiveness")
-                average += T[i].traits.attractiveness*100;
-            if (graph == "HI")
-                average += T[i].traits.HI*100;
-            if (graph == "AI")
-                average += T[i].traits.AI*100;
-            if (graph == "FI")
-                average += T[i].traits.FI*100;
-            if (graph == "HUI")
-                average += T[i].traits.HUI*100;
-            if (graph == "SI")
-                average += T[i].traits.SI*100;
-            if (graph == "RI")
-                average += T[i].traits.RI*100;
+        //     if (graph == "Speed")
+        //         average += T[i].traits.speed*100;
+        //     if (graph == "SightRange")
+        //         average += T[i].traits.sightRange*100;
+        //     if (graph == "Size")
+        //         average += T[i].traits.size*100;
+        //     if (graph == "Strength")
+        //         average += T[i].traits.strength*100;
+        //     if (graph == "DangerSense") 
+        //         average += T[i].traits.dangerSense*100;
+        //     if (graph == "Attractiveness")
+        //         average += T[i].traits.attractiveness*100;
+        //     if (graph == "HI")
+        //         average += T[i].traits.HI*100;
+        //     if (graph == "AI")
+        //         average += T[i].traits.AI*100;
+        //     if (graph == "FI")
+        //         average += T[i].traits.FI*100;
+        //     if (graph == "HUI")
+        //         average += T[i].traits.HUI*100;
+        //     if (graph == "SI")
+        //         average += T[i].traits.SI*100;
+        //     if (graph == "RI")
+        //         average += T[i].traits.RI*100;
 
-            L++;
-        }
-        average = average/L;
-        help.Plot(t,average,0);
-        help.Plot(t,L,1);
+        //     L++;
+        // }
+        // average = average/L;
+        // help.Plot(t,average,0);
+        // help.Plot(t,L,1);
+        // reset = 1;
+        // }
+        // else {
+        //     reset -= Time.deltaTime;
+        // }
     }
 
     public Transform SpawnEntity (Vector3 position) {

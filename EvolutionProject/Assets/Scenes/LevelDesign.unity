@@ -4523,7 +4523,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e3d4f391c1da6c34da7af3a54a9b1223, type: 2}
   hiddenLayer: 3
   hiddenNeuron: 7
-  tryNetwork: 0
+  tryNetwork: 1
   foodSpawnerScriptableObjects:
   - {fileID: 11400000, guid: b27ff65e910d36544a53c4a890a3b126, type: 2}
   worldSpawnedFoodSpawnPeriods:
@@ -4691,7 +4691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd158aa5fda823f45a55c867b8ed414f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenPopulationCurrencyIncrease: 0.2
+  timeBetweenPopulationCurrencyIncrease: 1
   currencyAmountUpperBound: -1
   currentCurrencyAmount: 10
 --- !u!114 &222929799
@@ -4710,34 +4710,66 @@ MonoBehaviour:
   eventList:
   - type: 0
     eventName: 
-    duration: 4
-    durationTo: 2
+    duration: 100
+    durationTo: 5
     notificationOnEnter:
       type: 0
-      text: 
+      text: A wave of foxes are coming in!! (Big one)
       duration: 0
       highPriority: 0
       containsAction: 0
     notificationToPrior:
-      type: 0
-      text: 
+      type: 2
+      text: A wave of foxes are going to enter in 5 seconds!
       duration: 0
       highPriority: 0
       containsAction: 0
   - type: 0
     eventName: 
-    duration: 4
-    durationTo: 3
+    duration: 100
+    durationTo: 20
     notificationOnEnter:
       type: 0
-      text: 
+      text: A wave of foxes are coming in!!
       duration: 0
       highPriority: 0
       containsAction: 0
     notificationToPrior:
-      type: 0
-      text: 
+      type: 2
+      text: A wave of foxes are going to enter in 5 seconds!
       duration: 0
+      highPriority: 0
+      containsAction: 0
+  - type: 0
+    eventName: 
+    duration: 100
+    durationTo: 20
+    notificationOnEnter:
+      type: 0
+      text: A wave of foxes are coming in!!
+      duration: 0
+      highPriority: 0
+      containsAction: 0
+    notificationToPrior:
+      type: 2
+      text: A wave of foxes are going to enter in 5 seconds!
+      duration: 0
+      highPriority: 0
+      containsAction: 0
+  - type: 2
+    eventName: 
+    duration: 100
+    durationTo: 20
+    notificationOnEnter:
+      type: 0
+      text: The food just dropped to nearly half, watch out.
+      duration: 2
+      highPriority: 0
+      containsAction: 0
+    notificationToPrior:
+      type: 2
+      text: A foodshortage is about to happen bro
+      duration: 2
       highPriority: 0
       containsAction: 0
   currentTimer: 0
@@ -4754,8 +4786,131 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da75207d85dd5f4ebaeec95914511fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foxObject: {fileID: 3761647023016439376, guid: 072fd773aafd73542b6d0267d5b2623c,
+    type: 3}
   waveIsRunning: 0
   currentWave: -1
+  foxWaves:
+  - maxAge: 100
+    movementCost: 5
+    eatPower: 1
+    hungerIncrease: 1.2
+    sleepPower: 1
+    reproductiveIncrease: 2
+    reproductiveCost: 1
+    numberOfFoxes: 20
+    maxNumberOfFoxes: 30
+    maxPercentKill: 0.2
+    variation: 1.61
+    averageTraits:
+      manager: {fileID: 0}
+      surroundingCheckCooldown: 0
+      decisionCoolDown: 0
+      speed: 2.5
+      size: 0.5
+      attractiveness: 0.8
+      sightRange: 0.3
+      dangerSense: 0.5
+      strength: 0.8
+      heatResistance: 0.2
+      intellect: 0.1
+      brute: 0.5
+      HI: 0.4
+      AI: 0.3
+      TI: 0.7
+      FI: 0.2
+      HUI: 0.8
+      SI: 0.7
+      RI: 0.5
+    startingState:
+      energyView: 100
+      healthView: 50
+      ageView: 0
+      thirstView: 0
+      fearView: 0
+      hungerView: 0
+      sleepView: 0
+      reproductivenessView: 0
+  - maxAge: 70
+    movementCost: 5
+    eatPower: 0.6
+    hungerIncrease: 1.6
+    sleepPower: 1.2
+    reproductiveIncrease: 3
+    reproductiveCost: 1
+    numberOfFoxes: 20
+    maxNumberOfFoxes: 30
+    maxPercentKill: 0.6
+    variation: 0.61
+    averageTraits:
+      manager: {fileID: 0}
+      surroundingCheckCooldown: 0
+      decisionCoolDown: 0
+      speed: 2.5
+      size: 0.5
+      attractiveness: 0.8
+      sightRange: 0.3
+      dangerSense: 0.5
+      strength: 0.8
+      heatResistance: 0.2
+      intellect: 0.1
+      brute: 0.5
+      HI: 0.4
+      AI: 0.3
+      TI: 0.7
+      FI: 0.2
+      HUI: 0.8
+      SI: 0.7
+      RI: 0.5
+    startingState:
+      energyView: 30
+      healthView: 50
+      ageView: 0
+      thirstView: 0
+      fearView: 0
+      hungerView: 0
+      sleepView: 0
+      reproductivenessView: 0
+  - maxAge: 100
+    movementCost: 5
+    eatPower: 1
+    hungerIncrease: 1.2
+    sleepPower: 1
+    reproductiveIncrease: 2
+    reproductiveCost: 1
+    numberOfFoxes: 15
+    maxNumberOfFoxes: 30
+    maxPercentKill: 0.6
+    variation: 3.42
+    averageTraits:
+      manager: {fileID: 0}
+      surroundingCheckCooldown: 0
+      decisionCoolDown: 0
+      speed: 2.5
+      size: 0.5
+      attractiveness: 0.8
+      sightRange: 0.3
+      dangerSense: 0.5
+      strength: 0.8
+      heatResistance: 0.2
+      intellect: 0.1
+      brute: 0.5
+      HI: 0.4
+      AI: 0.3
+      TI: 0.7
+      FI: 0.2
+      HUI: 0.8
+      SI: 0.7
+      RI: 0.5
+    startingState:
+      energyView: 100
+      healthView: 50
+      ageView: 0
+      thirstView: 0
+      fearView: 0
+      hungerView: 0
+      sleepView: 0
+      reproductivenessView: 0
 --- !u!114 &222929801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34044,11 +34199,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2893476831885205799, guid: 6af679325e40e1b4393571030b6ac447,
-        type: 3}
-      propertyPath: area.y
-      value: 4.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6af679325e40e1b4393571030b6ac447, type: 3}

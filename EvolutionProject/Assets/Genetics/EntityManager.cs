@@ -100,6 +100,7 @@ public class EntityManager : MonoBehaviour
             }
         }
 
+        if (GTYPE.Creature == type)
         stateManagement.ResetState();
 
 

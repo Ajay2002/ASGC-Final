@@ -67,6 +67,7 @@ MonoBehaviour:
     brute: 0
     HI: 0
     AI: 0
+    TI: 0
     FI: 0
     HUI: 0
     SI: 0
@@ -84,6 +85,8 @@ MonoBehaviour:
   creatures: []
   food: []
   bredWith: []
+  claimedBy: {fileID: 0}
+  isPartOfWave: 0
   manager: {fileID: 0}
   controller: {fileID: 8730529500624669337}
   stateManagement: {fileID: 8730529500624669335}
@@ -107,10 +110,17 @@ MonoBehaviour:
     energyView: 100
     healthView: 100
     ageView: 0
+    thirstView: 0
     fearView: 0
     hungerView: 0
     sleepView: 0
     reproductivenessView: 0
+  maxAge: 100
+  eatPower: 1
+  hungerIncrease: 1.2
+  sleepPower: 1
+  reproductiveIncrease: 2
+  reproductiveCost: 1
 --- !u!114 &8730529500624669334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b0bb28543981a4d885a85acca20b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementCost: 0.1
+  movementCost: 4
   controller: {fileID: 1545710247410228593}
   subState: 
   goalAccomplished: 1
@@ -147,6 +157,7 @@ MonoBehaviour:
   stateManager: {fileID: 8730529500624669335}
   agent: {fileID: 0}
   avgVelocity: {x: 0, y: 0, z: 0}
+  failsafeSpeed: 0.5
 --- !u!54 &-8068033892949714370
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -292,6 +303,21 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 6c48987041333774888aa46ea74a4f74, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ba72ae8cae65d1b45af4e73e627c06d5, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: c5ccac27f053a5e4dadf80a29eb941ab, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3fa647fd3df7e44428c9607cba3f9c0a, type: 2}
     - target: {fileID: -4216859302048453862, guid: 40816b85811ef274a80f0d3695e4a54a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -362,21 +388,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.32173
       objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ba72ae8cae65d1b45af4e73e627c06d5, type: 2}
-    - target: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: c5ccac27f053a5e4dadf80a29eb941ab, type: 2}
-    - target: {fileID: -1504981713932161579, guid: 40816b85811ef274a80f0d3695e4a54a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: 3fa647fd3df7e44428c9607cba3f9c0a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40816b85811ef274a80f0d3695e4a54a, type: 3}
 --- !u!4 &8933299456359919627 stripped

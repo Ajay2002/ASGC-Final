@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Jobs;
-using Unity.Entities;
+//using Unity.Entities;
 
 /* Extra Things 
 
@@ -1016,6 +1015,10 @@ public class BreedingAction : ActionTemplate {
         else
         newEntity = manager.manager.SpawnEntityEnemy(pos).GetComponent<EntityManager>();
         
+
+        if (GTYPE.Predator == manager.type && (manager.isPartOfWave || mate.isPartOfWave))
+            newEntity.isPartOfWave = true;
+
         if (manager.isNeuralNet && e.isNeuralNet) {
         NNetwork A = e.network;
         NNetwork B = manager.network;

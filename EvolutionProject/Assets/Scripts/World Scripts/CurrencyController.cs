@@ -26,7 +26,18 @@ public class CurrencyController : MonoBehaviour
 
     private IEnumerator PopulationCurrencyIncrease ()
     {
-        AddCurrency(50);
+        int increment = 0;
+
+        EntityManager[] creatures = GameObject.FindObjectsOfType<EntityManager>();
+        for (int i = 0; i < creatures.Length; i++) {
+            if (creatures[i].type == GTYPE.Creature) {
+                increment++;
+                continue;
+            }
+            
+        }
+
+        AddCurrency(increment*5);
         yield return new WaitForSeconds(timeBetweenPopulationCurrencyIncrease);
         StartCoroutine(nameof(PopulationCurrencyIncrease));
     }

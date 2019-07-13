@@ -12,12 +12,13 @@ public class EventManager : MonoBehaviour
     //Instance
     public static EventManager Instance;
 
-
+    
 
     [Header("Private")]
     //Private Variables
     public float currentTimer = 0f;
     private bool timerEnabled = false;
+
 
     public enum CurrentProgramState {RunningEvent, Finished, Waiting, Nothing};
     public CurrentProgramState cps;
@@ -58,6 +59,7 @@ public class EventManager : MonoBehaviour
                 if (currentEvent != null) {
                     currentTimer = currentEvent.durationTo;
                     cps = CurrentProgramState.Waiting;
+                    NotificationManager.Instance.CreateNotification(currentEvent.notificationToPrior);
                 }
                 else {
                     Debug.LogError("Something went wrong!");
@@ -82,6 +84,7 @@ public class EventManager : MonoBehaviour
                     //Start the event 
                     cps = CurrentProgramState.RunningEvent;
                     currentTimer = currentEvent.duration;
+                    NotificationManager.Instance.CreateNotification(currentEvent.notificationOnEnter);
                     currentEvent.Start(this);
 
                 }
@@ -96,6 +99,8 @@ public class EventManager : MonoBehaviour
                 currentEvent.Update();
 
             if (currentTimer <= 0f) {
+                //Call Compeltion of TIme
+                currentEvent.Completed();
                 currentEvent = null;
                 currentTimer = 0f;
                 cps = CurrentProgramState.Finished;
@@ -132,6 +137,7 @@ public abstract class EventTemplate  {
     public abstract void Update();
     public abstract void Start(EventManager manager);
     public abstract void CompletionChecking();
+    public abstract void Completed ();
     public abstract void FunctionCall (string query);
 
 }
@@ -144,6 +150,7 @@ public abstract class EventTemplate  {
 
 */
 
+
 public class FoxWave : EventTemplate {
 
     public override void Update() {
@@ -155,10 +162,65 @@ public class FoxWave : EventTemplate {
 
     public override void CompletionChecking() {
 
+        int maxFoxPopulation = WaveManager.Instance.foxWaves[WaveManager.Instance.currentWave].maxNumberOfFoxes;
+        float perc = WaveManager.Instance.foxWaves[WaveManager.Instance.currentWave].maxPercentKill;
+        int currentPopulation = 0;
+
+        int currentCreaturePopulation = 0;
+
+        EntityManager[] creatures = GameObject.FindObjectsOfType<EntityManager>();
+        for (int i = 0; i < creatures.Length; i++) {
+            if (creatures[i].type == GTYPE.Predator && creatures[i].isPartOfWave == true) {
+                currentPopulation ++;
+                if (currentPopulation > maxFoxPopulation) {
+                    //Find a better way to do this than to instant kill them.
+                    GameObject.Destroy(creatures[i].gameObject);
+                    currentPopulation --;
+                }
+
+                continue;
+            }
+
+            if (creatures[i].type == GTYPE.Creature) {
+
+                currentCreaturePopulation ++;
+
+            }
+
+        }
+
+        if (currentCreaturePopulation <= startingPopulation*perc) {
+            WaveManager.Instance.KillWave();
+        }
+    
     }
 
+    int startingPopulation = 0;
+
     public override void Start(EventManager manager)  {
+
+        EntityManager[] creatures = GameObject.FindObjectsOfType<EntityManager>();
+        for (int i = 0; i < creatures.Length; i++) {
+            if (creatures[i].type == GTYPE.Creature)
+                startingPopulation ++;
+        }
+
+        WaveManager.Instance.CreateNewWave();
         
+    }
+
+    public override void Completed() {
+        WaveManager.Instance.KillWave();
+        EntityManager[] creatures = GameObject.FindObjectsOfType<EntityManager>();
+        for (int i = 0; i < creatures.Length; i++) {
+            if (creatures[i].type == GTYPE.Predator && creatures[i].isPartOfWave == true) {
+                
+                GameObject.Destroy(creatures[i].gameObject);
+                continue;
+            }
+
+            
+        }
     }
 
     private void CreateWave() {
@@ -172,12 +234,77 @@ public class FoxWave : EventTemplate {
 
 }
 
+public class FoodShortage : EventTemplate {
+
+    public override void Update() {
+
+    }
+
+    float percentDrop = 0f;
+    int initialFoodCount = 0;
+    public override void Start(EventManager manager) {
+        
+        percentDrop = Random.Range(0.4f,0.6f);
+        initialFoodCount = MapManager.Instance.maxAmountOfFood;
+        MapManager.Instance.maxAmountOfFood = Mathf.RoundToInt(initialFoodCount*percentDrop);
+
+    }
+    
+    public override void Completed() {
+        MapManager.Instance.maxAmountOfFood = initialFoodCount;
+    }
+
+    public override void CompletionChecking() {
+
+    }
+
+    public override void FunctionCall(string query) {
+
+    }
+
+}
+
+/*
+    public override void Update() {
+
+    }
+
+    public override void Start(EventManager manager) {
+
+    }
+    
+    public override void Completed() {
+
+    }
+
+    public override void CompletionChecking() {
+
+    }
+
+    public override void FunctionCall(string query) {
+        
+    } 
+*/
+
+[System.Serializable]
 public class FoxWaveTraits  {
 
+    [Header("State Management")]
+    public int maxAge=100;
+    public float movementCost = 5;
+    public float eatPower=1f;
+    public float hungerIncrease=1.2f;
+    public float sleepPower=1f;
+    public float reproductiveIncrease=2;
+    public float reproductiveCost=1f;
+
+    [Header("Wave")]
     public int numberOfFoxes;
     public int maxNumberOfFoxes;
     public float maxPercentKill;
     
+    [Header("Genetics")]
+    public float variation;
     public GeneticTraits averageTraits;
     public CurrentState startingState;
 
@@ -201,6 +328,17 @@ public class EPublic {
         if (type == EType.FoxWave) {
 
             FoxWave w = new FoxWave();
+            w.eventName = eventName;
+            w.type = type;
+            w.duration = duration;
+            w.durationTo = durationTo;
+            w.notificationOnEnter = notificationOnEnter;
+            w.notificationToPrior = notificationToPrior;
+
+            return w;
+        }
+        else if (type == EType.FoodShortage) {
+            FoodShortage w = new FoodShortage();
             w.eventName = eventName;
             w.type = type;
             w.duration = duration;
