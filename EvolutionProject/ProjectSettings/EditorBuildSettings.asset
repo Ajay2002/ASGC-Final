@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Coding_Prototype.unity
+    guid: 70b9c2c6918d78b489b167a230b3acf8
   - enabled: 1
-    path: Assets/Scenes/LevelDesign.unity
-    guid: 8538cb572ad06d94e89f15fdd18acf77
+    path: Assets/Scenes/Coding_Prototype_Tristan.unity
+    guid: 346a4d8468634ae4a94747485c9c58b7
   m_configObjects: {}

@@ -37,6 +37,8 @@ public class MainUIController : MonoBehaviour
 	public float fastSimSpeed = 5;
 
 	public TextMeshProUGUI lettuceSpawnRateText;
+	public TextMeshProUGUI mutationChanceText;
+	public TextMeshProUGUI mutationChanceIncreaseCostText;
 
 	private Transform currentUIDrag;
 
@@ -172,6 +174,24 @@ public class MainUIController : MonoBehaviour
 		lettuceSpawnRateText.text = "Lettuce Spawn Rate: " + (1 / MapManager.Instance.worldSpawnedFood[0].Item1);
 	}
 
+	public void ChangeMutationChance (float amount)
+	{
+		const float m = 200000;
+		const float c = -3000;
+		
+		if (MapManager.Instance.mutationChance + amount > 0.9f || MapManager.Instance.mutationChance + amount < 0.02f) return;
+		
+		int cost = Mathf.RoundToInt(m * MapManager.Instance.mutationChance - c);
+		cost = amount > 0 ? cost : 1000;
+		
+		if (!CurrencyController.Instance.RemoveCurrency(cost, true)) return;
+
+		MapManager.Instance.mutationChance += amount;
+		
+		mutationChanceText.text = "Mutation Chance: " + Mathf.Round(MapManager.Instance.mutationChance * 1000) / 10 + "%";
+		mutationChanceIncreaseCostText.text = "(" + StringifyNum(Mathf.RoundToInt(m * MapManager.Instance.mutationChance - c)) + ")";
+	}
+
 	public GameObject CreateTooltip (string tooltipID)
 	{
 		TooltipScriptableObject tooltip = tooltips.Find(x => x.ID.Equals(tooltipID));
@@ -189,5 +209,10 @@ public class MainUIController : MonoBehaviour
 	private string StringifyNum (int i)
 	{
 		return $"{i:#,##0.##}";
+	}
+	
+	private string StringifyNum (float f)
+	{
+		return $"{f:#,##0.##}";
 	}
 }
