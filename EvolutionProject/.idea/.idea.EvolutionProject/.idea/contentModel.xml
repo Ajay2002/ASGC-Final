@@ -35,14 +35,9 @@
                 <e p="Matrix.cs" t="Include" />
               </e>
             </e>
-            <e p="Windows" t="Include">
-              <e p="ChatSystem.cs" t="Include" />
-              <e p="Debugger.cs" t="Include" />
-              <e p="Grapher.cs" t="Include" />
-              <e p="SceneSwitcher.cs" t="Include" />
-            </e>
           </e>
         </e>
+        <e p="EventManager.cs" t="Include" />
         <e p="Genetics" t="Include">
           <e p="ActionManager.cs" t="Include" />
           <e p="CombineManager.cs" t="Include" />
@@ -59,6 +54,7 @@
             <e p="NavMeshSourceTag.cs" t="Include" />
           </e>
         </e>
+        <e p="MovementTesting.cs" t="Include" />
         <e p="NavMeshComponents" t="Include">
           <e p="Editor" t="Include">
             <e p="NavMeshAssetManager.cs" t="Include" />
@@ -77,6 +73,7 @@
             <e p="NavMeshSurface.cs" t="Include" />
           </e>
         </e>
+        <e p="NavMeshManager.cs" t="Include" />
         <e p="NotificationManager.cs" t="Include" />
         <e p="Plugins" t="Include">
           <e p="MathNet.Numerics.xml" t="Include" />
@@ -300,6 +297,7 @@
             <e p="PlayerController.cs" t="Include" />
           </e>
         </e>
+        <e p="SpawnPoint.cs" t="Include" />
         <e p="Standard Assets" t="Include">
           <e p="2D" t="Include">
             <e p="Scripts" t="Include">
@@ -474,6 +472,7 @@
             <e p="EmojiOne Attribution.txt" t="Include" />
           </e>
         </e>
+        <e p="WaveManager.cs" t="Include" />
       </e>
       <e p="EvolutionProject.sln" t="IncludeFlat" />
       <e p="Library" t="ExcludeRecursive" />
