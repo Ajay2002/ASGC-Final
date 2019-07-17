@@ -184,7 +184,7 @@ public class GeneticEntity : MonoBehaviour
 
         Vector3 creationPosition = avgPosition+breedPosition*1.2f;
 
-        GeneticEntity newEntity = manager.SpawnEntity(transform.position+transform.forward*0.6f).GetComponent<GeneticEntity>();
+        GeneticEntity newEntity = manager.SpawnEntity(transform.position+transform.forward*0.6f,null).GetComponent<GeneticEntity>();
         
         e.state.energy -= 10;
         e.state.sleepiness += 10;

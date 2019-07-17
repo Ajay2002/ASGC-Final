@@ -53,7 +53,7 @@ public class PredatorEntity : GeneticEntity_T
     }
 
     public override void Breed(GeneticEntity_T e) {
-        GeneticEntity_T newEntity = manager.SpawnEntityEnemy(manager.GetRandomPointAwayFrom(transform.position,traits.sightRange)).GetComponent<GeneticEntity_T>();
+        GeneticEntity_T newEntity = manager.SpawnEntityEnemy(manager.GetRandomPointAwayFrom(transform.position,traits.sightRange),null).GetComponent<GeneticEntity_T>();
         
         #region  Trait Modification
         newEntity.traits.surroundingCheckCooldown = UnityEngine.Random.Range(0.01f,1.0f)<manager.mutationChance ? UnityEngine.Random.Range(0.1f,2f) : ((traits.surroundingCheckCooldown+e.traits.surroundingCheckCooldown)/2);

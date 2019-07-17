@@ -40,6 +40,8 @@ public class EntityManager : MonoBehaviour
     public List<Transform> food = new List<Transform>(); //Food Tag
     public List<EntityManager> bredWith = new List<EntityManager>();
 
+    public int currentGeneration = 0;
+
     public EntityManager claimedBy;
     public bool isPartOfWave = false;
 
@@ -57,7 +59,7 @@ public class EntityManager : MonoBehaviour
     [Header("External References & Components")]
     public MapManager manager;
     public ActionManager controller;
-    public StateManager stateManagement;
+    public StateManager stateManagement; 
 
     public BiomeType creatureBiomeType;
 

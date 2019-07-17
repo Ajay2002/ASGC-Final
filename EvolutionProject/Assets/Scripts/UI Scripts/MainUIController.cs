@@ -172,7 +172,7 @@ public class MainUIController : MonoBehaviour
 		}
 		else
 		{
-			Transform e = MapManager.Instance.SpawnEntity(MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition));
+			Transform e = MapManager.Instance.SpawnEntity(MapManager.Instance.NearestPointOnMap(currentMouseWorldPosition),null);
 			e.GetComponent<EntityManager>().initial = true;
 		}
 	}

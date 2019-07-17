@@ -240,7 +240,7 @@ public abstract class GeneticEntity_T : MonoBehaviour
     public virtual void Flight(){}
     public virtual void Breed(GeneticEntity_T e) {
      
-        GeneticEntity_T newEntity = manager.SpawnEntity(manager.GetRandomPointAwayFrom(transform.position,traits.sightRange)).GetComponent<GeneticEntity_T>();
+        GeneticEntity_T newEntity = manager.SpawnEntity(manager.GetRandomPointAwayFrom(transform.position,traits.sightRange),null).GetComponent<GeneticEntity_T>();
         
        
 

@@ -1011,9 +1011,9 @@ public class BreedingAction : ActionTemplate {
         //Vector3 pos = e.position + e.transform.forward*0.5f;
         EntityManager newEntity;
         if (GTYPE.Creature == manager.type)
-        newEntity = manager.manager.SpawnEntity(pos).GetComponent<EntityManager>();
+        newEntity = manager.manager.SpawnEntity(pos, e).GetComponent<EntityManager>();
         else
-        newEntity = manager.manager.SpawnEntityEnemy(pos).GetComponent<EntityManager>();
+        newEntity = manager.manager.SpawnEntityEnemy(pos, e).GetComponent<EntityManager>();
         
 
         if (GTYPE.Predator == manager.type && (manager.isPartOfWave || mate.isPartOfWave))

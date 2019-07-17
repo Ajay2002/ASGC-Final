@@ -23,6 +23,14 @@ public class MapManager : MonoBehaviour
     public static MapManager Instance;
 
     public int hiddenLayer,hiddenNeuron;
+    public int totalCreaturePopulation {
+        get {
+            EntityManager[] m = GameObject.FindObjectsOfType<EntityManager>();
+            
+            return m.Length;
+
+        }
+    }
     public bool tryNetwork = false;
 
     public List<FoodSpawnerScriptableObject> foodSpawnerScriptableObjects;
@@ -144,11 +152,8 @@ public class MapManager : MonoBehaviour
     }
 
     int bPress = 1;
-    public void CreateNewBiome (Vector3 position, Button sender, Vector3 ext) {
 
-        
-        
-        
+    public void CreateNewBiome (Vector3 position, Button sender, Vector3 ext) {
         BiomeType t = BiomeType.Grass;
         Material mat=biomeMaterials[0];
         int s = Random.Range(0,4);
@@ -159,7 +164,7 @@ public class MapManager : MonoBehaviour
 
         int biomeSelection = Random.Range(0,biomes.Count);
 
-        
+        if (bPress <= 7)
         if (CurrencyController.Instance.RemoveCurrency(10*bPress,true)) {
             NotificationManager.Instance.CreateNotification(NotificationType.Message,"Successfully created a new biome of type " + t.ToString() + "!",false,1);
             bPress++;
@@ -346,13 +351,38 @@ public class MapManager : MonoBehaviour
         // }
     }
 
-    public Transform SpawnEntity (Vector3 position) {
+    public Transform SpawnEntity (Vector3 position, EntityManager parent) {
+        
         GameObject go = Instantiate(entity,position,Quaternion.identity);
+        
+        if (parent == null)
+            go.GetComponent<EntityManager>().currentGeneration = 0;
+        else {
+            go.GetComponent<EntityManager>().currentGeneration = parent.currentGeneration + 1;
+
+            if (latestGeneration < go.GetComponent<EntityManager>().currentGeneration)  {
+                latestGeneration = go.GetComponent<EntityManager>().currentGeneration;
+                GraphManager.Instance.IncrementGeneration();
+            }
+
+        }
+
         return go.transform;
     }
 
-    public Transform SpawnEntityEnemy (Vector3 position) {
+    public int latestGeneration = 0;
+
+    public Transform SpawnEntityEnemy (Vector3 position, EntityManager parent) {
         GameObject go = (GameObject)GameObject.Instantiate(enemyEntity,position,Quaternion.identity);
+        if (parent == null)
+            go.GetComponent<EntityManager>().currentGeneration = 0;
+        else {
+            go.GetComponent<EntityManager>().currentGeneration = parent.currentGeneration + 1;
+            
+            if (latestGeneration < go.GetComponent<EntityManager>().currentGeneration)
+                latestGeneration = go.GetComponent<EntityManager>().currentGeneration;
+
+        }
         return go.transform;
     }
 
