@@ -36,11 +36,17 @@ public class MainUIController : MonoBehaviour
 	public float slowSimSpeed = 0.5f;
 	public float fastSimSpeed = 5;
 
+	private SimSpeed currentSimSpeed;
+
 	public TextMeshProUGUI lettuceSpawnRateText;
 	public TextMeshProUGUI mutationChanceText;
 	public TextMeshProUGUI mutationChanceIncreaseCostText;
 
+	public GameObject pauseMenu;
+
 	private Transform currentUIDrag;
+
+	private SimSpeed savedSimSpeed;
 
 	private void Start ()
 	{
@@ -59,6 +65,11 @@ public class MainUIController : MonoBehaviour
 		
 		MinimiseAllMenuTabs();
 		ChangeSimSpeed(2);
+	}
+
+	private void Update ()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape)) SetPauseMenu(!pauseMenu.activeSelf);
 	}
 
 	public void OpenMenuTab (GameObject tab)
@@ -93,9 +104,9 @@ public class MainUIController : MonoBehaviour
 
 		simSpeedButtons[s].GetComponent<Image>().color = simSpeedButtons[s].GetComponent<Button>().colors.pressedColor;
 
-		SimSpeed simSpeed = (SimSpeed) s;
+		currentSimSpeed = (SimSpeed) s;
 
-		switch (simSpeed)
+		switch (currentSimSpeed)
 		{
 			case SimSpeed.PAUSED:
 				Time.timeScale = 0;
@@ -116,6 +127,11 @@ public class MainUIController : MonoBehaviour
 			default:
 				throw new Exception("SimSpeed chosen not valid.");
 		}
+	}
+	
+	public void ChangeSimSpeed (SimSpeed s)
+	{
+		ChangeSimSpeed((int) s);
 	}
 
 	public void UpdateCurrencyDisplay (int currencyAmount)
@@ -204,6 +220,23 @@ public class MainUIController : MonoBehaviour
 		tt.transform.GetChild(2).GetComponent<TextMeshProUGUI>().ForceMeshUpdate();
 		tt.transform.GetChild(2).GetComponent<ResizeToFitText>().Resize();		
 		return tt;
+	}
+
+	public void SetPauseMenu (bool enabled)
+	{
+		pauseMenu.SetActive(enabled);
+		if (enabled)
+		{
+			MinimiseAllMenuTabs();
+			savedSimSpeed = currentSimSpeed;
+			ChangeSimSpeed(SimSpeed.PAUSED);
+		}
+		else ChangeSimSpeed(savedSimSpeed);
+	}
+	
+	public void QuitGame ()
+	{
+		Application.Quit();
 	}
 	
 	private string StringifyNum (int i)

@@ -283,6 +283,8 @@
             </e>
           </e>
           <e p="UI Scripts" t="Include">
+            <e p="HighscoreController.cs" t="Include" />
+            <e p="MainMenuController.cs" t="Include" />
             <e p="MainUIController.cs" t="Include" />
             <e p="MouseInputUIBlocker.cs" t="Include" />
             <e p="OnHoverDisplayTooltip.cs" t="Include" />
