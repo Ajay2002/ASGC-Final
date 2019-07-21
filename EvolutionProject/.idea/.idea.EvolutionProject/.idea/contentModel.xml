@@ -296,6 +296,7 @@
             <e p="CurrencyController.cs" t="Include" />
             <e p="Food.cs" t="Include" />
             <e p="FoodSpawner.cs" t="Include" />
+            <e p="HighscoreAdder.cs" t="Include" />
             <e p="PlayerController.cs" t="Include" />
           </e>
         </e>
