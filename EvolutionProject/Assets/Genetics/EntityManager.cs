@@ -69,8 +69,42 @@ public class EntityManager : MonoBehaviour
 
 
     public bool isNeuralNet = false;
+    public bool geneticallyCreated = false;
+    private void ModifyPhysicalAttributes() {
+        if (!geneticallyCreated) {
+            //Scale
+            transform.localScale = new Vector3(Mathf.Clamp((traits.size/3)/2f,0.1f,3), Mathf.Clamp((traits.size/3)/2f,0.1f,3), Mathf.Clamp((traits.size/3)/2f,0.1f,3));
+
+            Color pColor = Color.Lerp(Color.green, Color.red, (traits.sightRange/5));
+
+            if (type == GTYPE.Creature)
+            renderer.materials[0].color = pColor;
+            else {
+                Color p2Color = Color.Lerp(renderer.materials[0].color, Color.red, traits.speed/5);
+                renderer.materials[0].color = p2Color;
+            }
+
+            if (creatureBiomeType == BiomeType.Grass && type == GTYPE.Creature) 
+                renderer.materials[1].color = MapManager.Instance.biomeFurMaterials[0].color;
+            else if (creatureBiomeType == BiomeType.Snow && type == GTYPE.Creature) 
+                renderer.materials[1].color = MapManager.Instance.biomeFurMaterials[1].color;
+            else if (creatureBiomeType == BiomeType.Forest && type == GTYPE.Creature) 
+                renderer.materials[1].color = MapManager.Instance.biomeFurMaterials[2].color;
+            else if (creatureBiomeType == BiomeType.Desert && type == GTYPE.Creature) 
+                renderer.materials[1].color = MapManager.Instance.biomeFurMaterials[3].color;
+
+        }
+
+    }
 
     private void Start() {
+
+        Ray ray = new Ray(transform.position,Vector3.down);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit)) {
+            transform.position = new Vector3(transform.position.x, hit.point.y + 0.5f, transform.position.z);
+        }
         
         manager = GameObject.FindObjectOfType<MapManager>();
         controller = GetComponent<ActionManager>();
@@ -107,6 +141,10 @@ public class EntityManager : MonoBehaviour
 
 
         timerEnabled = true;
+
+
+        ModifyPhysicalAttributes();
+
     }
 
     private bool timerEnabled;

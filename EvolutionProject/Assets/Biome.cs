@@ -12,6 +12,9 @@ public class Biome : MonoBehaviour
     public List<Button> buttons = new List<Button>();
     public LayerMask groundMask;
     public LayerMask waterMask;
+
+    public List<GameObject> enable = new List<GameObject>();
+    public List<GameObject> disable = new List<GameObject>();
     public Vector3 area;
 
     
@@ -27,23 +30,80 @@ public class Biome : MonoBehaviour
     public void UpSender (Button obj) {
 
         Vector3 pos = transform.position-transform.up*upScale;
-        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.forward*upScale);
+         int i = -1;
+        if (obj.name.Contains("G"))
+            i = 0;
+        else if (obj.name.Contains("S"))
+            i = 1;
+        else if (obj.name.Contains("D")) 
+            i = 3;
+        else if (obj.name.Contains("F"))
+            i = 2;
+
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.forward*upScale, i);
 
     }
 
     public void RightSender (Button obj) {
         Vector3 pos = transform.position+transform.right*scale;
-        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.right*scale);
+        
+         int i = -1;
+        if (obj.name.Contains("G"))
+            i = 0;
+        else if (obj.name.Contains("S"))
+            i = 1;
+        else if (obj.name.Contains("D")) 
+            i = 3;
+        else if (obj.name.Contains("F"))
+            i = 2;
+        
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.right*scale,i);
     }
 
     public void LeftSender (Button obj) {
         Vector3 pos = transform.position-transform.right*scale;
-        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.right*scale);
+        
+        int i = -1;
+        if (obj.name.Contains("G"))
+            i = 0;
+        else if (obj.name.Contains("S"))
+            i = 1;
+        else if (obj.name.Contains("D")) 
+            i = 3;
+        else if (obj.name.Contains("F"))
+            i = 2;
+        
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.right*scale,i);
+    }
+
+    public void RevealChildren (Transform t) {
+        
+
+        t.GetChild(2).gameObject.SetActive(true);
+        t.GetChild(3).gameObject.SetActive(true);
+        t.GetChild(4).gameObject.SetActive(true);
+        t.GetChild(5).gameObject.SetActive(true);
+
+        t.GetChild(1).gameObject.SetActive(false);
+
+        t.GetComponent<Button>().enabled = false;
+        t.GetComponent<Image>().enabled = false;
     }
 
     public void DownSender (Button obj) {
         Vector3 pos = transform.position+transform.up*upScale;
-        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.forward*upScale);
+        
+         int i = -1;
+        if (obj.name.Contains("G"))
+            i = 0;
+        else if (obj.name.Contains("S"))
+            i = 1;
+        else if (obj.name.Contains("D")) 
+            i = 3;
+        else if (obj.name.Contains("F"))
+            i = 2;
+        
+        MapManager.Instance.CreateNewBiome(pos,obj,Vector3.forward*upScale,i);
     }
 
     public Vector3 getRandomPointGround (Vector3 def){

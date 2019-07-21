@@ -58,6 +58,10 @@ public class ActionManager : MonoBehaviour
         avgVelocity = (transform.position-lastPosition)/Time.deltaTime;
         lastPosition = transform.position;
 
+        if (avgVelocity.magnitude <= 0.1f) {
+            controller.SetBool("still",true);
+        } else {controller.SetBool("still",false);}
+
         if (subState=="waitingForM") {
             if(m2==null)
                 ActionCompletion();
@@ -279,7 +283,7 @@ public class ActionManager : MonoBehaviour
 		if (!movementProcessed && currentAction != null) {
             if (Vector3.Distance(transform.position,target) <= 0.9f || (agent.pathPending == false && agent.remainingDistance <= 0.6f))
             {
-                controller.speed=0f;
+                controller.speed=1f;
                 currentAction.MovementComplete(invocationStatement);
                 movementProcessed = true;
             }

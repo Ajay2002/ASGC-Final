@@ -153,10 +153,14 @@ public class MapManager : MonoBehaviour
 
     int bPress = 1;
 
-    public void CreateNewBiome (Vector3 position, Button sender, Vector3 ext) {
+    public void CreateNewBiome (Vector3 position, Button sender, Vector3 ext, int index) {
         BiomeType t = BiomeType.Grass;
         Material mat=biomeMaterials[0];
-        int s = Random.Range(0,4);
+        int s = 0;
+
+        if (index == -1 )
+            s = Random.Range(0,4);
+        else s = index;
         if (s == 0) {mat = biomeMaterials[s];t=BiomeType.Grass;};
         if (s == 1) {mat = biomeMaterials[s];t=BiomeType.Snow;};
         if (s == 2) {mat = biomeMaterials[s];t=BiomeType.Desert;};
@@ -164,7 +168,7 @@ public class MapManager : MonoBehaviour
 
         int biomeSelection = Random.Range(0,biomes.Count);
 
-        if (bPress <= 7)
+        if (bPress <= 8)
         if (CurrencyController.Instance.RemoveCurrency(10*bPress,true)) {
             NotificationManager.Instance.CreateNotification(NotificationType.Message,"Successfully created a new biome of type " + t.ToString() + "!",false,1);
             bPress++;
