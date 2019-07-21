@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class HighscoreController : MonoBehaviour
 {
-	public int numOfHighscores;
+	private const int numOfHighscores = 10;
 	
 	public Scrollbar     scrollbar;
 	public RectTransform container;
