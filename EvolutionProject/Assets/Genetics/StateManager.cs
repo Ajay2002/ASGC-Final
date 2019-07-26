@@ -69,7 +69,7 @@ public class StateManager : MonoBehaviour
         }
 
         if (state.energy <= 5) {
-            state.hunger += Time.deltaTime;
+            state.hunger += Time.deltaTime*1.5f;
             state.sleepiness += Time.deltaTime;
         }
 
@@ -82,7 +82,34 @@ public class StateManager : MonoBehaviour
         }
     }
 
+    float temperatureCalculation = 0f;
     private void StateUpdate() {
+        if (temperatureCalculation <= 0f) {
+            //Temp : Grass (0.5), Desert (1), Snow (0.01), Forest (0.6)
+
+            float f = 0.5f;
+
+            BiomeType t;
+            if (MapManager.Instance.GetBiomeTypeFromPosition(transform.position, out t)) {
+
+                if (t == BiomeType.Grass)
+                    f = 0.5f;
+                else if (t == BiomeType.Desert)
+                    f = 1f;
+                else if (t == BiomeType.Snow)
+                    f = 0.01f;
+                else if (t == BiomeType.Forest) 
+                    f = 0.75f;
+
+            }
+
+            float distanceFrom = Mathf.Abs(entity.traits.heatResistance - f);
+
+            state.energy -= distanceFrom*Time.deltaTime*2;
+
+            temperatureCalculation = Random.Range(1f, 3f);
+        }
+        else temperatureCalculation-=Time.deltaTime;
         state.energy = Mathf.Clamp(state.energy,0f,100f);
         
         state.age += 0.3f * Time.deltaTime;
@@ -108,7 +135,7 @@ public class StateManager : MonoBehaviour
         }
         
 
-        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*1.2f*entity.traits.size),0f,100f);
+        state.hunger = Mathf.Clamp(state.hunger + (Time.deltaTime*2f*entity.traits.size),0f,100f);
 
         if (state.hunger >= 95) {
             state.health -= Time.deltaTime*20;
@@ -169,19 +196,23 @@ public class StateManager : MonoBehaviour
     }
 
     public virtual float EnergyMovementCalculation (float movementSpeed) {
-        return movementSpeed*entity.traits.size+state.age*0.05f;
+        Biome b = MapManager.Instance.GetBiomeFromPosition(transform.position);
+        if (b!= null && b.type == entity.creatureBiomeType)
+            return movementSpeed*entity.traits.size+state.age*0.05f;
+        else
+            return movementSpeed*entity.traits.size+state.age*0.1f;
     }
 
     public void Pursuit (EntityManager e) {
         if (e != null && entity != null) {
-            state.fear += entity.traits.strength*10+e.traits.size*2+e.traits.speed*10;
-            fitnessAddition+=0.05f;
+            state.fear += entity.traits.strength*15+e.traits.size*2+e.traits.speed*10;
+            fitnessAddition+=2f;
         }
     }
 
     public void ReproductionState() {
-        state.energy -= 70*reproductiveCost;
-        state.hunger += 30*reproductiveCost;
+        state.energy -= 30*reproductiveCost;
+        state.hunger += 20*reproductiveCost;
         state.sleepiness += 20*reproductiveCost;
         state.reproductiveness -= 60*reproductiveCost;
         fitnessAddition+=30*reproductiveCost;

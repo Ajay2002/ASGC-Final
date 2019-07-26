@@ -73,7 +73,7 @@ public class EntityManager : MonoBehaviour
     private void ModifyPhysicalAttributes() {
         if (!geneticallyCreated) {
             //Scale
-            transform.localScale = new Vector3(Mathf.Clamp((traits.size/3)/2f,0.1f,3), Mathf.Clamp((traits.size/3)/2f,0.1f,3), Mathf.Clamp((traits.size/3)/2f,0.1f,3));
+            transform.localScale = new Vector3(Mathf.Clamp((traits.size/3)/2f,0.3f,3), Mathf.Clamp((traits.size/3)/2f,0.3f,3), Mathf.Clamp((traits.size/3)/2f,0.3f,3));
 
             Color pColor = Color.Lerp(Color.green, Color.red, (traits.sightRange/5));
 

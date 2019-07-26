@@ -15,8 +15,11 @@ public class MapManager : MonoBehaviour
     public LayerMask groundMask;
     public Vector3 bounds;
     public NavMeshSurface surface;
+    public float reproductiveControl = 1.5f;
     public Transform biomeInstance;
     public float buttonDistanceThreshold;
+    public int enforceLimit = 400;
+    
     public List<Mesh> biomes = new List<Mesh>();
     public List<Material> biomeMaterials = new List<Material>();
     public List<Material> biomeFurMaterials = new List<Material>();
@@ -289,8 +292,11 @@ public class MapManager : MonoBehaviour
             fs.Initialise(foodSpawnerScriptableObjects[0]);
         }
 
+        help = transform.GetComponent<GraphHelp>();
+
         // help.AddGraph("SelectedTrait", Color.blue);
         // help.AddGraph("Population",    Color.red);
+        // help.AddGraph("Support", Color.magenta);
         
         
         if (worldSpawnedFoodSpawnPeriods.Count != worldSpawnedFoodScriptableObjects.Count) throw new Exception("World Spawned Food Spawn Periods is not the " +
@@ -304,55 +310,97 @@ public class MapManager : MonoBehaviour
 
     float t = 0;
     float reset = 0f;
+    float secondTimer = -1f;
+
+    public int creaturePopulation {get {return pop;}}
+    public float reproductiveSupport = 1f;
+    private int pop;
+
     private void Update() {
-       
-        // if (reset <= 0) {
-        // t += Time.deltaTime;
+        
+        if (secondTimer <= 0f) {
+            
+            int tempPop = 0;
+            EntityManager[] manager = EntityManager.FindObjectsOfType<EntityManager>();
 
-        // float average = 0f;
-        // EntityManager[] T = GameObject.FindObjectsOfType<EntityManager>();
-        // int L  = 0;
-        // for (int i = 0; i < T.Length; i++) {
-        //     if (enemyGraph && T[i].type == GTYPE.Creature)
-        //         continue;
-        //     if (!enemyGraph && T[i].type == GTYPE.Predator)
-        //         continue;
+            for (int i = 0; i < manager.Length; i++) {
+                if (manager[i].type == GTYPE.Creature)
+                    tempPop ++;
+            }
 
-        //     if (graph == "Speed")
-        //         average += T[i].traits.speed*100;
-        //     if (graph == "SightRange")
-        //         average += T[i].traits.sightRange*100;
-        //     if (graph == "Size")
-        //         average += T[i].traits.size*100;
-        //     if (graph == "Strength")
-        //         average += T[i].traits.strength*100;
-        //     if (graph == "DangerSense") 
-        //         average += T[i].traits.dangerSense*100;
-        //     if (graph == "Attractiveness")
-        //         average += T[i].traits.attractiveness*100;
-        //     if (graph == "HI")
-        //         average += T[i].traits.HI*100;
-        //     if (graph == "AI")
-        //         average += T[i].traits.AI*100;
-        //     if (graph == "FI")
-        //         average += T[i].traits.FI*100;
-        //     if (graph == "HUI")
-        //         average += T[i].traits.HUI*100;
-        //     if (graph == "SI")
-        //         average += T[i].traits.SI*100;
-        //     if (graph == "RI")
-        //         average += T[i].traits.RI*100;
+            pop = tempPop;
 
-        //     L++;
-        // }
-        // average = average/L;
-        // help.Plot(t,average,0);
-        // help.Plot(t,L,1);
-        // reset = 1;
-        // }
-        // else {
-        //     reset -= Time.deltaTime;
-        // }
+            int symbol = 1;
+
+            if (tempPop > pop)
+            symbol = -1;
+
+            float a = (float)tempPop/(float)enforceLimit;
+            float b = 1-a;
+
+            float final = 1+b;
+            reproductiveSupport = final*reproductiveControl;
+
+            
+            GraphHealer.Instance.B.SendPlotRequest(new Point(Time.time,tempPop,0));
+            
+            //help.Plot(t,reproductiveSupport*100,2);
+
+            secondTimer = 1f;
+
+        }
+        else {
+            secondTimer -= Time.deltaTime;
+        }
+
+
+         if (reset <= 0) {
+         t += Time.deltaTime;
+
+        float average = 0f;
+        EntityManager[] T = GameObject.FindObjectsOfType<EntityManager>();
+        int L  = 0;
+        for (int i = 0; i < T.Length; i++) {
+            if (enemyGraph && T[i].type == GTYPE.Creature)
+                continue;
+            if (!enemyGraph && T[i].type == GTYPE.Predator)
+                continue;
+
+            if (graph == "Speed")
+                average += T[i].traits.speed*100;
+            if (graph == "SightRange")
+                average += T[i].traits.sightRange*100;
+            if (graph == "Size")
+                average += T[i].traits.size*100;
+            if (graph == "Strength")
+                average += T[i].traits.strength*100;
+            if (graph == "DangerSense") 
+                average += T[i].traits.dangerSense*100;
+            if (graph == "Attractiveness")
+                average += T[i].traits.attractiveness*100;
+            if (graph == "HI")
+                average += T[i].traits.HI*100;
+            if (graph == "AI")
+                average += T[i].traits.AI*100;
+            if (graph == "FI")
+                average += T[i].traits.FI*100;
+            if (graph == "HUI")
+                average += T[i].traits.HUI*100;
+            if (graph == "SI")
+                average += T[i].traits.SI*100;
+            if (graph == "RI")
+                average += T[i].traits.RI*100;
+
+            L++;
+        }
+        average = average/(L*10);
+        GraphHealer.Instance.A.SendPlotRequest(new Point(Time.time,average,0));
+        
+        reset = 1;
+        }
+        else {
+            reset -= Time.deltaTime;
+        }
     }
 
     public Transform SpawnEntity (Vector3 position, EntityManager parent) {
@@ -366,7 +414,7 @@ public class MapManager : MonoBehaviour
 
             if (latestGeneration < go.GetComponent<EntityManager>().currentGeneration)  {
                 latestGeneration = go.GetComponent<EntityManager>().currentGeneration;
-                GraphManager.Instance.IncrementGeneration();
+//                GraphManager.Instance.IncrementGeneration();
             }
 
         }

@@ -167,7 +167,10 @@ public class DecisionManager : MonoBehaviour
                     }
                 }
                 else if (i == 1) {
-                    if (state.reproductivenessView*traits.RI > highestScore) {
+                    float s = 1;
+                    if (entity.type == GTYPE.Creature)
+                        s = MapManager.Instance.reproductiveSupport;
+                    if (state.reproductivenessView*traits.RI*s > highestScore) {
                         highestScore = state.reproductivenessView*traits.RI;
                         highest = i;
                     }
