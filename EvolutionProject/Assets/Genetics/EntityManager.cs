@@ -70,8 +70,8 @@ public class EntityManager : MonoBehaviour
 
     public bool isNeuralNet = false;
     public bool geneticallyCreated = false;
-    private void ModifyPhysicalAttributes() {
-        if (!geneticallyCreated) {
+    public void ModifyPhysicalAttributes(bool overrideit) {
+        if (!geneticallyCreated || overrideit) {
             //Scale
             transform.localScale = new Vector3(Mathf.Clamp((traits.size/3)/2f,0.3f,3), Mathf.Clamp((traits.size/3)/2f,0.3f,3), Mathf.Clamp((traits.size/3)/2f,0.3f,3));
 
@@ -143,7 +143,7 @@ public class EntityManager : MonoBehaviour
         timerEnabled = true;
 
 
-        ModifyPhysicalAttributes();
+        ModifyPhysicalAttributes(false);
 
     }
 
