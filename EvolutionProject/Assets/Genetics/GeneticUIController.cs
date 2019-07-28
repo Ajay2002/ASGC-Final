@@ -65,9 +65,11 @@ public class GeneticUIController : MonoBehaviour
 
     }
 
+    
+
     [Header("Selection")]
     public Slider slider;
-    public int selectionMethod;
+    public int selectionMethod = 1;
     public void EntitySelectionTypeSwitch (int selection) {
 
         if (selection == 0) {
@@ -171,8 +173,53 @@ public class GeneticUIController : MonoBehaviour
         }
     }
 
+    public void ResetValue (string s) {
+       
+       float a = 0;
+
+        if (s == "Food Regeneration Time") {
+            a = MapManager.Instance.worldSpawnedFoodSpawnPeriods[0];
+            
+        }
+        else if (s == "Total Amount of Food") {
+            a = MapManager.Instance.maxAmountOfFood;
+        }
+        else if (s == "Energy Per Food") {
+            a = MapManager.Instance.worldFoodValue;
+        }
+        else if (s == "Mutation Chance") {
+            a = MapManager.Instance.mutationChance;
+        }
+        else if (s == "Decision Time") {
+            EntityManager[] m = EntityManager.FindObjectsOfType<EntityManager>();
+            float avg = 0;
+            int inc = 0;
+            for (int c = 0; c < m.Length; c++) {
+                
+                if (m[c].type == GTYPE.Creature) {
+                    avg += m[c].traits.surroundingCheckCooldown;
+                    inc++;
+                }
+
+            }
+            avg/=inc;
+            a = avg;
+        }
+           
+        for (int i = 0; i < stText.Count; i++) {
+            if (stText[i].valueName == s) {
+                stText[i].stepper.value = a;
+            }
+        }
+    }
+
     public TMP_InputField inp;
     private void Update() {
+
+        if (selectionType[0].isOn) selectionMethod = 0;
+        if (selectionType[1].isOn) selectionMethod = 1;
+        if (selectionType[2].isOn) selectionMethod = 2;
+
         int val = 0;
         int.TryParse(inp.text, out val);
 
@@ -184,7 +231,7 @@ public class GeneticUIController : MonoBehaviour
 
         }
 
-        float finalPrice = addedPrice*val;
+        float finalPrice = (addedPrice*val)/5;
         costText.text = "Cost : $" + finalPrice.ToString();
         if (finalPrice > CurrencyController.Instance.currentCurrencyAmount) {
             costText.color = Color.red;
@@ -351,6 +398,54 @@ public class GeneticUIController : MonoBehaviour
 
 
     private void LateUpdate() {
+         for (int i = 0; i < slText.Count; i++) {
+
+
+                slText[i].guiText.text = slText[i].originalText + " (" + (Math.Round(slText[i].slider.value,1)).ToString() + ") ";
+                String s = slText[i].originalText;
+                if (s == "Speed") {
+                    currentCreationTrait.speed = Mathf.Clamp(slText[i].getValue,0f,5f);
+                }
+                else if (s == "Size") {
+                    currentCreationTrait.size = Mathf.Clamp(slText[i].getValue,0f,3f);
+                }
+                else if (s == "Sight Range") {
+                    currentCreationTrait.sightRange = Mathf.Clamp(slText[i].getValue,0f,5f);
+                }
+                else if (s == "Attractiveness") {
+                    currentCreationTrait.attractiveness = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Danger Sense") {
+                    currentCreationTrait.dangerSense = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Strength") {
+                    currentCreationTrait.strength = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Heat Resistance") {
+                    currentCreationTrait.heatResistance = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Intelligence") {
+                    currentCreationTrait.intellect = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+
+                else if (s == "Hunger Importance") {
+                    currentCreationTrait.HUI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Health Importance") {
+                    currentCreationTrait.HI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Sleep Importance") {
+                    currentCreationTrait.SI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Merge Importance") {
+                    currentCreationTrait.RI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Fear Importance") {
+                    currentCreationTrait.FI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                
+            
+            }
+        }
         for (int i = 0; i < stText.Count; i++) {
                 
             float a = 0f;
@@ -543,7 +638,8 @@ public class GeneticUIController : MonoBehaviour
     }
 
     public void Increment (string s, float amount, float expensePerAmount) {
-        if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(expensePerAmount),true)==true) {
+        if (entities.Count > 0) {
+        if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(expensePerAmount*entities.Count),true)==true) {
             for (int i = 0; i < entities.Count; i++) {
 
                 if (entities[i] == null)
@@ -616,7 +712,7 @@ public class GeneticUIController : MonoBehaviour
             }
         }
         
-       
+        }
 
     }
 
@@ -687,7 +783,7 @@ public class GeneticUIController : MonoBehaviour
 
         }
 
-        float finalPrice = addedPrice*val;
+        float finalPrice = (addedPrice*val)/5;
         costText.text = "Cost : $" + finalPrice.ToString();
         if (finalPrice > CurrencyController.Instance.currentCurrencyAmount) {
             costText.color = Color.red;
@@ -725,7 +821,7 @@ public class GeneticUIController : MonoBehaviour
 
         }
 
-        float finalPrice = addedPrice*val;
+        float finalPrice = (addedPrice*val)/5;
 
         if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(finalPrice),true)==true) {
 

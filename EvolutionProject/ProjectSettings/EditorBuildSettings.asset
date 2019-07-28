@@ -11,7 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MenuScene.unity
     guid: ca500d0dde4fa5d4bba9abd61ae6e10f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Coding_Prototype_Tristan.unity
     guid: 346a4d8468634ae4a94747485c9c58b7
+  - enabled: 1
+    path: Assets/Scenes/DESIGN_NEW.unity
+    guid: cbcb19ec13f272848b00bf0ad16b9884
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: 3a4c0ccf79312ad46965aac71e826ab1
   m_configObjects: {}

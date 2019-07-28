@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using TMPro;
 
 public class CurrencyController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class CurrencyController : MonoBehaviour
     
     [SerializeField, Min(0)]
     private int currencyAmountUpperBound;
+
+    public TextMeshProUGUI currencyText;
 
     [SerializeField]
     public int currentCurrencyAmount;
@@ -64,8 +67,10 @@ public class CurrencyController : MonoBehaviour
     public bool RemoveCurrency (int amount, bool cancelOnInsufficientCurrency)
     {
         bool sufficientCurrency = !(currentCurrencyAmount < Mathf.Abs(amount));
-        if (cancelOnInsufficientCurrency && !sufficientCurrency) return false;
-        
+        if (cancelOnInsufficientCurrency && !sufficientCurrency)  {
+            currencyText.color = Color.red;
+            return false;
+        }
         currentCurrencyAmount -= Mathf.Abs(amount);
 
         currentCurrencyAmount = currentCurrencyAmount < 0 ? 0 : currentCurrencyAmount;
@@ -74,5 +79,9 @@ public class CurrencyController : MonoBehaviour
         MainUIController.Instance.UpdateCurrencyDisplay(currentCurrencyAmount);
 
         return sufficientCurrency;
+    }
+
+    private void LateUpdate() {
+        currencyText.color = Color.Lerp(currencyText.color,Color.white,0.1f);
     }
 }

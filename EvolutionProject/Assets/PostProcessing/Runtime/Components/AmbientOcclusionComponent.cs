@@ -59,9 +59,12 @@ namespace UnityEngine.PostProcessing
         {
             get
             {
+                if (model != null)
                 return model.enabled
                        && model.settings.intensity > 0f
                        && !context.interrupted;
+
+                       return false;
             }
         }
 

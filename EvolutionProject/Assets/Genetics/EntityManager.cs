@@ -32,6 +32,7 @@ public class EntityManager : MonoBehaviour
     //Sensory management & entity setup
     [Header("Sensory Elements")]
     public MeshRenderer renderer;
+    public MeshRenderer lodRenderer;
     public GTYPE type;
     public NNetwork network;
     public EntityManager parentA, parentB;
@@ -92,6 +93,23 @@ public class EntityManager : MonoBehaviour
                 renderer.materials[1].color = MapManager.Instance.biomeFurMaterials[2].color;
             else if (creatureBiomeType == BiomeType.Desert && type == GTYPE.Creature) 
                 renderer.materials[1].color = MapManager.Instance.biomeFurMaterials[3].color;
+
+
+            if (type == GTYPE.Creature)
+            lodRenderer.materials[1].color = pColor;
+            else {
+                Color p2Color = Color.Lerp(lodRenderer.materials[0].color, Color.red, traits.speed/5);
+                lodRenderer.materials[0].color = p2Color;
+            }
+
+            if (creatureBiomeType == BiomeType.Grass && type == GTYPE.Creature) 
+                lodRenderer.materials[0].color = MapManager.Instance.biomeFurMaterials[0].color;
+            else if (creatureBiomeType == BiomeType.Snow && type == GTYPE.Creature) 
+                lodRenderer.materials[0].color = MapManager.Instance.biomeFurMaterials[1].color;
+            else if (creatureBiomeType == BiomeType.Forest && type == GTYPE.Creature) 
+                lodRenderer.materials[0].color = MapManager.Instance.biomeFurMaterials[2].color;
+            else if (creatureBiomeType == BiomeType.Desert && type == GTYPE.Creature) 
+                lodRenderer.materials[0].color = MapManager.Instance.biomeFurMaterials[3].color;
 
         }
 

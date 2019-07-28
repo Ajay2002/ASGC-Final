@@ -77,9 +77,12 @@ namespace UnityEngine.PostProcessing
         {
             get
             {
+                if (model != null)
                 return model.enabled
                        && context.isGBufferAvailable
                        && !context.interrupted;
+
+                       return false;
             }
         }
 

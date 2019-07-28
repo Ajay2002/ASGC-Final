@@ -8,6 +8,7 @@ public class EntityGlowOnSelect : MonoBehaviour
 	public float colourLerpSpeed;
 
 	private Material[] glowMaterials;
+	private Material[] glowMaterials2;
 
 	private Color currentColor;
 
@@ -16,6 +17,9 @@ public class EntityGlowOnSelect : MonoBehaviour
 	private void OnEnable ()
 	{
 		if (glowMaterials == null) glowMaterials = transform.GetChild(0).GetComponent<Renderer>().materials;
+
+		if (transform.childCount > 1 && transform.GetChild(1).GetComponent<Renderer>() != null)
+		if (glowMaterials2 == null) glowMaterials2 = transform.GetChild(1).GetComponent<Renderer>().materials;
 	}
 
 	private void Update ()
@@ -30,6 +34,11 @@ public class EntityGlowOnSelect : MonoBehaviour
 
 		foreach (Material glowMaterial in glowMaterials)
 		{
+			glowMaterial.SetColor(GLOW_COLOUR, currentColor);
+		}
+
+		if (glowMaterials2 != null)
+		foreach (Material glowMaterial in glowMaterials2) {
 			glowMaterial.SetColor(GLOW_COLOUR, currentColor);
 		}
 	}

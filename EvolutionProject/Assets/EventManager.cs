@@ -135,6 +135,7 @@ public abstract class EventTemplate  {
     public float duration;
     public float durationTo;
     public float payoff;
+    public bool endGame;
     public Notification notificationOnEnter;
     public Notification notificationToPrior;
 
@@ -226,6 +227,9 @@ public class FoxWave : EventTemplate {
             
         }
         CurrencyController.Instance.AddCurrency(Mathf.RoundToInt(payoff));
+
+        if (endGame)
+            Application.LoadLevel(2);
     }
 
     private void CreateWave() {
@@ -252,12 +256,16 @@ public class FoodShortage : EventTemplate {
         percentDrop = Random.Range(0.4f,0.6f);
         initialFoodCount = MapManager.Instance.maxAmountOfFood;
         MapManager.Instance.maxAmountOfFood = Mathf.RoundToInt(initialFoodCount*percentDrop);
-
+        GeneticUIController.Instance.ResetValue("Total Amount of Food");
     }
     
     public override void Completed() {
         MapManager.Instance.maxAmountOfFood = initialFoodCount;        
         CurrencyController.Instance.AddCurrency(Mathf.RoundToInt(payoff));
+        
+        GeneticUIController.Instance.ResetValue("Total Amount of Food");
+        if (endGame)
+            Application.LoadLevel(2);
     }
 
     public override void CompletionChecking() {
@@ -325,6 +333,7 @@ public class EPublic {
     public float payoff;
     public float duration;
     public float durationTo;
+    public bool endGame;
 
     public Notification notificationOnEnter;
     public Notification notificationToPrior;
@@ -341,6 +350,7 @@ public class EPublic {
             w.durationTo = durationTo;
             w.notificationOnEnter = notificationOnEnter;
             w.notificationToPrior = notificationToPrior;
+            w.endGame = endGame;
 
             return w;
         }
@@ -353,7 +363,7 @@ public class EPublic {
             w.durationTo = durationTo;
             w.notificationOnEnter = notificationOnEnter;
             w.notificationToPrior = notificationToPrior;
-
+            w.endGame = endGame;
             return w;
         }
 

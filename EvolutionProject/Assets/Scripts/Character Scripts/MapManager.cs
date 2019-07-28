@@ -122,6 +122,13 @@ public class MapManager : MonoBehaviour
     private void LateUpdate() {
         popT.text = pop.ToString();
         curT.text = "$ " + CurrencyController.Instance.currentCurrencyAmount.ToString();
+
+        if (pop <= 0) {
+
+            Application.LoadLevel(2);
+
+        }
+
     }
 
     public bool GetBiomeTypeFromPosition (Vector3 pos, out BiomeType typeReturn) {
@@ -252,6 +259,7 @@ public class MapManager : MonoBehaviour
             avg.y = transform.position.y;
             transform.position = avg;
 
+
         }
         else {
             NotificationManager.Instance.CreateNotification(NotificationType.Cost,"Insufficient funds to create a new biome! ",false,0.2f);
@@ -270,6 +278,61 @@ public class MapManager : MonoBehaviour
         //Kill the Button that sent it.
 
     }
+
+    int counter = 0;
+    public void ResetGraph (string s) {
+        counter++;
+        if (counter == 1)
+            {
+                GraphHealer.Instance.ResetY();
+                GraphHealer.Instance.A.points.Clear();
+                graph = s;
+            }
+        else if (counter == 2) {
+            graph2 = s;
+            GraphHealer.Instance.B.points.Clear();
+        }
+    }
+
+    Button graphAButton;
+    Button graphBButton;
+    
+    public TextMeshProUGUI green;
+    public TextMeshProUGUI red;
+    public Transform hiddenPanel;
+    public void ChangeCol (Button b) {
+        if (counter == 1)
+        {
+            green.text = b.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+            if (graphAButton != null)
+            graphAButton.image.color = Color.white;
+            graphAButton = b;
+            b.image.color = Color.green;
+        }
+        else if (counter == 2) {
+            red.text = b.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+            counter = 0;
+            if (graphBButton != null)
+            graphBButton.image.color = Color.white;
+            graphBButton = b;
+            b.image.color = Color.red;
+        }
+    }
+
+
+    public void ShowHiddenPanel(Button editButton) {
+
+        if (hiddenPanel.gameObject.activeSelf == false) {
+            editButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Show Graph";
+            hiddenPanel.gameObject.SetActive(true);
+        }
+        else if (hiddenPanel.gameObject.activeSelf == true) {
+            editButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Edit Graph";
+            hiddenPanel.gameObject.SetActive(false);
+        }
+    }
+
+
 
     public float GetAverageFitness (GTYPE type) {
         
@@ -290,6 +353,7 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
+        Screen.SetResolution(1536, 864, false);
         if (Instance == null) Instance = this;
         
         if (foodSpawnerScriptableObjects == null) foodSpawnerScriptableObjects = new List<FoodSpawnerScriptableObject>();
@@ -356,7 +420,7 @@ public class MapManager : MonoBehaviour
             reproductiveSupport = final*reproductiveControl;
 
             
-            GraphHealer.Instance.B.SendPlotRequest(new Point(Time.time,tempPop,0));
+           
             
             //help.Plot(t,reproductiveSupport*100,2);
 
@@ -372,43 +436,117 @@ public class MapManager : MonoBehaviour
          t += Time.deltaTime;
 
         float average = 0f;
+        float average2 = 0f;
         EntityManager[] T = GameObject.FindObjectsOfType<EntityManager>();
         int L  = 0;
         for (int i = 0; i < T.Length; i++) {
-            if (enemyGraph && T[i].type == GTYPE.Creature)
+            if (T[i].type == GTYPE.Predator)
                 continue;
-            if (!enemyGraph && T[i].type == GTYPE.Predator)
-                continue;
-
+            
+            L++;
             if (graph == "Speed")
                 average += T[i].traits.speed*100;
-            if (graph == "SightRange")
+            else if (graph == "SightRange")
                 average += T[i].traits.sightRange*100;
-            if (graph == "Size")
+            else if (graph == "Size")
                 average += T[i].traits.size*100;
-            if (graph == "Strength")
+            else if (graph == "Strength")
                 average += T[i].traits.strength*100;
-            if (graph == "DangerSense") 
+            else if (graph == "DangerSense") 
                 average += T[i].traits.dangerSense*100;
-            if (graph == "Attractiveness")
+            else if (graph == "Attractiveness")
                 average += T[i].traits.attractiveness*100;
-            if (graph == "HI")
+            else if (graph == "HI")
                 average += T[i].traits.HI*100;
-            if (graph == "AI")
+            else if (graph == "AI")
                 average += T[i].traits.AI*100;
-            if (graph == "FI")
+            else if (graph == "FI")
                 average += T[i].traits.FI*100;
-            if (graph == "HUI")
+            else if (graph == "HUI")
                 average += T[i].traits.HUI*100;
-            if (graph == "SI")
+            else if (graph == "SI")
                 average += T[i].traits.SI*100;
-            if (graph == "RI")
+            else if (graph == "RI")
                 average += T[i].traits.RI*100;
+            else if (graph == "HeatResist")
+                average += T[i].traits.heatResistance*100;
+            else if (graph=="Intellect")
+                average += T[i].traits.intellect*100;
+            else if (graph=="Health")
+                average += T[i].stateManagement.state.healthView;
+            else if (graph=="Fear")
+                average += T[i].stateManagement.state.fearView;
+            else if (graph=="Hunger")
+                average += T[i].stateManagement.state.hungerView;
+            else if (graph=="Energy")
+                average += T[i].stateManagement.state.energyView;
+            else if (graph=="Sleep")
+                average += T[i].stateManagement.state.sleepiness;
+            else if (graph=="Merge")
+                average += T[i].stateManagement.state.reproductivenessView;
 
-            L++;
+            if (graph2 == "Speed")
+                average2 += T[i].traits.speed*100;
+            else if (graph2 == "SightRange")
+                average2 += T[i].traits.sightRange*100;
+            else if (graph2 == "Size")
+                average2 += T[i].traits.size*100;
+            else if (graph2 == "Strength")
+                average2 += T[i].traits.strength*100;
+            else if (graph2 == "DangerSense") 
+                average2 += T[i].traits.dangerSense*100;
+            else if (graph2 == "Attractiveness")
+                average2 += T[i].traits.attractiveness*100;
+            else if (graph2 == "HI")
+                average2 += T[i].traits.HI*100;
+            else if (graph2 == "AI")
+                average2 += T[i].traits.AI*100;
+            else if (graph2 == "FI")
+                average2 += T[i].traits.FI*100;
+            else if (graph2 == "HUI")
+                average2 += T[i].traits.HUI*100;
+            else if (graph2 == "SI")
+                average2 += T[i].traits.SI*100;
+            else if (graph2 == "RI")
+                average2 += T[i].traits.RI*100;
+            else if (graph2 == "HeatResist")
+                average2 += T[i].traits.heatResistance*100;
+            else if (graph2=="Intellect")
+                average2 += T[i].traits.intellect*100;
+            else if (graph2=="Health")
+                average2 += T[i].stateManagement.state.healthView;
+            else if (graph2=="Fear")
+                average2 += T[i].stateManagement.state.fearView;
+            else if (graph2=="Hunger")
+                average2 += T[i].stateManagement.state.hungerView;
+            else if (graph2=="Energy")
+                average2 += T[i].stateManagement.state.energyView;
+            else if (graph=="Sleep")
+                average += T[i].stateManagement.state.sleepiness;
+            else if (graph2=="Merge")
+                average2 += T[i].stateManagement.state.reproductivenessView;
+
+            
         }
         average = average/(L*10);
+        average2 = average2/(L*10);
+
+        if (graph == "Population")
+            average = L;
+        
+        if (graph2 == "Population")
+            average2 = L;
+        
+        if (graph == "Currency")
+            average = CurrencyController.Instance.currentCurrencyAmount;
+        
+        if (graph2 == "Currency")
+            average2 = CurrencyController.Instance.currentCurrencyAmount;
+        
+
+
         GraphHealer.Instance.A.SendPlotRequest(new Point(Time.time,average,0));
+        GraphHealer.Instance.B.SendPlotRequest(new Point(Time.time,average2,0));
         
         reset = 1;
         }
@@ -416,6 +554,8 @@ public class MapManager : MonoBehaviour
             reset -= Time.deltaTime;
         }
     }
+
+    public string graph2;
 
     public Transform SpawnEntity (Vector3 position, EntityManager parent) {
         
