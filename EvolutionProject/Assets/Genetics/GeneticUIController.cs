@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using UnityEngine.Events;
+using UnityEngine.UI.Extensions;
 using TMPro;
 public class GeneticUIController : MonoBehaviour
 {
@@ -9,7 +12,12 @@ public class GeneticUIController : MonoBehaviour
     public Transform sidePanel;
     public PlayerController controller;
 
+    public static GeneticUIController Instance;
+
     public List<Toggle> selectionType = new List<Toggle>();
+    
+    public Transform toggleGeneticPanel;
+    public Transform openButton;
 
     [Header("Average State")]
     public TextMeshProUGUI heading;
@@ -39,8 +47,22 @@ public class GeneticUIController : MonoBehaviour
     public TextMeshProUGUI RI;
     public TextMeshProUGUI TI;
 
+    [Header("Creation of Entities")]
+    public GeneticTraits currentCreationTrait;
+    public BiomeType typeOfBiome;
+    public List<SliderText> slText = new List<SliderText>();
+
+    [Header("Modification of Genetics")]
+    public List<StepperText> stText = new List<StepperText>();
+
+
+
     private void Awake() {
         selectionMethod = 1;
+
+        if (Instance == null)
+            Instance = this;
+
     }
 
     [Header("Selection")]
@@ -67,8 +89,109 @@ public class GeneticUIController : MonoBehaviour
     }
 
     public List<EntityManager> entities = new List<EntityManager>();
+    private void Start() {
+        selectionMethod = 1;
+        for (int i = 0; i < slText.Count; i++) {
+            slText[i].guiText.text = slText[i].originalText + " (" + Math.Round(slText[i].slider.value,1).ToString() + ") ";
+            String s = slText[i].guiText.text;
+                if (s == "Speed") {
+                    currentCreationTrait.speed = Mathf.Clamp(slText[i].getValue,0f,5f);
+                }
+                else if (s == "Size") {
+                    currentCreationTrait.size = Mathf.Clamp(slText[i].getValue,0f,3f);
+                }
+                else if (s == "Sight Range") {
+                    currentCreationTrait.sightRange = Mathf.Clamp(slText[i].getValue,0f,5f);
+                }
+                else if (s == "Attractiveness") {
+                    currentCreationTrait.attractiveness = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Danger Sense") {
+                    currentCreationTrait.dangerSense = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Strength") {
+                    currentCreationTrait.strength = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Heat Resistance") {
+                    currentCreationTrait.heatResistance = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Intelligence") {
+                    currentCreationTrait.intellect = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
 
+                else if (s == "Hunger Importance") {
+                    currentCreationTrait.HUI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Health Importance") {
+                    currentCreationTrait.HI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Sleep Importance") {
+                    currentCreationTrait.SI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Merge Importance") {
+                    currentCreationTrait.RI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Fear Importance") {
+                    currentCreationTrait.FI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+        }
+
+        for (int i = 0; i < stText.Count; i++) {
+                
+            float a = 0f;
+            if (stText[i].valueName == "Food Regeneration Time") {
+                a = MapManager.Instance.worldSpawnedFoodSpawnPeriods[0];
+            }
+            else if (stText[i].valueName == "Total Amount of Food") {
+                a = MapManager.Instance.maxAmountOfFood;
+            }
+            else if (stText[i].valueName == "Energy Per Food") {
+                a = MapManager.Instance.worldFoodValue;
+            }
+            else if (stText[i].valueName == "Mutation Chance") {
+                a = MapManager.Instance.mutationChance;
+            }
+            else if (stText[i].valueName == "Decision Time") {
+                EntityManager[] m = EntityManager.FindObjectsOfType<EntityManager>();
+                float avg = 0;
+                int inc = 0;
+                for (int c = 0; c < m.Length; c++) {
+                    
+                    if (m[c].type == GTYPE.Creature) {
+                        avg += m[c].traits.surroundingCheckCooldown;
+                        inc++;
+                    }
+
+                }
+                avg/=inc;
+                a = avg;
+            }
+           
+            stText[i].guiText.text = "($"+Math.Round(stText[i].getPrice,1)+") "+stText[i].valueName + " ["+Math.Round(a,1).ToString()+"]";
+        }
+    }
+
+    public TMP_InputField inp;
     private void Update() {
+        int val = 0;
+        int.TryParse(inp.text, out val);
+
+        float addedPrice = 500;
+        
+        for (int i = 0; i < slText.Count; i++) {
+
+            addedPrice += slText[i].price;
+
+        }
+
+        float finalPrice = addedPrice*val;
+        costText.text = "Cost : $" + finalPrice.ToString();
+        if (finalPrice > CurrencyController.Instance.currentCurrencyAmount) {
+            costText.color = Color.red;
+        }
+        else
+            costText.color = Color.green;
+        
         entities.Clear();
         if (selectionMethod == 0) {
             
@@ -226,6 +349,86 @@ public class GeneticUIController : MonoBehaviour
         }
     }
 
+
+    private void LateUpdate() {
+        for (int i = 0; i < stText.Count; i++) {
+                
+            float a = 0f;
+            if (stText[i].valueName == "Food Regeneration Time") {
+                a = MapManager.Instance.worldSpawnedFoodSpawnPeriods[0];
+            }
+            else if (stText[i].valueName == "Total Amount of Food") {
+                a = MapManager.Instance.maxAmountOfFood;
+            }
+            else if (stText[i].valueName == "Energy Per Food") {
+                a = MapManager.Instance.worldFoodValue;
+            }
+            else if (stText[i].valueName == "Mutation Chance") {
+                a = MapManager.Instance.mutationChance;
+            }
+            else if (stText[i].valueName == "Decision Time") {
+                EntityManager[] m = EntityManager.FindObjectsOfType<EntityManager>();
+                float avg = 0;
+                int inc = 0;
+                for (int c = 0; c < m.Length; c++) {
+                    
+                    if (m[c].type == GTYPE.Creature) {
+                        avg += m[c].traits.surroundingCheckCooldown;
+                        inc++;
+                    }
+
+                }
+                avg/=inc;
+                a = avg;
+            }
+           
+            stText[i].guiText.text = "($"+Math.Round(stText[i].getPrice,1)+") "+stText[i].valueName + " ["+Math.Round(a,2).ToString()+"]";
+        }
+    }
+
+    public StepperText PriceValue (Stepper s) {
+
+        for (int i = 0; i < stText.Count; i++) {
+
+            if (stText[i].stepper == s) {
+                return stText[i];
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public void CarryOut (string v, float increment, StepperText t) {
+
+        if (v == "Food Regeneration Time") {
+               MapManager.Instance.worldSpawnedFoodSpawnPeriods[0] = t.value;
+            }
+            else if (v == "Total Amount of Food") {
+                MapManager.Instance.maxAmountOfFood = Mathf.RoundToInt(t.value);
+            }
+            else if (v == "Energy Per Food") {
+                MapManager.Instance.worldFoodValue = t.value;
+            }
+            else if (v == "Mutation Chance") {
+                MapManager.Instance.mutationChance = t.value;
+            }
+            else if (v == "Decision Time") {
+                EntityManager[] m = EntityManager.FindObjectsOfType<EntityManager>();
+                for (int c = 0; c < m.Length; c++) {
+                    
+                    if (m[c].type == GTYPE.Creature) {
+                        m[c].traits.surroundingCheckCooldown = Mathf.Clamp(m[c].traits.surroundingCheckCooldown+increment,0.1f,3f);
+                    }
+
+                }
+            }
+           
+            
+    }
+
+    
 
     public void BiomeChange (string biome) {
 
@@ -415,6 +618,206 @@ public class GeneticUIController : MonoBehaviour
         
        
 
+    }
+
+    public void ConnectValue (Slider v) {
+
+        for (int i = 0; i < slText.Count; i++) {
+
+            if (slText[i].slider == v) {
+                slText[i].guiText.text = slText[i].originalText + " (" + (Math.Round(v.value,1)).ToString() + ") ";
+                String s = slText[i].guiText.text;
+                if (s == "Speed") {
+                    currentCreationTrait.speed = Mathf.Clamp(slText[i].getValue,0f,5f);
+                }
+                else if (s == "Size") {
+                    currentCreationTrait.size = Mathf.Clamp(slText[i].getValue,0f,3f);
+                }
+                else if (s == "Sight Range") {
+                    currentCreationTrait.sightRange = Mathf.Clamp(slText[i].getValue,0f,5f);
+                }
+                else if (s == "Attractiveness") {
+                    currentCreationTrait.attractiveness = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Danger Sense") {
+                    currentCreationTrait.dangerSense = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Strength") {
+                    currentCreationTrait.strength = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Heat Resistance") {
+                    currentCreationTrait.heatResistance = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Intelligence") {
+                    currentCreationTrait.intellect = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+
+                else if (s == "Hunger Importance") {
+                    currentCreationTrait.HUI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Health Importance") {
+                    currentCreationTrait.HI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Sleep Importance") {
+                    currentCreationTrait.SI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Merge Importance") {
+                    currentCreationTrait.RI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+                else if (s == "Fear Importance") {
+                    currentCreationTrait.FI = Mathf.Clamp(slText[i].getValue,0f,1f);
+                }
+            
+            }
+        }
+
+    }
+
+    public TextMeshProUGUI costText;
+    public void TextChange (TMP_InputField inp) {
+
+        int val = 0;
+        int.TryParse(inp.text, out val);
+
+        float addedPrice = 500;
+        
+        for (int i = 0; i < slText.Count; i++) {
+
+            addedPrice += slText[i].price;
+
+        }
+
+        float finalPrice = addedPrice*val;
+        costText.text = "Cost : $" + finalPrice.ToString();
+        if (finalPrice > CurrencyController.Instance.currentCurrencyAmount) {
+            costText.color = Color.red;
+        }
+        else
+            costText.color = Color.green;
+    }
+    
+
+    public void AnotherBiomeChange (string biome) {
+        BiomeType t = BiomeType.Grass;
+
+        if (biome == "grass")
+            t = BiomeType.Grass;
+        else if (biome == "desert")
+            t = BiomeType.Desert;
+        else if (biome == "snow") 
+            t = BiomeType.Snow;
+        else if (biome == "forest")
+            t = BiomeType.Forest;
+
+        typeOfBiome = t;
+    }
+
+    public void BuyIT (TMP_InputField inp) {
+
+        int val = 0;
+        int.TryParse(inp.text, out val);
+
+        float addedPrice = 500;
+        
+        for (int i = 0; i < slText.Count; i++) {
+
+            addedPrice += slText[i].price;
+
+        }
+
+        float finalPrice = addedPrice*val;
+
+        if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(finalPrice),true)==true) {
+
+            for (int i = 0; i < val+1; i++) {
+
+                MapManager.Instance.SpawnEntity(MapManager.Instance.GetRandomPoint(),currentCreationTrait,typeOfBiome);
+
+            }
+
+        }
+
+    }
+
+    public void ShowGeneticPanel (bool show) {
+
+        if (show) {
+
+            openButton.gameObject.SetActive(false);
+            toggleGeneticPanel.gameObject.SetActive(true);
+
+        }
+        else {
+
+            openButton.gameObject.SetActive(true);
+            toggleGeneticPanel.gameObject.SetActive(false);
+        
+        }
+
+    }
+
+
+}
+
+[System.Serializable]
+public class SliderText {
+
+    public Slider slider;
+    public TextMeshProUGUI guiText;
+    public float priceMax;
+    public float distanceFrom;
+    public float maxDistance;
+    public string originalText;
+
+    public float getValue {
+        get {return slider.value;}
+    }
+    
+    public float price {
+
+        get {
+
+            float perc = Mathf.Abs(slider.value-distanceFrom)/maxDistance;
+            float val = priceMax*perc;
+            return val/10;
+        }
+
+    }
+
+}
+
+[System.Serializable]
+public class StepperText {
+
+    public Stepper stepper;
+    public TextMeshProUGUI guiText;
+    public string valueName;
+    public float priceIncrement;
+    public float maxPrice;
+    public float initialPrice;
+    private int increment=1;
+    private float currentValue;
+
+    public float getPrice {
+
+        get {
+
+            float a = Mathf.Clamp(initialPrice + priceIncrement*increment,0,maxPrice);
+            currentValue = a;
+            return currentValue;
+
+        }
+
+    }
+
+    public void Inc () {
+        increment ++;
+    }
+
+    public float value {
+        get {
+            return stepper.value;
+        }
     }
 
 }

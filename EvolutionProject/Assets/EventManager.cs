@@ -53,6 +53,8 @@ public class EventManager : MonoBehaviour
 
         if (cps == CurrentProgramState.Finished) {
             currentEventIndex++;
+            
+            
             if (currentEventIndex >= 0 && currentEventIndex < eventList.Count) {
 
                 currentEvent = eventList[currentEventIndex].GenerateTemplate();
@@ -101,6 +103,7 @@ public class EventManager : MonoBehaviour
             if (currentTimer <= 0f) {
                 //Call Compeltion of TIme
                 currentEvent.Completed();
+
                 currentEvent = null;
                 currentTimer = 0f;
                 cps = CurrentProgramState.Finished;
@@ -131,6 +134,7 @@ public abstract class EventTemplate  {
     public EType type;
     public float duration;
     public float durationTo;
+    public float payoff;
     public Notification notificationOnEnter;
     public Notification notificationToPrior;
 
@@ -221,6 +225,7 @@ public class FoxWave : EventTemplate {
 
             
         }
+        CurrencyController.Instance.AddCurrency(Mathf.RoundToInt(payoff));
     }
 
     private void CreateWave() {
@@ -251,7 +256,8 @@ public class FoodShortage : EventTemplate {
     }
     
     public override void Completed() {
-        MapManager.Instance.maxAmountOfFood = initialFoodCount;
+        MapManager.Instance.maxAmountOfFood = initialFoodCount;        
+        CurrencyController.Instance.AddCurrency(Mathf.RoundToInt(payoff));
     }
 
     public override void CompletionChecking() {
@@ -316,7 +322,7 @@ public class EPublic {
 
     public EType type;
     public string eventName;
-
+    public float payoff;
     public float duration;
     public float durationTo;
 
@@ -328,6 +334,7 @@ public class EPublic {
         if (type == EType.FoxWave) {
 
             FoxWave w = new FoxWave();
+            w.payoff = payoff;
             w.eventName = eventName;
             w.type = type;
             w.duration = duration;
@@ -341,6 +348,7 @@ public class EPublic {
             FoodShortage w = new FoodShortage();
             w.eventName = eventName;
             w.type = type;
+            w.payoff = payoff;
             w.duration = duration;
             w.durationTo = durationTo;
             w.notificationOnEnter = notificationOnEnter;

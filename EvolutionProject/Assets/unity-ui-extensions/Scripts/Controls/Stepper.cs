@@ -15,16 +15,16 @@ namespace UnityEngine.UI.Extensions
         private Selectable[] _sides;
         [SerializeField]
         [Tooltip("The current step value of the control")]
-        private int _value = 0;
+        private float _value = 0;
         [SerializeField]
         [Tooltip("The minimum step value allowed by the control. When reached it will disable the '-' button")]
-        private int _minimum = 0;
+        private float _minimum = 0;
         [SerializeField]
         [Tooltip("The maximum step value allowed by the control. When reached it will disable the '+' button")]
-        private int _maximum = 100;
+        private float _maximum = 100;
         [SerializeField]
         [Tooltip("The step increment used to increment / decrement the step value")]
-        private int _step = 1;
+        private float _step = 1;
         [SerializeField]
         [Tooltip("Does the step value loop around from end to end")]
         private bool _wrap = false;
@@ -53,7 +53,7 @@ namespace UnityEngine.UI.Extensions
         private StepperValueChangedEvent _onValueChanged = new StepperValueChangedEvent();
 
         [Serializable]
-        public class StepperValueChangedEvent : UnityEvent<int> { }
+        public class StepperValueChangedEvent : UnityEvent<float> { }
 
         public Selectable[] sides
         {
@@ -67,13 +67,13 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        public int value { get { return _value; } set { _value = value; } }
+        public float value { get { return _value; } set { _value = value; } }
 
-        public int minimum { get { return _minimum; } set { _minimum = value; } }
+        public float minimum { get { return _minimum; } set { _minimum = value; } }
 
-        public int maximum { get { return _maximum; } set { _maximum = value; } }
+        public float maximum { get { return _maximum; } set { _maximum = value; } }
 
-        public int step { get { return _step; } set { _step = value; } }
+        public float step { get { return _step; } set { _step = value; } }
 
         public bool wrap { get { return _wrap; } set { _wrap = value; } }
 
@@ -130,16 +130,28 @@ namespace UnityEngine.UI.Extensions
         }
 
         public void StepUp()
-        {
-            Step(step);
+        {   
+            float v = GeneticUIController.Instance.PriceValue(this).getPrice;
+
+            if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(v),true)==true) {
+                GeneticUIController.Instance.PriceValue(this).Inc();
+                Step(step);
+                GeneticUIController.Instance.CarryOut(GeneticUIController.Instance.PriceValue(this).valueName,GeneticUIController.Instance.PriceValue(this).stepper.step,GeneticUIController.Instance.PriceValue(this));
+            }
         }
 
         public void StepDown()
         {
-            Step(-step);
+            float v = GeneticUIController.Instance.PriceValue(this).getPrice;
+
+            if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(v),true)==true) {
+                GeneticUIController.Instance.PriceValue(this).Inc();
+                Step(-step);
+                GeneticUIController.Instance.CarryOut(GeneticUIController.Instance.PriceValue(this).valueName,-GeneticUIController.Instance.PriceValue(this).stepper.step,GeneticUIController.Instance.PriceValue(this));
+            }
         }
 
-        private void Step(int amount)
+        private void Step(float amount)
         {
             value += amount;
 
@@ -213,7 +225,7 @@ namespace UnityEngine.UI.Extensions
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, insetX, width);
                 rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, transform.rect.height);
 
-// TODO: maybe adjust text position
+            // TODO: maybe adjust text position
             }
 
             if (separator)

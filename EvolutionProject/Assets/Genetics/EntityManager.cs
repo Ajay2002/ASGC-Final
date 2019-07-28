@@ -71,7 +71,7 @@ public class EntityManager : MonoBehaviour
     public bool isNeuralNet = false;
     public bool geneticallyCreated = false;
     public void ModifyPhysicalAttributes(bool overrideit) {
-        if (!geneticallyCreated || overrideit) {
+        if (!geneticallyCreated || overrideit || overrideRandom) {
             //Scale
             transform.localScale = new Vector3(Mathf.Clamp((traits.size/3)/2f,0.3f,3), Mathf.Clamp((traits.size/3)/2f,0.3f,3), Mathf.Clamp((traits.size/3)/2f,0.3f,3));
 
@@ -96,7 +96,7 @@ public class EntityManager : MonoBehaviour
         }
 
     }
-
+    public bool overrideRandom = false;
     private void Start() {
 
         Ray ray = new Ray(transform.position,Vector3.down);
@@ -110,6 +110,7 @@ public class EntityManager : MonoBehaviour
         controller = GetComponent<ActionManager>();
         traits.manager = manager;
 
+        if (!overrideRandom)
         MapManager.Instance.GetBiomeTypeFromPosition(transform.position, out creatureBiomeType);
 
         // if (creatureBiomeType==BiomeType.Grass){
@@ -169,13 +170,13 @@ public class EntityManager : MonoBehaviour
         
         traits.decisionCoolDown = UnityEngine.Random.Range(0.1f,1f);
         
-        traits.speed = UnityEngine.Random.Range(0.01f,1f)*5;
+        traits.speed = UnityEngine.Random.Range(0.01f,5f);
     
-        traits.size = UnityEngine.Random.Range(0.01f,1f)*3;
+        traits.size = UnityEngine.Random.Range(0.01f,3f);
         
         traits.attractiveness = UnityEngine.Random.Range(0.01f,1f);
     
-        traits.sightRange = UnityEngine.Random.Range(0.5f,1f)*5;
+        traits.sightRange = UnityEngine.Random.Range(0.5f,5f);
     
         traits.dangerSense = UnityEngine.Random.Range(0.01f,1f);
     

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-
+using TMPro;
 
 //IMPORTANT: YOU WILL NEED A TIME SCALE MANAGER
 
@@ -19,6 +19,9 @@ public class MapManager : MonoBehaviour
     public Transform biomeInstance;
     public float buttonDistanceThreshold;
     public int enforceLimit = 400;
+
+    public TextMeshProUGUI popT;
+    public TextMeshProUGUI curT;
     
     public List<Mesh> biomes = new List<Mesh>();
     public List<Material> biomeMaterials = new List<Material>();
@@ -64,15 +67,18 @@ public class MapManager : MonoBehaviour
         
     }
     
+    public float worldFoodValue = 5f;
     private IEnumerator FoodGen(int i)
     {
         if (amountOfFood < maxAmountOfFood)
         {
-            Food f = Instantiate(worldSpawnedFood[i].Item2.prefab, NearestPointOnMap(GetRandomPoint()), Quaternion.identity).GetComponent<Food>();
-            f.value      = worldSpawnedFood[i].Item2.value;
-            f.canPreyEat = worldSpawnedFood[i].Item2.canPreyEat;
-
-            amountOfFood++;
+            if (CurrencyController.Instance.RemoveCurrency(Mathf.RoundToInt(worldFoodValue/5),true)==true) {
+                Food f = Instantiate(worldSpawnedFood[i].Item2.prefab, NearestPointOnMap(GetRandomPoint()), Quaternion.identity).GetComponent<Food>();
+                f.value      = worldFoodValue;
+                f.canPreyEat = worldSpawnedFood[i].Item2.canPreyEat;
+                
+                amountOfFood++;
+            }
         }
 
         yield return new WaitForSeconds(worldSpawnedFood[i].Item1);
@@ -110,6 +116,12 @@ public class MapManager : MonoBehaviour
 
         return NearestPointOnMap(new Vector3(xPoint,1, zPoint));
 
+    }
+    
+    //Stat UI Update
+    private void LateUpdate() {
+        popT.text = pop.ToString();
+        curT.text = "$ " + CurrencyController.Instance.currentCurrencyAmount.ToString();
     }
 
     public bool GetBiomeTypeFromPosition (Vector3 pos, out BiomeType typeReturn) {
@@ -305,8 +317,10 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < worldSpawnedFoodSpawnPeriods.Count; i++)
             worldSpawnedFood.Add(new Tuple<float, FoodScriptableObject>(worldSpawnedFoodSpawnPeriods[i], worldSpawnedFoodScriptableObjects[i]));
 
-        for (int i = 0; i < worldSpawnedFood.Count; i++) StartCoroutine(nameof(FoodGen), i);
+        
     }
+
+    private void Start(){for (int i = 0; i < worldSpawnedFood.Count; i++) StartCoroutine(nameof(FoodGen), i);}
 
     float t = 0;
     float reset = 0f;
@@ -418,6 +432,16 @@ public class MapManager : MonoBehaviour
             }
 
         }
+
+        return go.transform;
+    }
+
+    public Transform SpawnEntity (Vector3 position, GeneticTraits t, BiomeType ty) {
+        
+        GameObject go = Instantiate(entity,position,Quaternion.identity);
+        go.GetComponent<EntityManager>().traits = t;
+        go.GetComponent<EntityManager>().creatureBiomeType = ty;
+        go.GetComponent<EntityManager>().overrideRandom = true;
 
         return go.transform;
     }

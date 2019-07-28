@@ -14,9 +14,9 @@ public class CurrencyController : MonoBehaviour
     private int currencyAmountUpperBound;
 
     [SerializeField]
-    private int currentCurrencyAmount;
+    public int currentCurrencyAmount;
 
-    private void Start()
+    private void Awake()
     {
         if (Instance == null) Instance = this;
         if(MainUIController.Instance != null)
@@ -37,7 +37,7 @@ public class CurrencyController : MonoBehaviour
             
         }
 
-        AddCurrency(increment*5);
+        AddCurrency(increment*4);
         yield return new WaitForSeconds(timeBetweenPopulationCurrencyIncrease);
         StartCoroutine(nameof(PopulationCurrencyIncrease));
     }
